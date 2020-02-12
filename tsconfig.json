@@ -1,15 +1,12 @@
 {
-    "compilerOptions": {
-      "jsx": "react",
-      "module": "commonjs",
-      "noImplicitAny": true,
-      "outDir": "./build/",
-      "preserveConstEnums": true,
-      "removeComments": true,
-      "sourceMap": true,
-      "target": "es5"
-    },
-    "include": [
-      "./src/**/**/*"
-    ]
+  "compilerOptions": {
+    "outDir": "public/assets",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "target": "es6",
+    "jsx": "react"
   }
+}

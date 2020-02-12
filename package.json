@@ -1,10 +1,10 @@
 {
   "name": "typescript-react-ssr",
   "version": "1.0.0",
-  "description": "typescript react kit",
-  "main": "index.js",
+  "description": "A Boilerplate for Modern Web apps With Best development experience & best practices",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env NODE_ENV=development PORT=3000 nodemon --exec ts-node --files ."
   },
   "repository": {
     "type": "git",
@@ -12,24 +12,35 @@
   },
   "keywords": [
     "react",
-    "typescript"
+    "typescript",
+    "best-practices"
   ],
-  "author": "Alagu Selvan",
+  "author": "Alagu Selvan <alaguselvan97@gmail.com> (https://github.com/alaguselvan)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AlaguSelvan/typescript-react-ssr/issues"
   },
   "homepage": "https://github.com/AlaguSelvan/typescript-react-ssr#readme",
   "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@types/express": "^4.17.2",
+    "@types/node": "^13.7.1",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
+    "@types/react-redux": "^7.1.7",
+    "@types/react-router": "^5.1.4",
+    "babel-plugin-dynamic-import-node": "^2.3.0",
+    "cross-env": "^7.0.0",
+    "nodemon": "^2.0.2",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.2.1",
+    "ts-node": "^8.6.2",
     "typescript": "^3.7.5",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "@babel/register": "^7.8.3",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
   }
