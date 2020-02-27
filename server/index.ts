@@ -7,7 +7,8 @@ const expressStaticGzip = require('express-static-gzip');
 import webpack from 'webpack';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 
-// import configDevClient from '../../config/webpack.dev-client.js';
+import configClient from '../config/webpack/client/webpack.config';
+import configServer from '../config/webpack/server/webpack.config';
 // import configDevServer from '../../config/webpack.dev-server.js';
 // import configProdClient from '../../config/webpack.prod-client.js';
 // import configProdServer from '../../config/webpack.prod-server.js';
@@ -29,19 +30,19 @@ const done = () => {
 };
 
 if (isDev) {
-  const compiler = webpack([configDevClient, configDevServer]);
+  const compiler = webpack([configClient, configServer]);
 
   const clientCompiler = compiler.compilers[0];
   const serverCompiler = compiler.compilers[1];
 
   const webpackDevMiddleware = require('webpack-dev-middleware')(
     compiler,
-    configDevClient.devServer,
+    configClient.devServer,
   );
 
   const webpackHotMiddlware = require('webpack-hot-middleware')(
     clientCompiler,
-    configDevClient.devServer,
+    configClient.devServer,
   );
 
   server.use(webpackDevMiddleware);
