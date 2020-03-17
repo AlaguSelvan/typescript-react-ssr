@@ -41,14 +41,6 @@ const base = {
           },
         ],
       },
-      {
-        test: /\.md$/,
-        use: [
-          {
-            loader: 'markdown-with-front-matter-loader',
-          },
-        ],
-      },
     ]
   },
   plugins: [

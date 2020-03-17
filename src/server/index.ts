@@ -9,9 +9,6 @@ import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 
 import configClient from '../config/webpack/client/webpack.config';
 import configServer from '../config/webpack/server/webpack.config';
-// import configDevServer from '../../config/webpack.dev-server.js';
-// import configProdClient from '../../config/webpack.prod-client.js';
-// import configProdServer from '../../config/webpack.prod-server.js';
 
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;
@@ -29,12 +26,13 @@ const done = () => {
   !isBuilt && console.log('Done');
 };
 
+
 if (isDev) {
   const compiler = webpack([configClient, configServer]);
 
   const clientCompiler = compiler.compilers[0];
   const serverCompiler = compiler.compilers[1];
-
+  compiler.apply(new webpack.ProgressPlugin())
   const webpackDevMiddleware = require('webpack-dev-middleware')(
     compiler,
     configClient.devServer,

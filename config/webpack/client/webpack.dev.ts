@@ -68,12 +68,12 @@ module.exports = {
       }
     ],
   },
-  resolve: {
-    alias: {
-      'react-dom': '@hot-loader/react-dom',
-    },
-    extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.scss'],
-  },
+  // resolve: {
+  //   alias: {
+  //     'react-dom': '@hot-loader/react-dom',
+  //   },
+  //   extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.scss'],
+  // },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ],
