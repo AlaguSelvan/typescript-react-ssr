@@ -5,7 +5,7 @@ import {Provider} from "react-redux";
 
 import "../app/imported";
 import App from "../app/App";
-import {configureStore} from "../app/store";
+import {configureStore} from "../app/redux/root-reducer";
 
 import generateHtml from "./generateHtml";
 import {ImportedStream} from "react-imported-component";

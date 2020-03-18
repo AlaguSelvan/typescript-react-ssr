@@ -7,8 +7,8 @@ const expressStaticGzip = require('express-static-gzip');
 import webpack from 'webpack';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 
-import configClient from '../config/webpack/client/webpack.config';
-import configServer from '../config/webpack/server/webpack.config';
+import configClient from '../../config/webpack/client/webpack.config';
+import configServer from '../../config/webpack/server/webpack.config';
 
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;

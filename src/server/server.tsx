@@ -1,8 +1,11 @@
+import fs from 'fs';
 import path from 'path';
-// import logger from 'morgan';
 import express from 'express';
 import compression from 'compression';
 import helmet from 'helmet';
+import Loadable from 'react-loadable'
+import { getBundles } from 'react-loadable/webpack'
+import routes from '../app/Router/Routes'
 import hpp from 'hpp';
 import favicon from 'serve-favicon';
 import React from 'react';
@@ -10,39 +13,36 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { renderRoutes, matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
-import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-import { Helmet } from 'react-helmet';
-import chalk from 'chalk';
 import webpack from 'webpack';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
+import matchPath from 'react-router-dom/matchPath'
+import createEmotionServer from 'create-emotion-server'
+import createCache from '@emotion/cache'
+import { CacheProvider } from '@emotion/core'
 
+import App from '../app/App'
 import configClient from '../../config/webpack/client/webpack.config';
 import configServer from '../../config/webpack/server/webpack.config';
 
 import configureStore from '../app/redux/configureStore';
-import renderHtml from '../utils/renderHtml';
-import routes from './routes';
+import htmlTemplate from '../utils/renderHtml';
 import config from './config';
 import { MyAction } from './types';
 
 const app = express();
 
-// Use helmet to secure Express with various HTTP headers
 app.use(helmet());
-// Prevent HTTP parameter pollution
 app.use(hpp());
-// Compress all requests
 app.use(compression());
-
-// Use for http request debug (show errors only)
-// app.use(logger('dev', { skip: (req, res) => res.statusCode < 400 }));
 app.use(favicon(path.resolve(process.cwd(), 'public/favicon.ico')));
 app.use(express.static(path.resolve(process.cwd(), 'public')));
 
-if (__DEV__) {
-  /* Run express as webpack dev server */
-  const compiler = webpack([configClient, configServer]);
+const cssCache = createCache()
+const { extractCritical } = createEmotionServer(cssCache)
 
+
+if (process.env.NODE_ENV === 'development') {
+  const compiler = webpack([configClient, configServer]);
   const clientCompiler = compiler.compilers[0];
   const serverCompiler = compiler.compilers[1];
   compiler.apply(new webpack.ProgressPlugin())
@@ -63,88 +63,50 @@ if (__DEV__) {
   console.log('Done');
 }
 
+const renderHtml = (req, store, branch) => {
+  const { url } = req
+  const staticContext: any = {};
+  let modules: Array<any> = []
+  const jsx = (
+    <Loadable.Capture report={moduleName => modules.push(moduleName)}>
+      <Provider store={store}>
+        <StaticRouter location={url} context={staticContext}>
+          <CacheProvider value={cssCache}>
+          <App />
+          </CacheProvider>
+        </StaticRouter>
+      </Provider>
+    </Loadable.Capture>
+  );
+
+  const initialState = store.getState();
+  let { html, css, ids } = extractCritical(renderToString(jsx))
+  const loadableStats = fs.readFileSync('build/react-loadable.json')
+  const stats = JSON.parse(loadableStats)
+  const bundles = getBundles(stats, modules)
+  const bundleScripts = bundles.map(bundle => `<script src="${bundle.publicPath}"></script>`).join('')
+  return htmlTemplate(helmet, html, css, ids, initialState, bundleScripts)
+}
+
 // Register server-side rendering middleware
 app.get('*', (req, res) => {
-  const { store } = configureStore({ url: req.url });
+  const store = configureStore(req.url)
+  let { url } = req
+  const branch = matchRoutes(routes, req.path)
 
-  // The method for loading data from server-side
-  const loadBranchData = (): Promise<any> => {
-    // @ts-ignore
-    const branch = matchRoutes(routes, req.path);
-    const promises = branch.map(({ route, match }: any) => {
-      if (route.loadData)
-        return Promise.all(
-          route
-            .loadData({ params: match.params, getState: store.getState })
-            .map((item: MyAction) => store.dispatch(item))
-        );
-
-      return Promise.resolve(null);
-    });
-
-    return Promise.all(promises);
-  };
-
-  (async () => {
-    try {
-      // Load data from server-side first
-      await loadBranchData();
-
-      const statsFile = path.resolve(
-        process.cwd(),
-        'public/loadable-stats.json'
-      );
-      const extractor = new ChunkExtractor({ statsFile });
-
-      const staticContext: any = {};
-      const App = (
-        <ChunkExtractorManager extractor={extractor}>
-          <Provider store={store}>
-            {/* Setup React-Router server-side rendering */}
-            <StaticRouter location={req.path} context={staticContext}>
-              {/*
-                // @ts-ignore */}
-              {renderRoutes(routes)}
-            </StaticRouter>
-          </Provider>
-        </ChunkExtractorManager>
-      );
-
-      const initialState = store.getState();
-      const htmlContent = renderToString(App);
-      // head must be placed after "renderToString"
-      // see: https://github.com/nfl/react-helmet#server-usage
-      const head = Helmet.renderStatic();
-
-      // Check if the render result contains a redirect, if so we need to set
-      // the specific status and redirect header and end the response
-      if (staticContext.url) {
-        res.status(301).setHeader('Location', staticContext.url);
-        res.end();
-
-        return;
-      }
-
-      // Check page status
-      const status = staticContext.status === '404' ? 404 : 200;
-
-      // Pass the route and initial state into html template
-      res
-        .status(status)
-        .send(renderHtml(head, extractor, htmlContent, initialState));
-    } catch (err) {
-      res.status(404).send('Not Found :(');
-
-      console.error(chalk.red(`==> 😭  Rendering routes error: ${err}`));
-    }
-  })();
+  const serverData = routes
+    .filter(route => matchPath(url, route))
+    .map(route => route.serverFetch ? route.serverFetch(store) : store)
+  Promise.all([serverData]).then(_ => {
+    return res.send(renderHtml(url, store, branch))
+  })
 });
 
 // @ts-ignore
-app.listen(config.port, config.host, err => {
-  const url = `http://${config.host}:${config.port}`;
+app.listen(3000, config.host, err => {
+  const url = `http://localhost:3000`;
 
-  if (err) console.error(chalk.red(`==> 😭  OMG!!! ${err}`));
+  // if (err) console.error(chalk.red(`==> 😭  OMG!!! ${err}`));
 
-  console.info(chalk.green(`==> 🌎  Listening at ${url}`));
+  console.info(console.log(`==> 🌎  Listening at ${url}`));
 });

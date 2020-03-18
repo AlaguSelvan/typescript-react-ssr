@@ -1,17 +1,15 @@
-import React from 'react';
-import Routes from './Router/Routes'
-import { BrowserRouter } from 'react-router-dom';
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
+import routes from './Router/routes'
 
-export default class extends React.Component {
-  constructor(props: any) {
-    super(props)
-    this.state = {}
-  }
-  render() {
-    return (
-      <BrowserRouter>
-        <Routes />
-      </BrowserRouter>
-    )
-  }
+export default function App() {
+  return (
+    <Switch>
+      {routes.map(({ component, ...route }, index) => {
+        return (
+          <Route key={index} component={component} {...route} />
+        )
+      })}
+    </Switch>
+  )
 }

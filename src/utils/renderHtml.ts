@@ -1,13 +1,15 @@
 import serialize from 'serialize-javascript';
 import { minify } from 'html-minifier';
 
-export default (
+const renderHtml =  (
   head: any,
-  extractor: any,
-  htmlContent: string,
-  initialState: object
+  html: string,
+  css: any,
+  ids: any,
+  initialState: object,
+  bundleScripts: string
 ) => {
-  const html = `
+  const document = `
     <!doctype html>
     <html ${head.htmlAttributes.toString()}>
       <head>
@@ -25,23 +27,17 @@ export default (
         ${head.meta.toString()}
         ${head.link.toString()}
         <!-- Insert bundled styles into <link> tag -->
-        ${extractor.getLinkTags()}
-        ${extractor.getStyleTags()}
+        <style data-emotion-css="${ids.join(' ')}">${css}</style>
       </head>
       <body>
         <!-- Insert the router, which passed from server-side -->
-        <div id="react-view">${htmlContent}</div>
-
+        <div id="root">${html}</div>
         <!-- Store the initial state into window -->
         <script>
-          // Use serialize-javascript for mitigating XSS attacks. See the following security issues:
-          // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
           window.__INITIAL_STATE__=${serialize(initialState)};
         </script>
-
         <!-- Insert bundled scripts into <script> tag -->
-        ${extractor.getScriptTags()}
-        ${head.script.toString()}
+        ${bundleScripts}
       </body>
     </html>
   `;
@@ -57,5 +53,7 @@ export default (
   };
 
   // Minify html in production
-  return __DEV__ ? html : minify(html, minifyConfig);
+  return __DEV__ ? document : minify(document, minifyConfig);
 };
+
+export default renderHtml
