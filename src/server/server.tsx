@@ -3,6 +3,7 @@ import path from 'path';
 import express from 'express';
 import compression from 'compression';
 import helmet from 'helmet';
+import Helmet from 'react-helmet';
 // import Loadable from 'react-loadable'
 // import { getBundles } from 'react-loadable/webpack'
 import routes from '../app/Router/Routes'
@@ -116,7 +117,7 @@ app.get('*', (req, res) => {
         return Promise.all(
           route
             .loadData({ params: match.params, getState: store.getState })
-            .map((item: MyAction) => store.dispatch({ isLoaded: true}))
+            .map((item: any) => store.dispatch({ isLoaded: true}))
         );
 
       return Promise.resolve(null);
@@ -133,7 +134,7 @@ app.get('*', (req, res) => {
       );
       const extractor = new ChunkExtractor({ statsFile });
       const staticContext: any = {};
-      const JSX = (
+      const Jsx = (
         <ChunkExtractorManager extractor={extractor}>
           <Provider store={store}>
             <StaticRouter location={url} context={staticContext}>
