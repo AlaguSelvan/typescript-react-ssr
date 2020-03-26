@@ -21,8 +21,8 @@ import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/core'
 
 import App from '../app/App'
-import configClient from '../../config/webpack/server/webpack.config';
-import configServer from '../../config/webpack/server/webpack.config';
+// import configClient from '../../config/webpack/server/webpack.config';
+// import configServer from '../../config/webpack/server/webpack.config';
 
 import configureStore from '../app/redux/configureStore';
 import htmlTemplate from '../utils/renderHtml';
@@ -100,7 +100,7 @@ const renderHtml = (url, store, branch) => {
   // const stats = JSON.parse(loadableStats)
   // const bundles = getBundles(stats, modules)
   // const bundleScripts = bundles.map(bundle => `<script src="${bundle.publicPath}"></script>`).join('')
-  return htmlTemplate(head, htmlContent, extractor, initialState)
+  // return htmlTemplate(head, htmlContent, extractor, initialState)
 }
 
 // Register server-side rendering middleware
@@ -116,7 +116,7 @@ app.get('*', (req, res) => {
         return Promise.all(
           route
             .loadData({ params: match.params, getState: store.getState })
-            .map((item: MyAction) => store.dispatch(item))
+            .map((item: MyAction) => store.dispatch({ isLoaded: true}))
         );
 
       return Promise.resolve(null);
