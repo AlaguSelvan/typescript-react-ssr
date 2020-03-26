@@ -26,7 +26,7 @@ export default ({ initialState, url }: Argv) => {
   // Use Redux DevTools Extension in development
   const composeEnhancers =
     // @ts-ignore
-    (__DEV__ && !isServer && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+    (!isServer && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
     compose;
   const enhancers = composeEnhancers(
     applyMiddleware(...middlewares)

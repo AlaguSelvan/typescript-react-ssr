@@ -8,7 +8,8 @@ const Home = LoadableHOC({
 	path: ({ page }: any) => path.join(__dirname, `/public/${page}`)
 })
 
-export default [
+
+const routes = [
 	{
 		path: '/',
 		component: Home,
@@ -16,3 +17,5 @@ export default [
 		exact: true
 	}
 ]
+
+export default routes

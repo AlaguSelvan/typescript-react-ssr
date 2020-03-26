@@ -1,31 +1,36 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render, hydrate } from 'react-dom'
 import Loadable from 'react-loadable'
+import { AppContainer } from 'react-hot-loader'
 import { CacheProvider } from '@emotion/core'
 import createCache from '@emotion/cache'
 import { Provider } from 'react-redux'
 import configureStore from './redux/configureStore'
-import { BrowserRouter } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
 import App from './App'
 
-const state = window.__INITIAL_STATE__
-const store = configureStore(state)
+const initialState = window.__INITIAL_STATE__;
+const { store, history } = configureStore({initialState})
 const cache = createCache()
 
-const render = () => {
-  const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate
+const startRender = () => {
+  const renderMethod = module.hot ? render : hydrate
+  console.log({window})
   renderMethod(
-    <Provider store={store}>
-        <BrowserRouter>
-        <CacheProvider value={cache}>
-          <App />
-        </CacheProvider>
-        </BrowserRouter>
-    </Provider>,
+    <AppContainer>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <CacheProvider value={cache}>
+            <App />
+          </CacheProvider>
+        </ConnectedRouter>
+      </Provider>
+    </AppContainer>
+    ,
     document.getElementById('root')
   )
 }
 
 Loadable.preloadReady().then(() => {
-  render()
+  startRender()
 })

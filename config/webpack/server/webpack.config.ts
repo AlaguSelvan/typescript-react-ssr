@@ -12,7 +12,7 @@ const config =
 const base = {
   name: 'server',
   target: 'node',
-  entry: './src/app/Client.tsx',
+  entry: './src/app/index',
   output: {
     path: resolve(__dirname, '../dist'),
     publicPath: '/',

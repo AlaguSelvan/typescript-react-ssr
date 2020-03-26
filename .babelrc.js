@@ -20,15 +20,7 @@ module.exports = {
     "universal-import",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-object-rest-spread",
-    "@babel/plugin-transform-runtime",
-    [
-      "babel-plugin-styled-components",
-      {
-        ssr: true,
-        displayName: true,
-        preprocess: false
-      }
-    ]
+    "@babel/plugin-transform-runtime"
   ],
   env: {
     development: {

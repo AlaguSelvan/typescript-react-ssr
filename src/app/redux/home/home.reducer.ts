@@ -1,11 +1,10 @@
 import HomeActionTypes from './home.types'
-// import {} from './'
 
 const INITIAL_STATE = {
   isLoaded: false
 }
 
-const homeReducer = (state = INITIAL_STATE, action: any) => {
+const HomeReducer = (state = INITIAL_STATE, action: any) => {
   const { TOGGLE_LOADED } = HomeActionTypes;
   switch(action.type) {
     case TOGGLE_LOADED:
@@ -16,4 +15,4 @@ const homeReducer = (state = INITIAL_STATE, action: any) => {
   }
 }
 
-export default homeReducer
+export default HomeReducer

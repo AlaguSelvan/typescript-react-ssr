@@ -12,22 +12,26 @@ interface Argv {
 
 export default ({ initialState, url }: Argv) => {
   const isServer = typeof window === 'undefined';
+  console.log({isServer})
   // Create a history depending on the environment
   const history = isServer
     ? createMemoryHistory({
       initialEntries: [url || '/']
     })
     : createBrowserHistory();
+  console.log({history})
   const middlewares = [
     routerMiddleware(history),
     thunk
     // Add other middlewares here
   ];
+  console.log({middlewares})
   // Use Redux DevTools Extension in development
   const composeEnhancers =
-    // @ts-ignore
-    (__DEV__ && !isServer && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-    compose;
+  // @ts-ignore
+  (!isServer && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
+  console.log({composeEnhancers})
   const enhancers = composeEnhancers(
     applyMiddleware(...middlewares)
     // Add other enhancers here

@@ -6,8 +6,8 @@ const renderHtml =  (
   html: string,
   css: any,
   ids: any,
-  initialState: object,
-  bundleScripts: string
+  initialState = {},
+  extractor: any
 ) => {
   const document = `
     <!doctype html>
@@ -27,6 +27,8 @@ const renderHtml =  (
         ${head.meta.toString()}
         ${head.link.toString()}
         <!-- Insert bundled styles into <link> tag -->
+        ${extractor.getLinkTags()}
+        ${extractor.getStyleTags()}
         <style data-emotion-css="${ids.join(' ')}">${css}</style>
       </head>
       <body>
@@ -37,7 +39,8 @@ const renderHtml =  (
           window.__INITIAL_STATE__=${serialize(initialState)};
         </script>
         <!-- Insert bundled scripts into <script> tag -->
-        ${bundleScripts}
+        ${extractor.getScriptTags()}
+        ${head.script.toString()}
       </body>
     </html>
   `;
@@ -53,7 +56,7 @@ const renderHtml =  (
   };
 
   // Minify html in production
-  return __DEV__ ? document : minify(document, minifyConfig);
+  return process.env.NODE_ENV === 'production' ? minify(document, minifyConfig) : document;
 };
 
 export default renderHtml

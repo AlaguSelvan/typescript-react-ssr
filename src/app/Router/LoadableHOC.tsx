@@ -1,7 +1,7 @@
 import React from 'react'
 import Loadable from 'react-loadable'
 
-function Loading(props) {
+function Loading(props: any) {
   if (props.error) {
     return <div>Error! <button onClick={props.retry}>Retry</button></div>
   } else if (props.timedOut) {
@@ -13,7 +13,7 @@ function Loading(props) {
   }
 }
 
-export default function LoadableHOC(opts) {
+export default function LoadableHOC(opts: any) {
   return Loadable(Object.assign({
     loading: Loading,
     delay: 5000,
