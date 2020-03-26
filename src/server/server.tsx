@@ -4,6 +4,8 @@ import express from 'express';
 import compression from 'compression';
 import helmet from 'helmet';
 import Helmet from 'react-helmet';
+require('dotenv').config()
+
 // import Loadable from 'react-loadable'
 // import { getBundles } from 'react-loadable/webpack'
 import routes from '../app/Router/Routes'
@@ -44,8 +46,9 @@ const statsFile =
     ? '../../build/client/loadable-stats.json'
     : '../../build/client/loadable-stats.json'
 
-if (process.env.NODE_ENV === 'development') {
-  const webpackConfig = require('../../config/webpack/webpack.config.js')
+if (process.env.NODE_ENV !== 'production') {
+  console.log('development')
+  const webpackConfig = require('../../config/webpack/webpack.config.dev.js')
   const compiler = webpack(webpackConfig);
   // const serverCompiler = compiler.compilers[1];
   compiler.apply(new webpack.ProgressPlugin())
@@ -77,47 +80,43 @@ if (process.env.NODE_ENV === 'development') {
   console.log('Done');
 }
 
-const renderHtml = (url, store, branch) => {
-  // const staticContext = {};
-  // let modules = []
-  // const Jsx = (
-  //   <Loadable.Capture report={moduleName => modules.push(moduleName)}>
-  //     <Provider store={store}>
-  //       <StaticRouter location={url} context={staticContext}>
-  //         <CacheProvider value={cssCache}>
-  //         <App />
-  //         </CacheProvider>
-  //       </StaticRouter>
-  //     </Provider>
-  //   </Loadable.Capture>
-  // );
-
-  // const initialState = store.getState();
+const renderHtml = (store: any, url: any, res: any) => {
+  const statsFile = path.resolve(
+    process.cwd(),
+    'build/public/loadable-stats.json'
+  );
+  const extractor = new ChunkExtractor({ statsFile });
+  const staticContext = {};
+  const Jsx = (
+    <ChunkExtractorManager extractor={extractor}>
+      <Provider store={store}>
+        <StaticRouter location={url} context={staticContext}>
+          <CacheProvider value={cssCache}>
+            <App />
+          </CacheProvider>
+        </StaticRouter>
+      </Provider>
+    </ChunkExtractorManager>
+  )
+  const initialState = store.getState();
   const { html, css, ids } = extractCritical(ReactDOMServer.renderToString(Jsx))
-  // // const loadableStats = fs.readFileSync('build/react-loadable.json')
-  // // const extractor = new ChunkExtractor({ statsFile });
-  // const tree = extractor.collectChunks(<Jsx />);
-  // const extractor = new ChunkExtractor({ statsFile });
-  // const stats = JSON.parse(loadableStats)
-  // const bundles = getBundles(stats, modules)
-  // const bundleScripts = bundles.map(bundle => `<script src="${bundle.publicPath}"></script>`).join('')
-  // return htmlTemplate(head, htmlContent, extractor, initialState)
+  const head = Helmet.renderStatic();
+  res.send(htmlTemplate(head, html, css, ids, initialState, extractor))
 }
 
 // Register server-side rendering middleware
-app.get('*', (req, res) => {
+app.get('*', async(req, res) => {
   let { url } = req
-  const store = configureStore({url})
+  const {store} = configureStore({url})
   const branch = matchRoutes(routes, req.path)
-  const loadBranchData = (): Promise<any> => {
-    // @ts-ignore
+  const loadBranchData = () => {
     const branch = matchRoutes(routes, req.path);
-    const promises = branch.map(({ route, match }: any) => {
+    const promises = branch.map(({ route, match }) => {
       if (route.loadData)
         return Promise.all(
           route
             .loadData({ params: match.params, getState: store.getState })
-            .map((item: any) => store.dispatch({ isLoaded: true}))
+            .map((item: any) => store.dispatch(item))
         );
 
       return Promise.resolve(null);
@@ -125,44 +124,9 @@ app.get('*', (req, res) => {
 
     return Promise.all(promises);
   };
-  (async () => {
-    try {
-      await loadBranchData();
-      const statsFile = path.resolve(
-        process.cwd(),
-        'build/public/loadable-stats.json'
-      );
-      const extractor = new ChunkExtractor({ statsFile });
-      const staticContext: any = {};
-      const Jsx = (
-        <ChunkExtractorManager extractor={extractor}>
-          <Provider store={store}>
-            <StaticRouter location={url} context={staticContext}>
-              <CacheProvider value={cssCache}>
-                <App />
-              </CacheProvider>
-            </StaticRouter>
-          </Provider>
-        </ChunkExtractorManager>
-      )
-    const initialState = store.getState();
-    // const htmlContent = renderToString(App);
-    const { html, css, ids } = extractCritical(ReactDOMServer.renderToString(Jsx))
-    const head = Helmet.renderStatic();
-    return htmlTemplate(head, html, css, ids, initialState, extractor)
+    await loadBranchData();
+    return renderHtml(store, url, res)
     // return res.send(renderHtml(head, htmlContent, extractor, initialState, bundleScripts))
-    } catch (err) {
-      res.status(404).send('Not Found :(');
-    }
-  })()
-  // const serverData = routes
-  //   .filter(route => matchPath(routes, req.path))
-  //   .map(route => route.serverFetch ? route.serverFetch(store) : store)
-  // console.log(serverData)
-  // Promise.all([serverData]).then(_ => {
-    // console.log('test')
-    // return res.send(renderHtml(url, store, branch))
-  // })
 });
 
 // @ts-ignore

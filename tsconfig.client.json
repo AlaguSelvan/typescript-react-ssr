@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
+    "jsx": "preserve",
     "module": "esnext", // for splitting chunks
-    "target": "es2015"
+    "target": "es2015",
+    "moduleResolution": "node",
   }
 }

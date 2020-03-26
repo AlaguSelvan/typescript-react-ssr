@@ -9,11 +9,17 @@ export const Home = loadable(() =>
 	import(/* webpackPrefetch: true */ '../pages/Home')
 );
 
+const getHome = () => import('../pages/Home')
+
+const HomeLoadable = loadable(() => import('../pages/Home'), {
+	fallback: <div>Loading... </div>
+});
+
 const routes = [
 	{
 		path: '/',
 		exact: true,
-		component: Home, // Add your route here
+		component: Home,
 		loadData: () => [
 		]
 

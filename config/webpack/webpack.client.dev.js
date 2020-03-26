@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const { resolve } = require('path')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import LoadablePlugin from '@loadable/webpack-plugin';
 
 const config = {
   mode: 'development',
@@ -19,24 +20,18 @@ const config = {
         loader: 'babel-loader'
       },
       {
-        test: /\.tsx?$/,
-        loader: [
-          'babel-loader',
-          {
-            loader: 'awesome-typescript-loader',
-            options: {
-              useCache: true,
-              // getCustomTransformers: () => ({
-              //   before: [styledComponentsTransformer],
-              // }),
-            },
-          },
-        ],
-      }
+        test: /\.ts(x?)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader', 'ts-loader'], // The orders are important
+      },
     ]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new LoadablePlugin({
+      writeToDisk: true,
+      filename: '../loadable-stats.json'
+    }),
     new ForkTsCheckerWebpackPlugin()
   ],
   optimization: {

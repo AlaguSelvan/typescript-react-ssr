@@ -12,26 +12,22 @@ interface Argv {
 
 export default ({ initialState, url }: Argv) => {
   const isServer = typeof window === 'undefined';
-  console.log({isServer})
   // Create a history depending on the environment
   const history = isServer
     ? createMemoryHistory({
       initialEntries: [url || '/']
     })
     : createBrowserHistory();
-  console.log({history})
   const middlewares = [
     routerMiddleware(history),
     thunk
     // Add other middlewares here
   ];
-  console.log({middlewares})
   // Use Redux DevTools Extension in development
   const composeEnhancers =
-  // @ts-ignore
-  (!isServer && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-  compose;
-  console.log({composeEnhancers})
+    // @ts-ignore
+    (!isServer && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+    compose;
   const enhancers = composeEnhancers(
     applyMiddleware(...middlewares)
     // Add other enhancers here
@@ -44,9 +40,9 @@ export default ({ initialState, url }: Argv) => {
 
   if ((module as any).hot) {
     // Enable Webpack hot module replacement for reducers
-    (module as any).hot.accept('./reducers', () => {
+    (module as any).hot.accept('../reducers', () => {
       try {
-        const createNextReducer = require('./reducers').default;
+        const createNextReducer = require('../reducers').default;
 
         store.replaceReducer(createNextReducer(history));
       } catch (error) {

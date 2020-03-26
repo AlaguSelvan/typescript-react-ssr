@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   isLoaded: false
 }
 
-const HomeReducer = (state = INITIAL_STATE, action: any) => {
+export default (state = INITIAL_STATE, action: any): any => {
   const { TOGGLE_LOADED } = HomeActionTypes;
   switch(action.type) {
     case TOGGLE_LOADED:
@@ -14,5 +14,3 @@ const HomeReducer = (state = INITIAL_STATE, action: any) => {
       }
   }
 }
-
-export default HomeReducer

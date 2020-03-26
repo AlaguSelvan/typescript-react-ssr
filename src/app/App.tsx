@@ -5,7 +5,7 @@ import routes from './Router/Routes'
 export default function App() {
   return (
     <Switch>
-      {routes.map(({ component, ...route }, index) => {
+      {routes.map(({ component, ...route }: any, index: number) => {
         return (
           <Route key={index} component={component} {...route} />
         )

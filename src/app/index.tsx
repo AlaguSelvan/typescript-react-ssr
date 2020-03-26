@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, hydrate } from 'react-dom'
-import Loadable from 'react-loadable'
+import { loadableReady } from '@loadable/component';
 import { AppContainer } from 'react-hot-loader'
 import { CacheProvider } from '@emotion/core'
 import createCache from '@emotion/cache'
@@ -31,6 +31,19 @@ const startRender = () => {
   )
 }
 
-Loadable.preloadReady().then(() => {
+loadableReady(() => {
   startRender()
-})
+});
+
+if ((module as any).hot) {
+  // Enable webpack hot module replacement for routes
+  (module as any).hot.accept('./Router/Routes.tsx', () => {
+    try {
+      const nextRoutes = require('./Router/Routes.tsx').default;
+
+      startRender()
+    } catch (error) {
+      console.error(`==> 😭  Routes hot reloading error ${error}`);
+    }
+  });
+}

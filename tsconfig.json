@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "declaration": false,
-    "jsx": "react",
+    "jsx": "preserve",
     "lib": [
       "es2018",
       "dom"
