@@ -2,7 +2,7 @@ import webpack from 'webpack'
 const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const externals = require('../../node-externals');
+// const externals = require('../../node-externals');
 
 const config =
   process.env.NODE_ENV === 'production'

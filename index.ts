@@ -1,4 +1,14 @@
+// Allows you to precompile ES6 syntax
 require('@babel/register')({
-  plugins: ['@babel/plugin-syntax-dynamic-import', 'dynamic-import-node']
-})
-require('./src/server/server')
+  plugins: ['dynamic-import-node']
+});
+
+// Setup global variables for server-side
+// global.__CLIENT__ = false;
+// global.__SERVER__ = true;
+// global.__DEV__ = process.env.NODE_ENV === 'development';
+
+// Run assets require hooks
+// require('./tools/webpack/hooks')();
+// Run server
+require('./src/server/server');

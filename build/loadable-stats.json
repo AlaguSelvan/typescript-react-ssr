@@ -1,0 +1,131 @@
+{
+  "errors": [
+    "./src/app/index.tsx\nModule build failed (from ./node_modules/ts-loader/index.js):\nError: TypeScript emitted no output for /c/Users/alagu/Desktop/typescript-react-ssr/src/app/index.tsx.\n    at makeSourceMapAndFinish (/c/Users/alagu/Desktop/typescript-react-ssr/node_modules/ts-loader/dist/index.js:80:15)\n    at successLoader (/c/Users/alagu/Desktop/typescript-react-ssr/node_modules/ts-loader/dist/index.js:68:9)\n    at Object.loader (/c/Users/alagu/Desktop/typescript-react-ssr/node_modules/ts-loader/dist/index.js:22:12)\n @ multi webpack-hot-middleware/client?reload=true ./src/app/index.tsx main[1]"
+  ],
+  "warnings": [],
+  "version": "4.42.1",
+  "hash": "346fbb2c26a1f1484ae0",
+  "publicPath": "/public/",
+  "outputPath": "/c/Users/alagu/Desktop/typescript-react-ssr/build/public",
+  "assetsByChunkName": {
+    "main": [
+      "main-bundle.js",
+      "main-bundle.js.map"
+    ],
+    "vendor": [
+      "vendor-bundle.js",
+      "vendor-bundle.js.map"
+    ]
+  },
+  "assets": [
+    {
+      "name": "main-bundle.js",
+      "size": 119436,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "main-bundle.js.map",
+      "size": 124947,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ],
+      "info": {
+        "development": true
+      },
+      "emitted": false
+    },
+    {
+      "name": "vendor-bundle.js",
+      "size": 993539,
+      "chunks": [
+        "vendor"
+      ],
+      "chunkNames": [
+        "vendor"
+      ],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "vendor-bundle.js.map",
+      "size": 1156434,
+      "chunks": [
+        "vendor"
+      ],
+      "chunkNames": [
+        "vendor"
+      ],
+      "info": {
+        "development": true
+      },
+      "emitted": false
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "vendor": {
+      "chunks": [
+        "vendor"
+      ],
+      "assets": [
+        "vendor-bundle.js",
+        "vendor-bundle.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "main-bundle.js",
+        "main-bundle.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "namedChunkGroups": {
+    "vendor": {
+      "chunks": [
+        "vendor"
+      ],
+      "assets": [
+        "vendor-bundle.js",
+        "vendor-bundle.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "main-bundle.js",
+        "main-bundle.js.map"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "logging": {
+    "webpack.buildChunkGraph.visitModules": {
+      "entries": [],
+      "filteredEntries": 2,
+      "debug": false
+    }
+  },
+  "children": []
+}

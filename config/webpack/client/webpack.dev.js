@@ -7,11 +7,11 @@ import LoadablePlugin from '@loadable/webpack-plugin';
 const config = {
   mode: 'development',
   entry: {
-  vendor: ["react", "react-dom"],
-  main: [
-    'webpack-hot-middleware/client?reload=true',
-    './src/app/index.tsx'
-  ]
+    vendor: ["react", "react-dom"],
+    main: [
+      'webpack-hot-middleware/client?reload=true',
+      './src/app/index.tsx'
+    ]
   },
   output: {
     filename: "[name]-bundle.js",

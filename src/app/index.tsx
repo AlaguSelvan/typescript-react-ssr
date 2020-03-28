@@ -9,13 +9,14 @@ import configureStore from './redux/configureStore'
 import { ConnectedRouter } from 'connected-react-router'
 import App from './App'
 
+// Get the initial state from server-side rendering
+// @ts-ignore
 const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({initialState})
 const cache = createCache()
 
-const startRender = () => {
+export default function startRender () {
   const renderMethod = module.hot ? render : hydrate
-  console.log({window})
   renderMethod(
     <AppContainer>
       <Provider store={store}>
@@ -35,11 +36,11 @@ loadableReady(() => {
   startRender()
 });
 
-if ((module as any).hot) {
+if ((module).hot) {
   // Enable webpack hot module replacement for routes
-  (module as any).hot.accept('./Router/Routes.tsx', () => {
+  (module).hot.accept('./Router/Routes', () => {
     try {
-      const nextRoutes = require('./Router/Routes.tsx').default;
+      const nextRoutes = require('./Router/Routes').default;
 
       startRender()
     } catch (error) {

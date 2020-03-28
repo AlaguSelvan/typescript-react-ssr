@@ -90,8 +90,10 @@
     "babel-plugin-dynamic-import-node": "^2.3.0",
     "babel-plugin-universal-import": "^4.0.0",
     "body-parser": "^1.19.0",
+    "brotli-webpack-plugin": "^1.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "clean-webpack-plugin": "^3.0.0",
+    "compression-webpack-plugin": "^3.1.0",
     "css-loader": "^3.4.2",
     "file-loader": "^5.1.0",
     "fork-ts-checker-webpack-plugin": "^4.1.2",
@@ -102,16 +104,18 @@
     "react-hot-loader": "^4.12.19",
     "redux-devtools-extension": "^2.13.8",
     "source-map-loader": "^0.2.4",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^6.2.2",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5",
     "typescript-plugin-styled-components": "^1.4.4",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.10",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-flush-chunks": "^2.0.3",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-hot-server-middleware": "^0.6.0",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "^1.7.2"
   }
 }

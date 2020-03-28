@@ -1,38 +1,32 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "declaration": false,
-    "jsx": "preserve",
+    "outDir": "./build/public",
+    "allowJs": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "noEmit": true,
+    "target": "es5",
+    "strict": true,
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "suppressImplicitAnyIndexErrors": true,
     "lib": [
-      "es2018",
+      "es5",
+      "es6",
       "dom"
     ],
-    "types": [
-      "react",
-      "jest",
-      "webpack-env"
-    ], // for styled-components
-    "module": "commonjs",
-    "moduleResolution": "node", // for module:esnext
-    "allowJs": false,
-    "sourceMap": true,
-    "removeComments": false, // to leave webpack's comment
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": false,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "strict": true,
-    "esModuleInterop": true
+    "typeRoots": [
+      "type-declarations",
+      "node_modules/@types"
+    ],
   },
-  "exclude": [
-    "node_modules",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/client/**/*.stories.ts"
-  ],
   "include": [
-    "src/**/*"
+    "./src/**/*.tsx", "src/app/index.js", "src/app/index.js"
+  ],
+  "exclude": [
+    "node_modules/**"
   ]
 }

@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 
-export const Home = (
+const Home = () => (
   <div>
     Hello World...
   </div>
 )
+
+
+export default Home

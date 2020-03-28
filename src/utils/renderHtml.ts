@@ -34,17 +34,15 @@ const renderHtml =  (
       <body>
         <!-- Insert the router, which passed from server-side -->
         <div id="root">${html}</div>
-        <!-- Store the initial state into window -->
-        <script>
-          window.__INITIAL_STATE__=${serialize(initialState)};
-        </script>
         <!-- Insert bundled scripts into <script> tag -->
         ${extractor.getScriptTags()}
         ${head.script.toString()}
+                <!-- Store the initial state into window -->
+        <script>window.__INITIAL_STATE__ = ${serialize(initialState)}</script>
       </body>
     </html>
   `;
-
+console.log('document', document)
   // html-minifier configuration, refer to "https://github.com/kangax/html-minifier" for more configuration
   const minifyConfig = {
     collapseWhitespace: true,
