@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "614812aa77353fcafec3";
+/******/ 	var hotCurrentHash = "b69b93982e146f73b238";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -790,7 +790,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire(0)(__webpack_require__.s = 0);
+/******/ 	return hotCreateRequire(1)(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -44056,7 +44056,7 @@ exports.default = Routes;
 
 /***/ }),
 
-/***/ 0:
+/***/ 1:
 /*!****************************************************************************!*\
   !*** multi webpack-hot-middleware/client?reload=true ./src/app/Client.tsx ***!
   \****************************************************************************/
@@ -44070,4 +44070,4 @@ module.exports = __webpack_require__(/*! ./src/app/Client.tsx */"./src/app/Clien
 /***/ })
 
 /******/ });
-//# sourceMappingURL=main-bundle.js.map
+//# sourceMappingURL=main.bundle.js.map

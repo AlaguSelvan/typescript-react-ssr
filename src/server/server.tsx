@@ -14,11 +14,12 @@ import createEmotionServer from 'create-emotion-server'
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/core'
-require('dotenv').config()
 
 import App from '../app/App'
 import configureStore from '../app/redux/configureStore';
 import htmlTemplate from '../utils/renderHtml';
+
+require('dotenv').config()
 
 const app = express();
 
@@ -30,15 +31,14 @@ const cssCache = createCache()
 const { extractCritical } = createEmotionServer(cssCache)
 
 if (process.env.NODE_ENV === 'development') {
-  console.log('development')
-  const webpackClientConfig = require('../../config/webpack/webpack.client.dev.js')
-  const webpackServerConfig = require('../../config/webpack/webpack.server.dev.js')
+  // console.log('App there?', App)
+  const webpackClientConfig = require('../../tools/webpack/client/webpack.config')
+  // const webpackServerConfig = require('../../tools/webpack/server/webpack.config')
   // const compiler = webpack([webpackClientConfig, webpackServerConfig]);
   const compiler = webpack(webpackClientConfig);
-  compiler.apply(new webpack.ProgressPlugin())
   const devServerProps = {
     path: path.resolve('build', 'public'),
-    publicPath: '/public/',
+    // publicPath: '/public/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
     quiet: true,
@@ -59,18 +59,16 @@ if (process.env.NODE_ENV === 'development') {
 
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
-  console.log('Middleware enabled');
-  console.log('Done');
 } else {
   console.log('development')
-  const webpackClientConfig = require('../../config/webpack/webpack.client.dev.js')
-  // const webpackServerConfig = require('../../config/webpack/webpack.server.dev.js')
+  const webpackClientConfig = require('../../tools/webpack/webpack.client.dev.js')
+  // const webpackServerConfig = require('../../tools/webpack/webpack.server.dev.js')
   // const compiler = webpack([webpackClientConfig, webpackServerConfig]);
   const compiler = webpack(webpackClientConfig);
   compiler.apply(new webpack.ProgressPlugin())
   const devServerProps = {
     path: path.resolve('build', 'public'),
-    publicPath: '/public/',
+    // publicPath: '/public/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
     quiet: true,

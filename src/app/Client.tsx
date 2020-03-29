@@ -15,7 +15,7 @@ const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({initialState})
 const cache = createCache()
 
-export default function startRender () {
+function startRender () {
   const renderMethod = module.hot ? render : hydrate
   renderMethod(
     <AppContainer>
@@ -38,9 +38,9 @@ loadableReady(() => {
 
 if ((module).hot) {
   // Enable webpack hot module replacement for routes
-  (module).hot.accept('./Router/Routes', () => {
+  (module).hot.accept('./Router/index.ts', () => {
     try {
-      const nextRoutes = require('./Router/Routes').default;
+      const nextRoutes = require('./Router/index.ts').default;
 
       startRender()
     } catch (error) {

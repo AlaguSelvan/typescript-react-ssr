@@ -1,32 +1,12 @@
 {
   "compilerOptions": {
-    "outDir": "./build/public",
-    "allowJs": true,
+    "outDir": "build/public",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "commonjs",
-    "noEmit": true,
-    "target": "es5",
-    "strict": true,
-    "jsx": "react",
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "lib": [
-      "es5",
-      "es6",
-      "dom"
-    ],
-    "typeRoots": [
-      "type-declarations",
-      "node_modules/@types"
-    ],
-  },
-  "include": [
-    "./src/**/*.tsx", "src/app/index.js", "src/app/index.js"
-  ],
-  "exclude": [
-    "node_modules/**"
-  ]
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "target": "es5",
+    "jsx": "react"
+  }
 }

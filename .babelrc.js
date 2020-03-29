@@ -1,5 +1,4 @@
 module.exports = {
-  compact: true,
   presets: [
     [
       '@babel/preset-env',
@@ -12,16 +11,14 @@ module.exports = {
 				debug: false
 			}
     ],
-    '@babel/preset-react'
+    "@babel/preset-typescript",
+    "@babel/preset-react"
   ],
   plugins: [
-    "@babel/plugin-transform-async-to-generator",
-    "@babel/plugin-syntax-dynamic-import",
-    "universal-import",
-    '@loadable/babel-plugin',
+    "react-hot-loader/babel",
+    "@loadable/babel-plugin",
     "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-object-rest-spread",
-    "@babel/plugin-transform-runtime"
+    "@babel/plugin-syntax-dynamic-import"
   ],
   env: {
     development: {

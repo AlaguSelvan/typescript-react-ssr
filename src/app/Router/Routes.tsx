@@ -6,8 +6,7 @@ const Loading = () => (
 )
 
 export const Home = loadable(() =>
-	// import(/* webpackPrefetch: true */ '../pages/Home')
-	import('../pages/Home')
+	import(/* webpackPrefetch: true */ '../pages/Home')
 );
 
 const routes = [

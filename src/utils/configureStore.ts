@@ -40,9 +40,9 @@ export default ({ initialState, url }: Argv) => {
 
   if ((module as any).hot) {
     // Enable Webpack hot module replacement for reducers
-    (module as any).hot.accept('../app/redux/reducers', () => {
+    (module as any).hot.accept('../reducers', () => {
       try {
-        const createNextReducer = require('../app/redux/reducers').default;
+        const createNextReducer = require('../reducers').default;
 
         store.replaceReducer(createNextReducer(history));
       } catch (error) {

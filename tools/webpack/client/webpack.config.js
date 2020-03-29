@@ -1,52 +1,42 @@
-const { resolve } = require('path')
-const webpack = require('webpack')
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import LoadablePlugin from '@loadable/webpack-plugin';
+const { resolve } = require('path');
+const { smart } = require('webpack-merge')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin');
+// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 
-const config = {
-  mode: 'development',
+const config =
+  process.env.NODE_ENV === 'production'
+    ? require('./webpack.prod')
+    : require('./webpack.dev')
+
+const base = {
+  name: 'client',
   entry: {
-  vendor: ["react", "react-dom"],
-  main: [
-    'webpack-hot-middleware/client?reload=true',
-    './src/app/index.tsx'
-  ]
+    vendor: ['react', 'react-dom'],
   },
   output: {
-    filename: "[name]-bundle.js",
     path: resolve('build', 'public'),
     publicPath: '/public/'
   },
-  devServer: {
-    contentBase: "build",
-    overlay: true,
-    stats: {
-      colors: true
-    }
-  },
-  devtool: 'source-map',
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      },
       {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
         use: ['babel-loader', 'ts-loader'], // The orders are important
-      },
+      }
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new ManifestPlugin({
+      fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
+      filter: file => file.isInitial
+    }),
     new LoadablePlugin({
       writeToDisk: true,
       filename: '../loadable-stats.json'
-    }),
-    new ForkTsCheckerWebpackPlugin()
+    })
   ],
   optimization: {
     splitChunks: {
@@ -74,4 +64,4 @@ const config = {
   }
 }
 
-module.exports = config
+module.exports = smart(base, config)
