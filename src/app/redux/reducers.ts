@@ -4,10 +4,10 @@ import { connectRouter } from 'connected-react-router';
 
 import HomeReducer from './home/home.reducer';
 
-console.log('hit here')
-
-export default (history: History) =>
+const rootReducer = (history: History) =>
   combineReducers({
     HomeReducer,
     router: connectRouter(history)
   });
+
+export default rootReducer

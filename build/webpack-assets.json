@@ -1,6 +1,0 @@
-{
-  "main.js": "/public/main.bundle.js",
-  "main.js.map": "/public/main.bundle.js.map",
-  "vendor.js": "/public/vendor.bundle.js",
-  "vendor.js.map": "/public/vendor.bundle.js.map"
-}
