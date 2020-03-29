@@ -4,7 +4,7 @@
   "description": "A Boilerplate for Modern Web apps With Best development experience & best practices",
   "main": "index.ts",
   "scripts": {
-    "dev": "NODE_ENV=development PORT=3000 nodemon --watch src/server --watch config index.ts",
+    "dev": "nodemon --watch src/server --watch config index.ts",
     "start": "nodemon server/index.ts"
   },
   "repository": {

@@ -10,6 +10,7 @@ import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import webpack from 'webpack';
+import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import createEmotionServer from 'create-emotion-server'
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import createCache from '@emotion/cache'
@@ -60,15 +61,13 @@ if (process.env.NODE_ENV === 'development') {
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
 } else {
-  console.log('development')
-  const webpackClientConfig = require('../../tools/webpack/webpack.client.dev.js')
-  // const webpackServerConfig = require('../../tools/webpack/webpack.server.dev.js')
-  // const compiler = webpack([webpackClientConfig, webpackServerConfig]);
-  const compiler = webpack(webpackClientConfig);
+  const webpackClientConfig = require('../../tools/webpack/client/webpack.config')
+  const webpackServerConfig = require('../../tools/webpack/server/webpack.config')
+  const compiler = webpack([webpackClientConfig, webpackServerConfig]);
+  const clientCompiler = compiler.compilers[0];
+  const serverCompiler = compiler.compilers[1];
   compiler.apply(new webpack.ProgressPlugin())
   const devServerProps = {
-    path: path.resolve('build', 'public'),
-    // publicPath: '/public/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
     quiet: true,
@@ -78,19 +77,18 @@ if (process.env.NODE_ENV === 'development') {
     serverSideRender: true
   }
   const webpackDevMiddleware = require('webpack-dev-middleware')(
-    compiler,
-    devServerProps
+    clientCompiler,
+    webpackClientConfig.devServer
   );
 
   const webpackHotMiddlware = require('webpack-hot-middleware')(
-    compiler,
-    devServerProps
+    clientCompiler,
+    webpackClientConfig.devServer
   );
 
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
-  console.log('Middleware enabled');
-  console.log('Done');
+  app.use(webpackHotServerMiddleware(compiler));
 }
 
 app.get('*', async (req, res) => {
@@ -129,14 +127,13 @@ app.get('*', async (req, res) => {
     </ChunkExtractorManager>
   )
   const initialState = store.getState();
-  console.log(initialState)
+  console.log('initialState server side', initialState)
   const { html, css, ids } = extractCritical(ReactDOMServer.renderToString(rootJsx))
   const head = Helmet.renderStatic();
   return res.send(htmlTemplate(head, html, css, ids, initialState, extractor))
 });
 
-app.listen(3000, () => {
-  const url = `http://localhost:3000`;
-
-  console.info(console.log(`==> 🌎  Listening at ${url}`));
+app.listen(process.env.PORT, () => {
+  const url = `http://localhost:${process.env.PORT}`;
+  console.info(`=> 🌎  Listening at ${url}`);
 });
