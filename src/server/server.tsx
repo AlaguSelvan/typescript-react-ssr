@@ -5,19 +5,23 @@ import ReactDOMServer from 'react-dom/server';
 import compression from 'compression';
 import helmet from 'helmet';
 import Helmet from 'react-helmet';
-import routes from '../app/Router/Routes'
+import routes from '../client/Router/Routes'
 import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import webpack from 'webpack';
+//@ts-ignore
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
+//@ts-ignore
 import createEmotionServer from 'create-emotion-server'
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
+//@ts-ignore
 import createCache from '@emotion/cache'
+//@ts-ignore
 import { CacheProvider } from '@emotion/core'
 
-import App from '../app/App'
-import configureStore from '../app/redux/configureStore';
+import App from '../client/App'
+import configureStore from '../client/redux/configureStore';
 import htmlTemplate from '../utils/renderHtml';
 
 require('dotenv').config()
@@ -26,7 +30,7 @@ const app = express();
 
 app.use(helmet());
 app.use(compression());
-app.use(express.static(path.resolve(process.cwd(), 'public')));
+app.use(express.static(path.resolve('public')));
 
 const cssCache = createCache()
 const { extractCritical } = createEmotionServer(cssCache)
@@ -110,7 +114,6 @@ app.get('*', async (req, res) => {
   };
   await loadBranchData();
   const statsFile = path.resolve(
-    process.cwd(),
     'build/public/loadable-stats.json'
   );
   const extractor = new ChunkExtractor({ statsFile });
@@ -127,7 +130,6 @@ app.get('*', async (req, res) => {
     </ChunkExtractorManager>
   )
   const initialState = store.getState();
-  console.log('initialState server side', initialState)
   const { html, css, ids } = extractCritical(ReactDOMServer.renderToString(rootJsx))
   const head = Helmet.renderStatic();
   return res.send(htmlTemplate(head, html, css, ids, initialState, extractor))
@@ -135,5 +137,5 @@ app.get('*', async (req, res) => {
 
 app.listen(process.env.PORT, () => {
   const url = `http://localhost:${process.env.PORT}`;
-  console.info(`=> 🌎  Listening at ${url}`);
+  console.info(`Listening at ${url}`);
 });

@@ -10,10 +10,8 @@ const BrotliPlugin = require("brotli-webpack-plugin")
 const config = {
   mode: 'production',
   entry: {
-    // vendor: ["react", "react-dom"],
     main: [
-      // 'webpack-hot-middleware/client?reload=true',
-      './src/app/index.tsx'
+      './src/client/index.tsx'
     ]
   },
   output: {

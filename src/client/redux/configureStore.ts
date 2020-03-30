@@ -10,7 +10,7 @@ interface Argv {
   url?: string;
 }
 
-export default ({ initialState, url }: Argv) => {
+const configureStore = ({ initialState, url }: Argv) => {
   const isServer = typeof window === 'undefined';
   // Create a history depending on the environment
   const history = isServer
@@ -40,9 +40,9 @@ export default ({ initialState, url }: Argv) => {
 
   if ((module as any).hot) {
     // Enable Webpack hot module replacement for reducers
-    (module as any).hot.accept('../reducers', () => {
+    (module as any).hot.accept('./reducers', () => {
       try {
-        const createNextReducer = require('../reducers').default;
+        const createNextReducer = require('./reducers');
 
         store.replaceReducer(createNextReducer(history));
       } catch (error) {
@@ -53,3 +53,5 @@ export default ({ initialState, url }: Argv) => {
 
   return { store, history };
 };
+
+export default configureStore

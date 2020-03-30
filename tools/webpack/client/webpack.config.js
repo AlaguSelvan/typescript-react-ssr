@@ -2,7 +2,6 @@ const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
-// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 
 const config =
@@ -28,14 +27,22 @@ const base = {
       }
     ]
   },
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+    extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.scss'],
+  },
+
   plugins: [
+    new CleanWebpackPlugin(),
     new ManifestPlugin({
-      fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
+      fileName: resolve('build/public/webpack-assets.json'),
       filter: file => file.isInitial
     }),
     new LoadablePlugin({
       writeToDisk: true,
-      filename: '../loadable-stats.json'
+      filename: '../public/loadable-stats.json'
     })
   ],
   optimization: {

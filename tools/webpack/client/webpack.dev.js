@@ -1,14 +1,15 @@
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const webpack = require('webpack')
 
 const config = {
   mode: 'development',
   entry: {
     main: [
+      // Migrate to react-refresh on its release https://github.com/facebook/react/issues/16604#issuecomment-528663101
       'react-hot-loader/patch',
       '@babel/runtime/regenerator',
       'webpack-hot-middleware/client?reload=true',
-      './src/app/Client.tsx'
+      './src/client/Client.tsx'
     ]
   },
   output: {
@@ -16,7 +17,7 @@ const config = {
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: "src/app",
+    contentBase: "src/client",
     overlay: true,
     stats: {
       colors: true

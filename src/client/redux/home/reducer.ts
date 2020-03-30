@@ -1,10 +1,10 @@
-import HomeActionTypes from './home.types'
+import HomeActionTypes from './types'
 
-const INITIAL_STATE = {
+export const initialState = {
   isLoaded: false
 }
 
-export default (state = INITIAL_STATE, action: any): any => {
+export default (state = initialState, action: any) => {
   const { TOGGLE_LOADED } = HomeActionTypes;
   switch(action.type) {
     case TOGGLE_LOADED:
@@ -12,5 +12,7 @@ export default (state = INITIAL_STATE, action: any): any => {
         ...state,
         isLoaded: true
       }
+    default:
+      return state
   }
 }

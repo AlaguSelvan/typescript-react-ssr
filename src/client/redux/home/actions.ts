@@ -1,4 +1,4 @@
-import HomeActionTypes from "./home.types";
+import HomeActionTypes from "./types";
 
 
 export const loadPage = () => ({
