@@ -4,10 +4,9 @@
   "description": "A Boilerplate for Modern Web apps With Best development experience & best practices",
   "main": "index.ts",
   "scripts": {
-    "dev": "nodemon --watch ts-node index.ts",
+    "dev": "nodemon --watch src/server --watch config index.ts",
     "dev:test": "nodemon --watch src/server --watch config index.ts",
-    "start": "nodemon server/index.ts",
-    "build": "babel src -d build"
+    "start": "nodemon server/index.ts"
   },
   "repository": {
     "type": "git",
@@ -56,7 +55,6 @@
     "webpack-mild-compile": "^3.3.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
@@ -91,7 +89,7 @@
     "@types/webpack": "^4.41.7",
     "@types/webpack-env": "^1.15.1",
     "awesome-typescript-loader": "^5.2.1",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "^8.0.6",
     "babel-plugin-dynamic-import-node": "^2.3.0",
     "babel-plugin-universal-import": "^4.0.0",
     "body-parser": "^1.19.0",

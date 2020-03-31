@@ -10,14 +10,10 @@ import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import webpack from 'webpack';
-//@ts-ignore
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
-//@ts-ignore
 import createEmotionServer from 'create-emotion-server'
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-//@ts-ignore
 import createCache from '@emotion/cache'
-//@ts-ignore
 import { CacheProvider } from '@emotion/core'
 
 import App from '../client/App'
@@ -35,15 +31,10 @@ app.use(express.static(path.resolve('public')));
 const cssCache = createCache()
 const { extractCritical } = createEmotionServer(cssCache)
 
-if (process.env.NODE_ENV === 'development') {
-  // console.log('App there?', App)
+if (process.env.NODE_ENV === 'production') {
   const webpackClientConfig = require('../../tools/webpack/client/webpack.config')
-  // const webpackServerConfig = require('../../tools/webpack/server/webpack.config')
-  // const compiler = webpack([webpackClientConfig, webpackServerConfig]);
   const compiler = webpack(webpackClientConfig);
   const devServerProps = {
-    path: path.resolve('build', 'public'),
-    // publicPath: '/public/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
     quiet: true,
@@ -70,7 +61,6 @@ if (process.env.NODE_ENV === 'development') {
   const compiler = webpack([webpackClientConfig, webpackServerConfig]);
   const clientCompiler = compiler.compilers[0];
   const serverCompiler = compiler.compilers[1];
-  compiler.apply(new webpack.ProgressPlugin())
   const devServerProps = {
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
@@ -82,20 +72,24 @@ if (process.env.NODE_ENV === 'development') {
   }
   const webpackDevMiddleware = require('webpack-dev-middleware')(
     clientCompiler,
-    webpackClientConfig.devServer
+    devServerProps
   );
 
   const webpackHotMiddlware = require('webpack-hot-middleware')(
     clientCompiler,
-    webpackClientConfig.devServer
+    devServerProps
+  );
+  const webpackServerMiddlware = require('webpack-hot-middleware')(
+    compiler
   );
 
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
-  app.use(webpackHotServerMiddleware(compiler));
+  app.use(webpackServerMiddlware);
 }
 
 app.get('*', async (req, res) => {
+  console.log('hit routes')
   let { url } = req
   const { store } = configureStore({ url })
   const branch = matchRoutes(routes, req.path)

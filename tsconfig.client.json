@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "module": "esnext", // for splitting chunks
+    "target": "es2015"
+  }
+}

@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const externals = require('../../node-externals');
+const externals = require('./node-externals');
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -12,11 +12,12 @@ const config =
 const base = {
   name: "server",
   target: "node",
-  externals,
+  // externals,
   entry: "../../src/server/server.tsx",
   output: {
-    path: resolve(__dirname, "../build"),
-    libraryTarget: "commonjs2"
+    path: resolve('build', 'public'),
+    publicPath: '/public/',
+    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
@@ -36,4 +37,4 @@ const base = {
   ]
 }
 
-export default smart(base, config)
+module.exports = smart(base, config)

@@ -16,13 +16,6 @@ const config = {
     filename: "[name].bundle.js",
   },
   devtool: 'source-map',
-  devServer: {
-    contentBase: "src/client",
-    overlay: true,
-    stats: {
-      colors: true
-    }
-  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ForkTsCheckerWebpackPlugin()

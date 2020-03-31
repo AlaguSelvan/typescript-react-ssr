@@ -23,7 +23,7 @@ const base = {
       {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'ts-loader'], // The orders are important
+        use: 'babel-loader'
       }
     ]
   },
@@ -31,18 +31,18 @@ const base = {
     alias: {
       'react-dom': '@hot-loader/react-dom',
     },
-    extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.scss'],
+    modules: ['node_modules'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
-
   plugins: [
-    new CleanWebpackPlugin(),
+    // new CleanWebpackPlugin(),
     new ManifestPlugin({
-      fileName: resolve('build/public/webpack-assets.json'),
+      fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
       filter: file => file.isInitial
     }),
     new LoadablePlugin({
       writeToDisk: true,
-      filename: '../public/loadable-stats.json'
+      fileName: resolve(process.cwd(), 'build/loadable-stats.json')
     })
   ],
   optimization: {
