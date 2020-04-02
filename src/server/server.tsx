@@ -13,8 +13,6 @@ import webpack from 'webpack';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import createEmotionServer from 'create-emotion-server'
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-import { clearChunks, flushChunkNames } from 'react-universal-component/server';
-import flushChunks from 'webpack-flush-chunks';
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/core'
 
@@ -87,49 +85,64 @@ if (process.env.NODE_ENV === 'production') {
 
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
-  app.use(webpackHotServerMiddleware(compiler));
+  // app.use(webpackHotServerMiddleware(compiler));
   console.log('done')
 }
 
-app.get('*', async (req, res) => {
+export const serverRenderer = async(url: any, req: any, res: any) => {
+(async() => {
+  try {  const { store } = configureStore({ url });
+         const branch = matchRoutes(routes, req.path);
+         const loadBranchData = () => {
+           const branch = matchRoutes(routes, req.path);
+           const promises = branch.map(({ route, match }) => {
+             if (route.loadData)
+               return Promise.all(
+                 route
+                   .loadData({ params: match.params, getState: store.getState })
+                   .map((item: any) => store.dispatch(item))
+               );
+             return Promise.resolve(null);
+           });
+           return Promise.all(promises);
+         };
+         await loadBranchData();
+         const statsFile = path.resolve('build/client/loadable-stats.json');
+         const extractor = new ChunkExtractor({ statsFile });
+         const staticContext = {};
+         const rootJsx = (
+           <ChunkExtractorManager extractor={extractor}>
+             <Provider store={store}>
+               <StaticRouter location={url} context={staticContext}>
+                 <CacheProvider value={cssCache}>
+                   <App />
+                 </CacheProvider>
+               </StaticRouter>
+             </Provider>
+           </ChunkExtractorManager>
+         );
+         const initialState = store.getState();
+         // const extractors = new ChunkExtractor({ statsFile });
+         const tree = extractor.collectChunks(<App />);
+         const { html, css, ids } = extractCritical(
+           ReactDOMServer.renderToString(rootJsx)
+         );
+         const head = Helmet.renderStatic();
+         return res.send(
+           htmlTemplate(head, html, css, ids, initialState, extractor)
+         );
+}
+  catch (err) {
+      console.log(err.message)
+      res.status(404).send('Not Found :(');
+    }
+  })()
+}
+
+app.get('*', (req, res) => {
   console.log('hit routes')
   let { url } = req
-  const { store } = configureStore({ url })
-  const branch = matchRoutes(routes, req.path)
-  const loadBranchData = () => {
-    const branch = matchRoutes(routes, req.path);
-    const promises = branch.map(({ route, match }) => {
-      if (route.loadData)
-        return Promise.all(
-          route
-            .loadData({ params: match.params, getState: store.getState })
-            .map((item : any) => store.dispatch(item))
-        );
-      return Promise.resolve(null);
-    });
-    return Promise.all(promises);
-  };
-  await loadBranchData();
-  const statsFile = path.resolve(
-    'build/public/loadable-stats.json'
-  );
-  const extractor = new ChunkExtractor({ statsFile });
-  const staticContext = {};
-  const rootJsx = (
-    <ChunkExtractorManager extractor={extractor}>
-      <Provider store={store}>
-        <StaticRouter location={url} context={staticContext}>
-          <CacheProvider value={cssCache}>
-            <App />
-          </CacheProvider>
-        </StaticRouter>
-      </Provider>
-    </ChunkExtractorManager>
-  )
-  const initialState = store.getState();
-  const { html, css, ids } = extractCritical(ReactDOMServer.renderToString(rootJsx))
-  const head = Helmet.renderStatic();
-  return res.send(htmlTemplate(head, html, css, ids, initialState, extractor))
+  serverRenderer(url, req, res)
 });
 
 app.listen(process.env.PORT, () => {

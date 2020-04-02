@@ -1,5 +1,5 @@
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const webpack = require('webpack')
+const { resolve } = require('path');
 
 const config = {
   mode: 'development',
@@ -9,22 +9,21 @@ const config = {
       'react-hot-loader/patch',
       '@babel/runtime/regenerator',
       'webpack-hot-middleware/client?reload=true',
-      './src/client/Client.tsx'
+      resolve('src', 'client', 'Client.tsx')
     ]
   },
   output: {
-    filename: "[name].bundle.js",
+    filename: '[name].bundle.js'
   },
   resolve: {
     // alias: {
     //   'react-dom': '@hot-loader/react-dom',
     // },
   },
-  devtool: 'source-map',
+  devtool: 'inline-cheap-module-source-map',
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new ForkTsCheckerWebpackPlugin()
+    new webpack.HotModuleReplacementPlugin()
   ]
-}
+};
 
 module.exports = config

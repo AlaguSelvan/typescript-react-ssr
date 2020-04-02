@@ -5,6 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -17,8 +18,8 @@ const base = {
     vendor: ['react', 'react-dom'],
   },
   output: {
-    path: resolve('build', 'public'),
-    publicPath: '/public/'
+    path: resolve('build', 'client'),
+    publicPath: '/client/'
   },
   module: {
     rules: [
@@ -43,10 +44,12 @@ const base = {
       fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
       filter: file => file.isInitial
     }),
+    new ForkTsCheckerWebpackPlugin(),
     new webpack.NamedModulesPlugin(),
+    new webpack.ProgressPlugin(),
     new LoadablePlugin({
-      writeToDisk: true,
-      fileName: resolve(process.cwd(), 'build/loadable-stats.json')
+      // writeToDisk: true,
+      // fileName: resolve(process.cwd(), 'build/loadable-stats.json')
     })
   ],
   optimization: {
