@@ -13,6 +13,8 @@ import webpack from 'webpack';
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import createEmotionServer from 'create-emotion-server'
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
+import { clearChunks, flushChunkNames } from 'react-universal-component/server';
+import flushChunks from 'webpack-flush-chunks';
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/core'
 
@@ -79,13 +81,14 @@ if (process.env.NODE_ENV === 'production') {
     clientCompiler,
     devServerProps
   );
-  const webpackServerMiddlware = require('webpack-hot-middleware')(
-    compiler
-  );
+  // const webpackServerMiddlware = require('webpack-hot-server-middleware')(
+  //   compiler
+  // );
 
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
-  app.use(webpackServerMiddlware);
+  app.use(webpackHotServerMiddleware(compiler));
+  console.log('done')
 }
 
 app.get('*', async (req, res) => {

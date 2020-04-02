@@ -1,8 +1,10 @@
+const webpack = require('webpack');
 const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -21,25 +23,27 @@ const base = {
   module: {
     rules: [
       {
-        test: /\.ts(x?)$/,
-        exclude: /node_modules/,
-        use: 'babel-loader'
+        test: /\.tsx?$/,
+        use: {
+          loader: 'babel-loader',
+        }
       }
     ]
   },
   resolve: {
-    alias: {
-      'react-dom': '@hot-loader/react-dom',
-    },
+    // alias: {
+    //   'react-dom': '@hot-loader/react-dom',
+    // },
     modules: ['node_modules'],
     extensions: ['.ts', '.tsx', '.js'],
   },
   plugins: [
-    // new CleanWebpackPlugin(),
+    new CaseSensitivePathsPlugin(),
     new ManifestPlugin({
       fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
       filter: file => file.isInitial
     }),
+    new webpack.NamedModulesPlugin(),
     new LoadablePlugin({
       writeToDisk: true,
       fileName: resolve(process.cwd(), 'build/loadable-stats.json')

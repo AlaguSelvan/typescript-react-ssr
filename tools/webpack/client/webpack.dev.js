@@ -15,6 +15,11 @@ const config = {
   output: {
     filename: "[name].bundle.js",
   },
+  resolve: {
+    // alias: {
+    //   'react-dom': '@hot-loader/react-dom',
+    // },
+  },
   devtool: 'source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
