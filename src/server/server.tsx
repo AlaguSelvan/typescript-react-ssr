@@ -107,7 +107,7 @@ export const serverRenderer = async(url: any, req: any, res: any) => {
            return Promise.all(promises);
          };
          await loadBranchData();
-         const statsFile = path.resolve('build/client/loadable-stats.json');
+         const statsFile = path.resolve('build/loadable-stats.json');
          const extractor = new ChunkExtractor({ statsFile });
          const staticContext = {};
          const rootJsx = (

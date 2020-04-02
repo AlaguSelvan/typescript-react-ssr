@@ -15,7 +15,7 @@ const config =
 const base = {
   name: 'client',
   entry: {
-    vendor: ['react', 'react-dom'],
+    vendor: ['react', 'react-dom']
   },
   output: {
     path: resolve('build', 'client'),
@@ -26,7 +26,7 @@ const base = {
       {
         test: /\.tsx?$/,
         use: {
-          loader: 'babel-loader',
+          loader: 'babel-loader'
         }
       }
     ]
@@ -36,7 +36,7 @@ const base = {
     //   'react-dom': '@hot-loader/react-dom',
     // },
     modules: ['node_modules'],
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js']
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
@@ -48,9 +48,9 @@ const base = {
     new webpack.NamedModulesPlugin(),
     new webpack.ProgressPlugin(),
     new LoadablePlugin({
-      // writeToDisk: true,
-      // fileName: resolve(process.cwd(), 'build/loadable-stats.json')
-    })
+      writeToDisk: true,
+      filename: '../loadable-stats.json',
+    }),
   ],
   optimization: {
     splitChunks: {
@@ -76,6 +76,6 @@ const base = {
       }
     }
   }
-}
+};
 
 module.exports = smart(base, config)
