@@ -7,6 +7,7 @@ const config = {
     main: [
       // Migrate to react-refresh on its release https://github.com/facebook/react/issues/16604#issuecomment-528663101
       'react-hot-loader/patch',
+      '@babel/polyfill',
       '@babel/runtime/regenerator',
       'webpack-hot-middleware/client?reload=true',
       resolve('src', 'client', 'Client.tsx')
@@ -16,9 +17,10 @@ const config = {
     filename: '[name].bundle.js'
   },
   resolve: {
-    // alias: {
-    //   'react-dom': '@hot-loader/react-dom',
-    // },
+    modules: ['src', 'node_modules'],
+    descriptionFiles: ['package.json'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+    alias: { 'react-dom': '@hot-loader/react-dom' },
   },
   devtool: 'inline-cheap-module-source-map',
   plugins: [

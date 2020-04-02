@@ -25,9 +25,10 @@ const base = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: {
-          loader: 'babel-loader'
-        }
+        use: [
+          'babel-loader', // <------------
+          'ts-loader'
+        ]
       }
     ]
   },
@@ -49,8 +50,8 @@ const base = {
     new webpack.ProgressPlugin(),
     new LoadablePlugin({
       writeToDisk: true,
-      filename: '../loadable-stats.json',
-    }),
+      filename: '../loadable-stats.json'
+    })
   ],
   optimization: {
     splitChunks: {
@@ -75,6 +76,12 @@ const base = {
         }
       }
     }
+  },
+  node: {
+    fs: 'empty',
+    vm: 'empty',
+    net: 'empty',
+    tls: 'empty'
   }
 };
 

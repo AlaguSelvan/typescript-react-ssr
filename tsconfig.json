@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "lib": [
+      "es2015",
+      "es2017",
+      "dom"
+    ],
+    "moduleResolution": "node",
     "outDir": "build/public",
     "sourceMap": true,
     "noImplicitAny": true,

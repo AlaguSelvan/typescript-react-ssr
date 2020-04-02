@@ -7,12 +7,13 @@ import helmet from 'helmet';
 import Helmet from 'react-helmet';
 import routes from '../client/Router/Routes'
 import { StaticRouter } from 'react-router-dom';
-import { matchRoutes } from 'react-router-config';
+import { renderRoutes, matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import webpack from 'webpack';
-import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
+// import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import createEmotionServer from 'create-emotion-server'
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
+
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/core'
 
@@ -60,7 +61,7 @@ if (process.env.NODE_ENV === 'production') {
   const webpackServerConfig = require('../../tools/webpack/server/webpack.config')
   const compiler = webpack([webpackClientConfig, webpackServerConfig]);
   const clientCompiler = compiler.compilers[0];
-  const serverCompiler = compiler.compilers[1];
+  // const serverCompiler = compiler.compilers[1];
   const devServerProps = {
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
@@ -92,7 +93,7 @@ if (process.env.NODE_ENV === 'production') {
 export const serverRenderer = async(url: any, req: any, res: any) => {
 (async() => {
   try {  const { store } = configureStore({ url });
-         const branch = matchRoutes(routes, req.path);
+        //  const branch = matchRoutes(routes, req.path);
          const loadBranchData = () => {
            const branch = matchRoutes(routes, req.path);
            const promises = branch.map(({ route, match }) => {
@@ -123,7 +124,6 @@ export const serverRenderer = async(url: any, req: any, res: any) => {
          );
          const initialState = store.getState();
          // const extractors = new ChunkExtractor({ statsFile });
-         const tree = extractor.collectChunks(<App />);
          const { html, css, ids } = extractCritical(
            ReactDOMServer.renderToString(rootJsx)
          );
@@ -140,7 +140,6 @@ export const serverRenderer = async(url: any, req: any, res: any) => {
 }
 
 app.get('*', (req, res) => {
-  console.log('hit routes')
   let { url } = req
   serverRenderer(url, req, res)
 });
