@@ -12,7 +12,8 @@ const config = {
     ]
   },
   output: {
-    filename: "[name].bundle.js",
+    filename: '[name]-bundle.[hash].js',
+    chunkFilename: '[name].[hash].js',
   },
   devtool: 'source-map',
   plugins: [

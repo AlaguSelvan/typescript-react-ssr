@@ -14,12 +14,8 @@ const base = {
   target: 'node',
   externals,
   mode: process.env.NODE_ENV,
-  entry: { main: ['./src/server/render.tsx'] },
+  entry: './server/render.tsx',
   output: {
-    path: resolve('build', 'server'),
-    // publicPath: '/',
-    filename: 'dev-server-bundle.js',
-    chunkFilename: '[name].js',
     path: resolve('build', 'server'),
     libraryTarget: 'commonjs2'
   },
@@ -58,9 +54,9 @@ const base = {
     //     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
     //   }
     // }),
-    new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1
-    })
+    // new webpack.optimize.LimitChunkCountPlugin({
+    //   maxChunks: 1
+    // })
   ]
 };
 

@@ -6,6 +6,7 @@ const WriteFilePlugin = require('write-file-webpack-plugin');
 module.exports = {
   output: {
     filename: 'dev-server-bundle.js',
+    chunkFilename: '[name].js',
   //   chunkFilename: '[name].js',
     // path: resolve('dist', 'server'),
     libraryTarget: 'commonjs2'
@@ -16,11 +17,11 @@ module.exports = {
         NODE_ENV: JSON.stringify('development')
       }
     }),
-    new WriteFilePlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: 'public'
-      }
-    ])
+    // new WriteFilePlugin(),
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: 'public'
+    //   }
+    // ])
   ]
 };
