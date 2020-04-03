@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const { resolve } = require('path');
 const { smart } = require('webpack-merge')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+// const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const externals = require('./node-externals');
 
 const config =
@@ -10,31 +10,58 @@ const config =
     : require('./webpack.dev')
 
 const base = {
-  name: "server",
-  target: "node",
+  name: 'server',
+  target: 'node',
   externals,
-  entry: "../../src/server/server.tsx",
+  mode: process.env.NODE_ENV,
+  entry: { main: ['./src/server/render.tsx'] },
   output: {
-    path: resolve('build', 'public'),
-    publicPath: '/public/',
+    path: resolve('build', 'server'),
+    // publicPath: '/',
+    filename: 'dev-server-bundle.js',
+    chunkFilename: '[name].js',
+    path: resolve('build', 'server'),
     libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
       {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader'
+          }
+        ]
+      },
+      {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'ts-loader']
-      },
+        loader: [
+          'babel-loader',
+          {
+            loader: 'awesome-typescript-loader',
+            options: {
+              useCache: true
+            }
+          }
+        ]
+      }
     ]
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.json']
+  },
   plugins: [
-    new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify("development")
-      }
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    //   }
+    // }),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1
     })
   ]
-}
+};
 
 module.exports = smart(base, config)

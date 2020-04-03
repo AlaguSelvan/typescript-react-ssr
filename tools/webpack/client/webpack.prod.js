@@ -8,7 +8,6 @@ const CompressionPlugin = require("compression-webpack-plugin")
 const BrotliPlugin = require("brotli-webpack-plugin")
 
 const config = {
-  mode: 'production',
   entry: {
     main: [
       './src/client/index.tsx'

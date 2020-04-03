@@ -1,6 +1,6 @@
 import React from 'react'
-import { render, hydrate } from 'react-dom'
-import { loadableReady } from '@loadable/component';
+import ReactDOM from 'react-dom'
+// import { loadableReady } from '@loadable/component';
 import { AppContainer } from 'react-hot-loader'
 import { CacheProvider } from '@emotion/core'
 import createCache from '@emotion/cache'
@@ -15,10 +15,10 @@ const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({initialState})
 const cache = createCache()
 
-function startRender () {
-  const renderMethod = module.hot ? render : hydrate
+const render = () => {
+  const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
   renderMethod(
-    <AppContainer>
+    // <AppContainer>
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <CacheProvider value={cache}>
@@ -26,15 +26,17 @@ function startRender () {
           </CacheProvider>
         </ConnectedRouter>
       </Provider>
-    </AppContainer>
+    // </AppContainer>
     ,
     document.getElementById('root')
   )
 }
 
-loadableReady(() => {
-  startRender()
-});
+render()
+
+// loadableReady(() => {
+//   startRender()
+// });
 
 if ((module).hot) {
   // Enable webpack hot module replacement for routes
@@ -42,7 +44,7 @@ if ((module).hot) {
     try {
       const nextRoutes = require('./Router/index.ts').default;
 
-      startRender()
+      render()
     } catch (error) {
       console.error(`==> 😭  Routes hot reloading error ${error}`);
     }

@@ -1,41 +1,26 @@
-const path = require("path")
+const {resolve} = require("path")
 const webpack = require("webpack")
-// const externals = require("../node-externals")
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 
 module.exports = {
-  // name: "server",
-  // target: "node",
-  // externals,
-  // entry: "../../src/server/server.tsx",
-  mode: "development",
   output: {
-    filename: "dev-server-bundle.js",
-    // path: path.resolve(__dirname, "../build"),
-    // libraryTarget: "commonjs2"
+    filename: 'dev-server-bundle.js',
+  //   chunkFilename: '[name].js',
+    // path: resolve('dist', 'server'),
+    libraryTarget: 'commonjs2'
   },
-  // module: {
-    // rules: [
-      // {
-      //   test: /\.js$/,
-      //   exclude: /node_modules/,
-      //   use: [
-      //     {
-      //       loader: "babel-loader"
-      //     }
-      //   ]
-      // },
-      // {
-      //   test: /\.ts(x?)$/,
-      //   exclude: /node_modules/,
-      //   use: ['babel-loader', 'ts-loader']
-      // },
-    // ]
-  // },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify("development")
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
       }
-    })
+    }),
+    new WriteFilePlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: 'public'
+      }
+    ])
   ]
-}
+};
