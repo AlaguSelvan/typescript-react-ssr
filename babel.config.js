@@ -15,10 +15,11 @@ module.exports = {
     "@babel/preset-react"
   ],
   plugins: [
-    "@loadable/babel-plugin",
+    // "@loadable/babel-plugin",
     "react-hot-loader/babel",
     "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-syntax-dynamic-import"
+    "@babel/plugin-syntax-dynamic-import",
+    "universal-import"
   ],
   env: {
     development: {

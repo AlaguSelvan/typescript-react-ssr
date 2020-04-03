@@ -1,19 +1,21 @@
 import * as React from 'react'
-import loadable from '@loadable/component';
 
-const Loading = () => (
-	<div>...Loading</div>
-)
-
-export const Home = loadable(() =>
-	import(/* webpackPrefetch: true */ '../pages/Home')
-);
+// const UniversalComponent = universal(
+//   props => import(`../Views/${props.page}`),
+//   {
+//     loading: () => <div> Loading...</div>,
+//     ignoreBabelRename: true
+//   }
+// );
+// export const Home = loadable(() =>
+// 	import(/* webpackPrefetch: true */ '../pages/Home')
+// );
 
 const routes = [
 	{
 		path: '/',
 		exact: true,
-		component: Home,
+		page: 'Home',
 		// loadData: () => [
 		// ]
 	}

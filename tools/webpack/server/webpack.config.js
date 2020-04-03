@@ -12,7 +12,7 @@ const config =
 const base = {
   name: "server",
   target: "node",
-  // externals,
+  externals,
   entry: "../../src/server/server.tsx",
   output: {
     path: resolve('build', 'public'),
