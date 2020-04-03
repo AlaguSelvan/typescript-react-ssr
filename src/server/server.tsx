@@ -108,16 +108,7 @@ if (process.env.NODE_ENV === 'production') {
 //     return Promise.all(promises);
 //   };
 //   await loadBranchData();
-//   const statsFile = path.resolve(
-//     'build/public/loadable-stats.json'
-//   );
-//   const { js, styles, cssHash } = flushChunks(clientStats, {
-//     chunkNames: flushChunkNames()
-//   });
-//   const extractor = new ChunkExtractor({ statsFile });
-//   const staticContext = {};
 //   const rootJsx = (
-//     <ChunkExtractorManager extractor={extractor}>
 //       <Provider store={store}>
 //         <StaticRouter location={url} context={staticContext}>
 //           <CacheProvider value={cssCache}>
@@ -125,7 +116,6 @@ if (process.env.NODE_ENV === 'production') {
 //           </CacheProvider>
 //         </StaticRouter>
 //       </Provider>
-//     </ChunkExtractorManager>
 //   )
 //   const initialState = store.getState();
 //   const { html, css, ids } = extractCritical(ReactDOMServer.renderToString(rootJsx))

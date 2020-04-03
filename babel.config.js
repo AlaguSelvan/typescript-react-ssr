@@ -15,7 +15,6 @@ module.exports = {
     "@babel/preset-react"
   ],
   plugins: [
-    // "@loadable/babel-plugin",
     "react-hot-loader/babel",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import",
