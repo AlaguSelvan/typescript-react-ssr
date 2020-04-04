@@ -2,7 +2,6 @@ const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
-// const LoadablePlugin = require('@loadable/webpack-plugin');
 
 const config =
   process.env.NODE_ENV === 'production'
