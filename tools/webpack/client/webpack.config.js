@@ -54,31 +54,7 @@ const base = {
     //   writeToDisk: true,
     //   fileName: resolve(process.cwd(), 'build/loadable-stats.json')
     // })
-  ],
-  optimization: {
-    splitChunks: {
-      chunks: 'async',
-      minSize: 0,
-      minChunks: 1,
-      maxAsyncRequests: 1,
-      maxInitialRequests: 1,
-      automaticNameDelimiter: '.',
-      name: true,
-      cacheGroups: {
-        vendors: {
-          chunks: 'all',
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10,
-          reuseExistingChunk: true
-        },
-        default: {
-          minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true
-        }
-      }
-    }
-  }
+  ]
 };
 
 module.exports = smart(base, config)

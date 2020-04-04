@@ -12,9 +12,9 @@ import flushChunks from 'webpack-flush-chunks';
 import { HelmetProvider } from "react-helmet-async";
 import serialize from 'serialize-javascript';
 
-import routes from '../src/client/Router/Routes';
-import App from '../src/client/App';
-import configureStore from '../src/client/redux/configureStore';
+import routes from '../app/Router/Routes';
+import App from '../app/App';
+import configureStore from '../app/redux/configureStore';
 // import htmlTemplate from '../utils/renderHtml';
 
 const cssCache = createCache();

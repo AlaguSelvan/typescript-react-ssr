@@ -10,8 +10,9 @@ const BrotliPlugin = require("brotli-webpack-plugin")
 const config = {
   entry: {
     main: [
-      './src/client/index.tsx'
-    ]
+      './app/index.tsx'
+    ],
+    vendor: ['react', 'react-dom']
   },
   output: {
     filename: '[name].[chunkhash:8].bundle.js',
@@ -44,31 +45,31 @@ const config = {
       algorithm: "gzip"
     }),
     new BrotliPlugin()
-  ]
-  // optimization: {
-  //   splitChunks: {
-  //     chunks: 'async',
-  //     minSize: 0,
-  //     minChunks: 1,
-  //     maxAsyncRequests: 1,
-  //     maxInitialRequests: 1,
-  //     automaticNameDelimiter: '.',
-  //     name: true,
-  //     cacheGroups: {
-  //       vendors: {
-  //         chunks: 'all',
-  //         test: /[\\/]node_modules[\\/]/,
-  //         priority: -10,
-  //         reuseExistingChunk: true
-  //       },
-  //       default: {
-  //         minChunks: 2,
-  //         priority: -20,
-  //         reuseExistingChunk: true
-  //       }
-  //     }
-  //   }
-  // }
+  ],
+  optimization: {
+    splitChunks: {
+      chunks: 'async',
+      minSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 1,
+      maxInitialRequests: 1,
+      automaticNameDelimiter: '.',
+      name: true,
+      cacheGroups: {
+        vendors: {
+          chunks: 'all',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    }
+  }
 }
 
 module.exports = config

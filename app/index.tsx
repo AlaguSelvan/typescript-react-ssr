@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import { loadableReady } from '@loadable/component';
 import { AppContainer } from 'react-hot-loader'
 import { CacheProvider } from '@emotion/core'
 import createCache from '@emotion/cache'
@@ -9,13 +8,12 @@ import configureStore from './redux/configureStore'
 import { ConnectedRouter } from 'connected-react-router'
 import App from './App'
 
-// Get the initial state from server-side rendering
 // @ts-ignore
 const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({initialState})
 const cache = createCache()
 
-const render = () => {
+export const render = () => {
   const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
   renderMethod(
     // <AppContainer>

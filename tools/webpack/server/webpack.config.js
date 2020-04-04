@@ -54,9 +54,9 @@ const base = {
     //     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
     //   }
     // }),
-    // new webpack.optimize.LimitChunkCountPlugin({
-    //   maxChunks: 1
-    // })
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1
+    })
   ]
 };
 
