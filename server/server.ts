@@ -51,6 +51,7 @@ if (process.env.NODE_ENV === 'production') {
   const compiler = webpack([webpackClientConfig, webpackServerConfig])
   const clientCompiler = compiler.compilers[0];
   const serverCompiler = compiler.compilers[1];
+  compiler.apply(new webpack.ProgressPlugin());
   const devServerProps = {
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,

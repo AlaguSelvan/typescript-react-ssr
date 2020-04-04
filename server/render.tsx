@@ -44,9 +44,12 @@ export default ({ clientStats }: any) => (req: any, res: any) => {
     const app = extractCritical(html);
     //@ts-ignore
     const { helmet } = helmetContext;
-    const { js, styles, cssHash } = flushChunks(clientStats, {
-      chunkNames: flushChunkNames()
+    const chunkNames = flushChunkNames()
+    const { js, styles, cssHash, scripts } = flushChunks(clientStats, {
+      chunkNames
     });
+    console.log('DYNAMIC CHUNK NAMES RENDERED', chunkNames);
+    console.log('SCRIPTS SERVED', scripts);
     const initialState = store.getState();
     const template = `<!DOCTYPE html><html lang="en"><head><meta name="theme-color" content="#000000"/>${styles}${helmet.title}${helmet.meta.toString()}
     ${helmet.link.toString()}</head>

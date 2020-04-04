@@ -19,11 +19,6 @@ export default function App() {
           <Route key={index} exact path={route.path}>
             <UniversalComponent page={route.component} {...route} />
           </Route>
-          // <Route
-          //   key={index}
-          //   render={routeProps => (
-          //   )}
-          // />
         );
       })}
     </Switch>

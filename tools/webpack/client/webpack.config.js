@@ -41,7 +41,6 @@ const base = {
     alias: {
       'react-dom': '@hot-loader/react-dom',
     },
-    modules: ['node_modules'],
     extensions: ['.ts', '.tsx', '.js'],
   },
   plugins: [

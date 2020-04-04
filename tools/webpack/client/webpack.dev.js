@@ -1,25 +1,26 @@
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const WriteFilePlugin = require('write-file-webpack-plugin') // here so you can see what chunks are built
 const webpack = require('webpack')
 
 const config = {
   entry: {
     main: [
-      // Migrate to react-refresh on its release https://github.com/facebook/react/issues/16604#issuecomment-528663101
-      'react-hot-loader/patch',
-      '@babel/runtime/regenerator',
       'webpack-hot-middleware/client?reload=true',
-      './app/index.tsx'
-    ]
+      'react-hot-loader/patch',
+      './app/index.tsx',
+    ],
   },
   output: {
-    filename: '[name]-bundle.[hash].js',
-    chunkFilename: '[name].[hash].js',
+		filename: '[name]-bundle.[hash].js',
+		chunkFilename: '[name].[hash].js',
   },
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   plugins: [
+    new WriteFilePlugin(),
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new ForkTsCheckerWebpackPlugin()
-  ]
-}
+    new ForkTsCheckerWebpackPlugin(),
+  ],
+};
 
 module.exports = config
