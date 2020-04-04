@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "build/public",
+    "outDir": "build/client",
     "sourceMap": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,

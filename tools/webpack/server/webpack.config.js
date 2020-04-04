@@ -1,7 +1,6 @@
 const webpack = require('webpack')
 const { resolve } = require('path');
 const { smart } = require('webpack-merge')
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const externals = require('./node-externals');
 
 const config =
@@ -49,11 +48,6 @@ const base = {
     extensions: ['.ts', '.tsx', '.js', '.json']
   },
   plugins: [
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-    //   }
-    // }),
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     })
