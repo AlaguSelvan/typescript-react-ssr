@@ -14,12 +14,12 @@ const config =
 
 const base = {
   name: 'client',
-  entry: {
-    vendor: ['react', 'react-dom']
-  },
+  // entry: {
+  //   vendor: ['react', 'react-dom'],
+  // },
   output: {
     path: resolve('build', 'client'),
-    publicPath: '/client/'
+    publicPath: '/public/',
   },
   module: {
     rules: [
@@ -27,31 +27,31 @@ const base = {
         test: /\.tsx?$/,
         use: [
           'babel-loader', // <------------
-          'ts-loader'
-        ]
-      }
-    ]
+          'ts-loader',
+        ],
+      },
+    ],
   },
   resolve: {
     // alias: {
     //   'react-dom': '@hot-loader/react-dom',
     // },
     modules: ['node_modules'],
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js'],
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
-    new ManifestPlugin({
-      fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
-      filter: file => file.isInitial
-    }),
+    // new ManifestPlugin({
+    //   fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
+    //   filter: file => file.isInitial
+    // }),
     new ForkTsCheckerWebpackPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.ProgressPlugin(),
     new LoadablePlugin({
-      writeToDisk: true,
-      filename: '../loadable-stats.json'
-    })
+      // writeToDisk: true,
+      fileName: resolve(process.cwd(), 'build/client/loadable-stats.json'),
+    }),
   ],
   optimization: {
     splitChunks: {
@@ -67,22 +67,22 @@ const base = {
           chunks: 'all',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          reuseExistingChunk: true
+          reuseExistingChunk: true,
         },
         default: {
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true
-        }
-      }
-    }
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
   node: {
     fs: 'empty',
     vm: 'empty',
     net: 'empty',
-    tls: 'empty'
-  }
+    tls: 'empty',
+  },
 };
 
 module.exports = smart(base, config)

@@ -3,14 +3,12 @@ const { resolve } = require('path');
 
 const config = {
   mode: 'development',
-  entry: {
-    main: [
+  entry: [
       // Migrate to react-refresh on its release https://github.com/facebook/react/issues/16604#issuecomment-528663101
       'react-hot-loader/patch',
       'webpack-hot-middleware/client?reload=true',
       resolve('src', 'client', 'Client.tsx')
-    ]
-  },
+  ],
   output: {
     filename: '[name].bundle.js'
   },
