@@ -1,9 +1,12 @@
+const webpack = require('webpack');
 const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
-// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -16,27 +19,40 @@ const base = {
     vendor: ['react', 'react-dom'],
   },
   output: {
-    path: resolve('build', 'public'),
-    publicPath: '/public/'
+    path: resolve('build', 'client'),
+    publicPath: '/public/',
   },
   module: {
     rules: [
       {
-        test: /\.ts(x?)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader', 'ts-loader'], // The orders are important
-      }
-    ]
+        test: /\.tsx?$/,
+        use: [
+          'babel-loader', // <------------
+          'ts-loader',
+        ],
+      },
+    ],
+  },
+  resolve: {
+    // alias: {
+    //   'react-dom': '@hot-loader/react-dom',
+    // },
+    modules: ['node_modules'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   plugins: [
-    new ManifestPlugin({
-      fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
-      filter: file => file.isInitial
-    }),
+    new CaseSensitivePathsPlugin(),
+    // new ManifestPlugin({
+    //   fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
+    //   filter: file => file.isInitial
+    // }),
+    new ForkTsCheckerWebpackPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new webpack.ProgressPlugin(),
     new LoadablePlugin({
-      writeToDisk: true,
-      filename: '../loadable-stats.json'
-    })
+      // writeToDisk: true,
+      fileName: resolve(process.cwd(), 'build/client/loadable-stats.json'),
+    }),
   ],
   optimization: {
     splitChunks: {
@@ -52,16 +68,22 @@ const base = {
           chunks: 'all',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          reuseExistingChunk: true
+          reuseExistingChunk: true,
         },
         default: {
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true
-        }
-      }
-    }
-  }
-}
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
+  node: {
+    fs: 'empty',
+    vm: 'empty',
+    net: 'empty',
+    tls: 'empty',
+  },
+};
 
 module.exports = smart(base, config)
