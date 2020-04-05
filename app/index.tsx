@@ -16,7 +16,7 @@ const cache = createCache()
 export const render = () => {
   const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
   renderMethod(
-    // <AppContainer>
+    <AppContainer>
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <CacheProvider value={cache}>
@@ -24,8 +24,7 @@ export const render = () => {
           </CacheProvider>
         </ConnectedRouter>
       </Provider>
-    // </AppContainer>
-    ,
+    </AppContainer>,
     document.getElementById('root')
   )
 }

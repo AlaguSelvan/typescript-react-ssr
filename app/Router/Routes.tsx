@@ -7,6 +7,11 @@ const routes = [
 		page: 'Home',
 		// loadData: () => [
 		// ]
+	},
+	{
+		path: '/about',
+		exact: true,
+		page: 'About'
 	}
 ]
 

@@ -53,7 +53,7 @@ export default ({ clientStats }: any) => (req: any, res: any) => {
     const initialState = store.getState();
     const template = `<!DOCTYPE html><html lang="en"><head><meta name="theme-color" content="#000000"/>${styles}${helmet.title}${helmet.meta.toString()}
     ${helmet.link.toString()}</head>
-    <body><div id="react-root">${html}</div>${js}${cssHash}
+    <body><div id="root">${html}</div>${js}${cssHash}
     <script>window.__INITIAL_STATE__ = ${serialize(store.getState())}</script>
     </body></html>`;
     return res
