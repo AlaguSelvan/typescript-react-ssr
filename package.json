@@ -4,7 +4,7 @@
   "description": "A Boilerplate for Modern Web apps With Best development experience & best practices",
   "main": "index.ts",
   "scripts": {
-    "start": "npm run clean && nodemon --watch src/server --watch config index.ts",
+    "start": "npm run clean && nodemon server/server.ts",
     "clean": "rimraf build .awcache"
   },
   "repository": {
@@ -53,7 +53,9 @@
     "webpack-mild-compile": "^3.3.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
+    "@babel/node": "^7.8.7",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.0",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",

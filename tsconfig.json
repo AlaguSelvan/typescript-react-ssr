@@ -1,12 +1,38 @@
 {
   "compilerOptions": {
-    "outDir": "build/client",
+    "outDir": "./build",
+    "declaration": false,
+    "jsx": "react",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "types": [
+      "react",
+      "webpack-env"
+    ], // for styled-components
+    "module": "esnext", // for splitting chunks
+    "target": "es2015",
+    "moduleResolution": "node", // for module:esnext
+    "allowJs": false,
     "sourceMap": true,
-    "noImplicitAny": true,
+    "removeComments": false, // to leave webpack's comment
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": false,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "target": "es5",
-    "jsx": "react"
-  }
+    "experimentalDecorators": true,
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "exclude": [
+    "node_modules",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/client/**/*.stories.ts"
+  ],
+  "include": [
+    "src/**/*"
+  ]
 }
