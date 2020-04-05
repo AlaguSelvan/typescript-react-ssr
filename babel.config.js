@@ -4,18 +4,21 @@ module.exports = {
       '@babel/preset-env',
       {
         targets: {
-          browsers: ['last 2 versions']
+          browsers: ['last 2 versions'],
+          node: 'current',
         },
-        debug: false
-      }
+        debug: false,
+      },
     ],
     '@babel/preset-typescript',
-    '@babel/preset-react'
+    '@babel/preset-react',
   ],
   plugins: [
     'react-hot-loader/babel',
+    '@babel/plugin-transform-async-to-generator',
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-syntax-dynamic-import',
-    '@loadable/babel-plugin'
-  ]
+    '@loadable/babel-plugin',
+    '@babel/plugin-transform-runtime'
+  ],
 };

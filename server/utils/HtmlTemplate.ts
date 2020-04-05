@@ -29,7 +29,7 @@ import cheerio from 'cheerio';
 //   return template.html();
 // };
 
-export const renderHtml = (
+const HtmlTemplate = (
   html: string,
   css: any,
   ids: any,
@@ -65,7 +65,7 @@ export const renderHtml = (
         <!-- Insert bundled scripts into <script> tag -->
         ${extractor.getScriptTags()}
         ${head.script.toString()}
-                <!-- Store the initial state into window -->
+        <!-- Store the initial state into window -->
         <script>window.__INITIAL_STATE__ = ${serialize(initialState)}</script>
       </body>
     </html>
@@ -85,3 +85,5 @@ export const renderHtml = (
     ? minify(document, minifyConfig)
     : document;
 };
+
+export default HtmlTemplate

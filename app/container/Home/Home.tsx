@@ -4,7 +4,7 @@ import Button from '../../components/Button';
 
 const About = () => (
   <div>
-    <p>About Page...</p>
+    <p>Home Page...</p>
     <Button />
     <Link to="/about">
       <p>goto prev page</p>

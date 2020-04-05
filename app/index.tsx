@@ -9,7 +9,6 @@ import configureStore from './redux/configureStore'
 import { ConnectedRouter } from 'connected-react-router'
 import App from './App'
 
-// Get the initial state from server-side rendering
 // @ts-ignore
 const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({initialState})

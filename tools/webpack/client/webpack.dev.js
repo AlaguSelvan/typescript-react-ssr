@@ -9,7 +9,7 @@ const config = {
     main: [
       // Migrate to react-refresh on its release https://github.com/facebook/react/issues/16604#issuecomment-528663101
       'react-hot-loader/patch',
-      'webpack-hot-middleware/client?reload=true',
+      `webpack-hot-middleware/client?path=http://localhost:${process.env.PORT}/__webpack_hmr`,
       resolve('app', 'index.tsx'),
     ],
   },
@@ -25,7 +25,7 @@ const config = {
   devtool: 'inline-cheap-module-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ErrorOverlayPlugin()
+    new ErrorOverlayPlugin(),
     // new HtmlWebpackPlugin({
     //   hash: true,
     //   inject: true,

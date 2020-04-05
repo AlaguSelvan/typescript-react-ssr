@@ -1,7 +1,6 @@
 import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import routes from '../app/Router/Routes';
 import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
@@ -12,7 +11,8 @@ import { CacheProvider } from '@emotion/core';
 
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
-import {renderHtml} from './utils/renderHtml';
+import HtmlTemplate from './utils/HtmlTemplate';
+import routes from '../app/Router/Routes';
 
 const cssCache = createCache()
 const { extractCritical } = createEmotionServer(cssCache)
@@ -52,7 +52,7 @@ const render = async(req: any, res: any) => {
   const { html, css, ids } = extractCritical(
     ReactDOMServer.renderToString(rootJsx)
   );
-  const document = renderHtml(html, css, ids, initialState, extractor);
+  const document = HtmlTemplate(html, css, ids, initialState, extractor);
   return res.send(document);
 };
 

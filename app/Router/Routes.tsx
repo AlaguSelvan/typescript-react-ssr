@@ -6,11 +6,11 @@ const Loading = () => (
 )
 
 export const Home = loadable(() =>
-	import(/* webpackPrefetch: true */ '../container/Home')
+	import('../container/Home')
 );
 
 export const About = loadable(() =>
-	import(/* webpackPrefetch: true */ '../container/About')
+	import('../container/About')
 );
 
 const routes = [

@@ -12,6 +12,7 @@ interface Argv {
 
 const configureStore = ({ initialState, url }: Argv) => {
   const isServer = typeof window === 'undefined';
+  const isDev = process.env.NODE_ENV === 'development';
   // Create a history depending on the environment
   const history = isServer
     ? createMemoryHistory({
