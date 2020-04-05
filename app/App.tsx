@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import universal from 'react-universal-component';
-import routes from './Router/Routes'
+import routes from './Router'
 
 export const UniversalComponent = universal(
   (props: any) => import(`./pages/${props.page}`),

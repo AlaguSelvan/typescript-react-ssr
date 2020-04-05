@@ -13,9 +13,9 @@ const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({initialState})
 const cache = createCache()
 
-export const render = () => {
-  const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
-  renderMethod(
+const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
+const render = () => {
+  return renderMethod(
     <AppContainer>
       <Provider store={store}>
         <ConnectedRouter history={history}>
@@ -30,10 +30,6 @@ export const render = () => {
 }
 
 render()
-
-// loadableReady(() => {
-//   startRender()
-// });
 
 if ((module).hot) {
   // Enable webpack hot module replacement for routes

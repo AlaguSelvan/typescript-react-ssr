@@ -1,5 +1,16 @@
-import * as Routes from './Routes'
+const routes = [
+  {
+    path: '/',
+    exact: true,
+    page: 'Home',
+    // loadData: () => [
+    // ]
+  },
+  {
+    path: '/about',
+    exact: true,
+    page: 'About',
+  },
+];
 
-console.log('routes file', Routes)
-
-export default Routes
+export default routes;

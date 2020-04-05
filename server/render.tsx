@@ -12,7 +12,7 @@ import flushChunks from 'webpack-flush-chunks';
 import { HelmetProvider } from "react-helmet-async";
 import serialize from 'serialize-javascript';
 
-import routes from '../app/Router/Routes';
+import routes from '../app/Router';
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
 // import htmlTemplate from '../utils/renderHtml';
@@ -40,21 +40,25 @@ export default ({ clientStats }: any) => (req: any, res: any) => {
         </Provider>
       </HelmetProvider>
     );
-    const html = renderToString(rootJsx)
-    const app = extractCritical(html);
+    const element = renderToString(rootJsx)
+    const { html, css, ids } = extractCritical(element);
+    console.log(res.locals, 'locals')
     //@ts-ignore
     const { helmet } = helmetContext;
     const chunkNames = flushChunkNames()
-    const { js, styles, cssHash, scripts } = flushChunks(clientStats, {
+    const { js, styles, scripts, ...others } = flushChunks(clientStats, {
       chunkNames
     });
-    console.log('DYNAMIC CHUNK NAMES RENDERED', chunkNames);
-    console.log('SCRIPTS SERVED', scripts);
+    // console.log('flush chunks', js, styles, cssHash, scripts, others);
     const initialState = store.getState();
-    const template = `<!DOCTYPE html><html lang="en"><head><meta name="theme-color" content="#000000"/>${styles}${helmet.title}${helmet.meta.toString()}
-    ${helmet.link.toString()}</head>
-    <body><div id="root">${html}</div>${js}${cssHash}
-    <script>window.__INITIAL_STATE__ = ${serialize(store.getState())}</script>
+    const template = `<!DOCTYPE html><html lang="en"><head><meta name="theme-color" content="#000000"/>${
+      helmet.title
+    }${helmet.meta.toString()}
+    ${helmet.link.toString()}
+    <style data-emotion-css="${ids.join(' ')}">${css}</style>
+    </head>
+    <body><div id="root">${html}</div>${js}
+    <script>window.__INITIAL_STATE__ = ${serialize(initialState)}</script>
     </body></html>`;
     return res
       .status(200)
