@@ -1,7 +1,8 @@
 const { resolve } = require('path')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const UglifyJSPlugin = require("uglifyjs-webpack-plugin")
 const CompressionPlugin = require("compression-webpack-plugin")
+const ManifestPlugin = require('webpack-manifest-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const BrotliPlugin = require("brotli-webpack-plugin")
 
 const config = {
@@ -14,12 +15,16 @@ const config = {
     chunkFilename: '[name].[chunkhash:8].bundle.js',
   },
   plugins: [
-    new ForkTsCheckerWebpackPlugin(),
     new UglifyJSPlugin(),
     new CompressionPlugin({
       algorithm: 'gzip',
     }),
     new BrotliPlugin(),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+    }),
+    new ManifestPlugin()
   ],
   // optimization: {
   //   splitChunks: {
