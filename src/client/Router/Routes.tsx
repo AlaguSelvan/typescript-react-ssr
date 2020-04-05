@@ -9,6 +9,10 @@ export const Home = loadable(() =>
 	import(/* webpackPrefetch: true */ '../pages/Home')
 );
 
+export const About = loadable(() =>
+	import(/* webpackPrefetch: true */ '../pages/About')
+);
+
 const routes = [
 	{
 		path: '/',
@@ -16,6 +20,10 @@ const routes = [
 		component: Home,
 		// loadData: () => [
 		// ]
+	}, {
+		path: '/about',
+		exact: true,
+		component: About
 	}
 ]
 

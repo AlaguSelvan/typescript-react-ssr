@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Button from '../../components/Button';
+import { Toggle } from '../../components';
 
 const About = () => (
   <div>
     <p>About Page...</p>
-    <Button />
-    <Link to="/about">
+    <Toggle />
+    <Link to="/">
       <p>goto prev page</p>
     </Link>
   </div>
