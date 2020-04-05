@@ -1,26 +1,18 @@
-import '@loadable/babel-plugin';
 import path from 'path';
-import express from 'express';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import compression from 'compression';
-import helmet from 'helmet';
-import Helmet from 'react-helmet';
-import routes from '../client/Router/Routes';
+import routes from '../app/Router/Routes';
 import { StaticRouter } from 'react-router-dom';
-import { renderRoutes, matchRoutes } from 'react-router-config';
+import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
-import webpack from 'webpack';
-// import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 import createEmotionServer from 'create-emotion-server';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
 
-import App from '../client/App';
-import configureStore from '../client/redux/configureStore';
-import htmlTemplate from '../utils/renderHtml';
+import App from '../app/App';
+import configureStore from '../app/redux/configureStore';
+import {renderHtml} from './utils/renderHtml';
 
 const cssCache = createCache()
 const { extractCritical } = createEmotionServer(cssCache)
@@ -60,8 +52,9 @@ const render = async(req: any, res: any) => {
   const { html, css, ids } = extractCritical(
     ReactDOMServer.renderToString(rootJsx)
   );
-  const head = Helmet.renderStatic();
-  return res.send(htmlTemplate(head, html, css, ids, initialState, extractor));
+  const document = renderHtml(html, css, ids, initialState, extractor);
+  // const document = htmlTemp(html, css, ids, initialState, extractor);
+  return res.send(document);
 };
 
 export default render

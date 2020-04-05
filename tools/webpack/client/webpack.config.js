@@ -3,6 +3,7 @@ const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -14,9 +15,9 @@ const config =
 
 const base = {
   name: 'client',
-  // entry: {
-  //   vendor: ['react', 'react-dom'],
-  // },
+  entry: {
+    vendor: ['react', 'react-dom'],
+  },
   output: {
     path: resolve('build', 'client'),
     publicPath: '/public/',

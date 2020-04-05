@@ -14,7 +14,7 @@ app.use(compression());
 app.use(express.static(path.resolve('public')));
 
 if (process.env.NODE_ENV === 'production') {
-  const webpackClientConfig = require('../../tools/webpack/client/webpack.config');
+  const webpackClientConfig = require('../tools/webpack/client/webpack.config');
   const compiler = webpack(webpackClientConfig);
   const devServerProps = {
     headers: { 'Access-Control-Allow-Origin': '*' },
@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
 } else {
-  const webpackClientConfig = require('../../tools/webpack/client/webpack.config');
+  const webpackClientConfig = require('../tools/webpack/client/webpack.config');
   const compiler = webpack(webpackClientConfig);
   const clientCompiler = compiler;
   const devServerProps = {
@@ -49,6 +49,7 @@ if (process.env.NODE_ENV === 'production') {
     writeToDisk: true,
     stats: 'minimal',
     serverSideRender: true,
+    index: false
   };
   const webpackDevMiddleware = require('webpack-dev-middleware')(
     clientCompiler,

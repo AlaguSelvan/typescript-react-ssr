@@ -28,7 +28,7 @@ function startRender () {
       </Provider>
     </AppContainer>
     ,
-    document.getElementById('root')
+    document.getElementById('app')
   )
 }
 

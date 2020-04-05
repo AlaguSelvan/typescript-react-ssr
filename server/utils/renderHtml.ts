@@ -1,14 +1,46 @@
 import serialize from 'serialize-javascript';
 import { minify } from 'html-minifier';
+import Helmet from 'react-helmet';
+import { resolve } from 'path';
+import cheerio from 'cheerio';
 
-const renderHtml =  (
-  head: any,
+// export const renderToHtml = (
+//   html: string,
+//   css: any,
+//   ids: any,
+//   initialState = {},
+//   extractor: any
+// ) => {
+//   console.log('before render', html);
+//   const HTML_TEMPLATE = resolve('build', 'client', 'index.html');
+//   const $template = cheerio.load(HTML_TEMPLATE);
+//   const helmet = Helmet.renderStatic();
+//   $template('head').append(
+//     helmet.title.toString() + helmet.meta.toString() + helmet.link.toString()
+//   );
+//   $template('head').append(
+//     extractor.getLinkTags().toString() +
+//     extractor.getStyleTags().toString
+//   );
+//   $template('head').append(
+//     `<style data-emotion-css="${ids.join(' ')}">${css}</style>`
+//   );
+//   $template('head').append(
+//     `<script>window.__INITIAL_STATE__ = ${serialize(initialState)}</script>`
+//   );
+//   $template('#app').html(html);
+//   // console.log($template.html());
+//   return $template.html();
+// };
+
+export const renderHtml = (
   html: string,
   css: any,
   ids: any,
   initialState = {},
   extractor: any
 ) => {
+  const head = Helmet.renderStatic();
   const document = `
     <!doctype html>
     <html ${head.htmlAttributes.toString()}>
@@ -33,7 +65,7 @@ const renderHtml =  (
       </head>
       <body>
         <!-- Insert the router, which passed from server-side -->
-        <div id="root">${html}</div>
+        <div id="app">${html}</div>
         <!-- Insert bundled scripts into <script> tag -->
         ${extractor.getScriptTags()}
         ${head.script.toString()}
@@ -42,7 +74,7 @@ const renderHtml =  (
       </body>
     </html>
   `;
-console.log('document', document)
+  console.log('document', document);
   // html-minifier configuration, refer to "https://github.com/kangax/html-minifier" for more configuration
   const minifyConfig = {
     collapseWhitespace: true,
@@ -50,11 +82,11 @@ console.log('document', document)
     trimCustomFragments: true,
     minifyCSS: true,
     minifyJS: true,
-    minifyURLs: true
+    minifyURLs: true,
   };
 
   // Minify html in production
-  return process.env.NODE_ENV === 'production' ? minify(document, minifyConfig) : document;
+  return process.env.NODE_ENV === 'production'
+    ? minify(document, minifyConfig)
+    : document;
 };
-
-export default renderHtml

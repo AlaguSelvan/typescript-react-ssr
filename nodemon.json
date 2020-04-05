@@ -1,7 +1,7 @@
 {
   "verbose": true,
-  "ignore": ["build", "src/client"],
+  "ignore": ["build", "app/"],
   "exec": "babel-node --extensions \".ts,.tsx\"",
   "ext": "ts,tsx,js,json",
-  "watch": ["src/server"]
+  "watch": ["server"]
 }

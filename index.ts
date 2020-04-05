@@ -3,4 +3,4 @@
 //   plugins: ['dynamic-import-node'],
 // });
 
-require('./src/server/server');
+require('./server/server');
