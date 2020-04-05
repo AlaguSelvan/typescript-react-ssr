@@ -1,6 +1,6 @@
 import path from 'path';
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import {renderToString} from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
@@ -49,9 +49,8 @@ const render = async(req: any, res: any) => {
     </ChunkExtractorManager>
   );
   const initialState = store.getState();
-  const { html, css, ids } = extractCritical(
-    ReactDOMServer.renderToString(rootJsx)
-  );
+  const app = renderToString(rootJsx)
+  const { html, css, ids } = extractCritical(app);
   const document = HtmlTemplate(html, css, ids, initialState, extractor);
   return res.send(document);
 };

@@ -3,7 +3,6 @@ const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -27,7 +26,7 @@ const base = {
       {
         test: /\.tsx?$/,
         use: [
-          'babel-loader', // <------------
+          'babel-loader',
           'ts-loader',
         ],
       },
@@ -39,13 +38,10 @@ const base = {
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
-    // new ManifestPlugin({
-    //   fileName: resolve(process.cwd(), 'build/webpack-assets.json'),
-    //   filter: file => file.isInitial
-    // }),
     new ForkTsCheckerWebpackPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.ProgressPlugin(),
+    new CleanWebpackPlugin(),
     new LoadablePlugin({
       writeToDisk: true,
       fileName: resolve(process.cwd(), 'build/client/loadable-stats.json'),

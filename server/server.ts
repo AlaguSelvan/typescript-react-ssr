@@ -14,7 +14,7 @@ app.use(helmet());
 app.use(compression());
 
 if (process.env.NODE_ENV === 'development') {
-  const webpackClientConfig = require('../tools/webpack/client/webpack.config');
+  const webpackClientConfig = require('../tools/webpack/webpack.config');
   const compiler = webpack(webpackClientConfig);
   const clientCompiler = compiler;
   const devServerProps = {
@@ -40,13 +40,13 @@ if (process.env.NODE_ENV === 'development') {
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
 }
-
-  app.use(
+app.use('/public', express.static(path.resolve('build/client')));
+app.use(
     '/public',
     expressStaticGzip(path.resolve('build/client'), {
       enableBrotli: true,
     })
-  );
+);
 
 app.get('*', (req, res) => {
   render(req, res);
