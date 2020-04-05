@@ -63,12 +63,12 @@ if (process.env.NODE_ENV === 'production') {
   app.use(webpackHotMiddlware);
   console.log('done');
 }
+app.use('/public', express.static('build/client'));
 
 app.get('*', (req, res) => {
   render(req, res);
 });
 
-app.use('/public', express.static('build'));
 
 app.listen(process.env.PORT, () => {
   const url = `http://localhost:${process.env.PORT}`;
