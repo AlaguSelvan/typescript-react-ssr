@@ -3,7 +3,7 @@ import requireContext from 'require-context.macro';
 import { configure, addDecorator } from '@storybook/react';
 
 configure(
-  requireContext('../app/components', true, /\.stories\.tsx?$/),
+  requireContext('../../app/components', true, /\.stories\.tsx?$/),
   module
 );
 

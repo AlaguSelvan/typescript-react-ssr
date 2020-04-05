@@ -1,5 +1,5 @@
 const { smart } = require('webpack-merge');
-const base = require('../tools/webpack/client/webpack.config');
+const base = require('../webpack/client/webpack.config');
 
 module.exports = async ({ config, mode }) => {
   // delete files of an entry point
