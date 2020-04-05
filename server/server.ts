@@ -11,7 +11,7 @@ const app = express();
 
 app.use(helmet());
 app.use(compression());
-app.use(express.static(path.resolve('public')));
+// app.use(express.static(path.resolve('public')));
 
 if (process.env.NODE_ENV === 'production') {
   const webpackClientConfig = require('../tools/webpack/client/webpack.config');

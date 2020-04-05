@@ -53,7 +53,6 @@ const render = async(req: any, res: any) => {
     ReactDOMServer.renderToString(rootJsx)
   );
   const document = renderHtml(html, css, ids, initialState, extractor);
-  // const document = htmlTemp(html, css, ids, initialState, extractor);
   return res.send(document);
 };
 

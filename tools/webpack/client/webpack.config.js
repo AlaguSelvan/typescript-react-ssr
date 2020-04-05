@@ -3,7 +3,7 @@ const { resolve } = require('path');
 const { smart } = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -34,9 +34,6 @@ const base = {
     ],
   },
   resolve: {
-    // alias: {
-    //   'react-dom': '@hot-loader/react-dom',
-    // },
     modules: ['node_modules'],
     extensions: ['.ts', '.tsx', '.js'],
   },
@@ -50,7 +47,7 @@ const base = {
     new webpack.NamedModulesPlugin(),
     new webpack.ProgressPlugin(),
     new LoadablePlugin({
-      // writeToDisk: true,
+      writeToDisk: true,
       fileName: resolve(process.cwd(), 'build/client/loadable-stats.json'),
     }),
   ],
