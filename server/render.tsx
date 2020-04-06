@@ -1,43 +1,49 @@
-import path from 'path';
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import routes from '../app/Router/Routes';
-import { StaticRouter } from 'react-router-dom';
-import { matchRoutes } from 'react-router-config';
-import { Provider } from 'react-redux';
-import createEmotionServer from 'create-emotion-server';
-import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-import createCache from '@emotion/cache';
-import { CacheProvider } from '@emotion/core';
+import { resolve } from "path";
+import React from "react";
+import { renderToString } from "react-dom/server";
+import { StaticRouter } from "react-router-dom";
+import { matchRoutes } from "react-router-config";
+import { Provider } from "react-redux";
+import Helmet from "react-helmet";
+import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
+import createCache from "@emotion/cache";
+import { CacheProvider } from "@emotion/core";
+import { extractCritical } from "emotion-server";
+// import serialize from "serialize-javascript";
 
-import App from '../app/App';
-import configureStore from '../app/redux/configureStore';
-import {renderHtml} from './utils/renderHtml';
+import App from "../app/App";
+import configureStore from "../app/redux/configureStore";
+import HtmlTemplate from "./utils/HtmlTemplate";
+import routes from "../app/Router";
 
-const cssCache = createCache()
-const { extractCritical } = createEmotionServer(cssCache)
+const cssCache = createCache();
 
-const render = async(req: any, res: any) => {
-  const { url } = req
+const preloadData = (routes, path, store) => {
+  const branch = matchRoutes(routes, path);
+  const promises = branch.map(({ route, match }) => {
+    if (route.loadData) {
+      return Promise.all(
+        route
+          .loadData({
+            params: match.params,
+            getState: store.getState
+          })
+          .map((item: any) => store.dispatch(item))
+      );
+    }
+    return Promise.resolve(null);
+  });
+  return Promise.all(promises);
+};
+
+const render = async (req: any, res: any) => {
+  const { url } = req;
   const { store } = configureStore({ url });
-  const loadBranchData = () => {
-    const branch = matchRoutes(routes, req.path);
-    const promises = branch.map(({ route, match }) => {
-      if (route.loadData)
-        return Promise.all(
-          route
-            .loadData({ params: match.params, getState: store.getState })
-            .map((item: any) => store.dispatch(item))
-        );
-      return Promise.resolve(null);
-    });
-    return Promise.all(promises);
-  };
-  await loadBranchData();
-  const statsFile = path.resolve('build/client/loadable-stats.json');
+  await preloadData(routes, req.path, store);
+  const statsFile = resolve("build/client/loadable-stats.json");
   const extractor = new ChunkExtractor({ statsFile });
   const staticContext = {};
-  const rootJsx = (
+  const Jsx = (
     <ChunkExtractorManager extractor={extractor}>
       <Provider store={store}>
         <StaticRouter location={url} context={staticContext}>
@@ -49,11 +55,36 @@ const render = async(req: any, res: any) => {
     </ChunkExtractorManager>
   );
   const initialState = store.getState();
-  const { html, css, ids } = extractCritical(
-    ReactDOMServer.renderToString(rootJsx)
+  const app = renderToString(Jsx);
+  const { html, css, ids } = extractCritical(app);
+  const head = Helmet.renderStatic();
+  const meta = `
+    ${head.title.toString()}
+    ${head.base.toString()}
+    ${head.meta.toString()}
+    ${head.link.toString()}
+  `.trim();
+  const { nonce } = res.locals;
+  cssCache.nonce = nonce;
+  const linkTags = `
+    ${extractor.getLinkTags({ nonce })}
+  `;
+  const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
+    ids
+  )}</script>`;
+  const scripts = `${extractor.getScriptTags({ nonce })} ${emotionId}`;
+  const style = `<style data-emotion-css="${ids.join(
+    " "
+  )}" nonce=${nonce}>${css}</style>`;
+  const document = HtmlTemplate(
+    html,
+    meta,
+    style,
+    linkTags,
+    initialState,
+    scripts
   );
-  const document = renderHtml(html, css, ids, initialState, extractor);
   return res.send(document);
 };
 
-export default render
+export default render;

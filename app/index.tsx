@@ -1,22 +1,24 @@
-import React from 'react'
-import { render, hydrate } from 'react-dom'
-import { loadableReady } from '@loadable/component';
-import { AppContainer } from 'react-hot-loader'
-import { CacheProvider } from '@emotion/core'
-import createCache from '@emotion/cache'
-import { Provider } from 'react-redux'
-import configureStore from './redux/configureStore'
-import { ConnectedRouter } from 'connected-react-router'
-import App from './App'
+import React from "react";
+import ReactDOM from "react-dom";
+import { loadableReady } from "@loadable/component";
+import { AppContainer } from "react-hot-loader";
+import { CacheProvider } from "@emotion/core";
+import createCache from "@emotion/cache";
+import { Provider } from "react-redux";
+import configureStore from "./redux/configureStore";
+import { ConnectedRouter } from "connected-react-router";
+import { hydrate as emotionHydrate } from "emotion";
 
-// Get the initial state from server-side rendering
+import App from "./App";
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 const initialState = window.__INITIAL_STATE__;
-const { store, history } = configureStore({initialState})
-const cache = createCache()
+const { store, history } = configureStore({ initialState });
+const cache = createCache();
+const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
 
-function startRender () {
-  const renderMethod = module.hot ? render : hydrate
+const render = () => {
   renderMethod(
     <AppContainer>
       <Provider store={store}>
@@ -26,25 +28,22 @@ function startRender () {
           </CacheProvider>
         </ConnectedRouter>
       </Provider>
-    </AppContainer>
-    ,
-    document.getElementById('app')
-  )
-}
+    </AppContainer>,
+    document.getElementById("app")
+  );
+};
 
 loadableReady(() => {
-  startRender()
+  render();
 });
 
-if ((module).hot) {
-  // Enable webpack hot module replacement for routes
-  (module).hot.accept('./Router/index.ts', () => {
-    try {
-      const nextRoutes = require('./Router/index.ts').default;
+if (process.env.NODE_ENV === "development") {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  const emotionIds = window.__emotion;
+  emotionHydrate(emotionIds);
+}
 
-      startRender()
-    } catch (error) {
-      console.error(`==> 😭  Routes hot reloading error ${error}`);
-    }
-  });
+if (module.hot) {
+  module.hot.accept();
 }
