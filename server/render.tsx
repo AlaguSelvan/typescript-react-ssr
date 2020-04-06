@@ -14,7 +14,7 @@ import { extractCritical } from "emotion-server";
 import App from "../app/App";
 import configureStore from "../app/redux/configureStore";
 import HtmlTemplate from "./utils/HtmlTemplate";
-import routes from "../app/Router/Routes";
+import routes from "../app/Router";
 
 const cssCache = createCache();
 
