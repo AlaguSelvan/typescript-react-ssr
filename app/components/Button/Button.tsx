@@ -1,7 +1,7 @@
-import React from 'react';
-import { css, cx } from 'emotion';
+import React from "react";
+import { css, cx } from "emotion";
 
-const color = 'white';
+const color = "white";
 
 const Button = () => {
   const [count, setCount] = React.useState(0);

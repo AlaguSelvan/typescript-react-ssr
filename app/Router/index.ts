@@ -1,3 +1,3 @@
-import * as Routes from './Routes'
+import * as Routes from "./Routes";
 
-export default Routes
+export default Routes;

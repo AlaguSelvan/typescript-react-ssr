@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Toggle from './Toggle';
+import React, { useEffect, useState } from "react";
+import Toggle from "./Toggle";
 
 export default {
   component: Toggle,
-  title: 'Toggle',
+  title: "Toggle",
 };
 
 export const Base = () => {

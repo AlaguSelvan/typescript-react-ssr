@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Button from './Button';
+import React, { useEffect, useState } from "react";
+import Button from "./Button";
 
 export default {
   component: Button,
-  title: 'Button',
+  title: "Button",
 };
 
 export const Base = () => {

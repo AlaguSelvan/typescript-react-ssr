@@ -1,18 +1,18 @@
-import HomeActionTypes from './types'
+import HomeActionTypes from "./types";
 
 export const initialState = {
-  isLoaded: false
-}
+  isLoaded: false,
+};
 
 export default (state = initialState, action: any) => {
   const { TOGGLE_LOADED } = HomeActionTypes;
-  switch(action.type) {
+  switch (action.type) {
     case TOGGLE_LOADED:
       return {
         ...state,
-        isLoaded: true
-      }
+        isLoaded: true,
+      };
     default:
-      return state
+      return state;
   }
-}
+};

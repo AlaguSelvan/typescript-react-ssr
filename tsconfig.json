@@ -3,14 +3,8 @@
     "outDir": "./build",
     "declaration": false,
     "jsx": "react",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "types": [
-      "react",
-      "webpack-env"
-    ], // for styled-components
+    "lib": ["es2018", "dom"],
+    "types": ["react", "webpack-env"], // for styled-components
     "module": "esnext", // for splitting chunks
     "target": "es2015",
     "moduleResolution": "node", // for module:esnext
@@ -32,7 +26,5 @@
     "app/**/*.test.tsx",
     "app/client/**/*.stories.ts"
   ],
-  "include": [
-    "app/**/*"
-  ]
+  "include": ["app/**/*"]
 }

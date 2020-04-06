@@ -13,6 +13,7 @@
     "build:storybook": "build-storybook -o build/storybook-static",
     "storybook": "start-storybook -p 6006 -c tools/storybook",
     "deploy:storybook": "npm run build:storybook && storybook-to-ghpages",
+    "format": "prettier --write \"./**/**/*.{js,ts,tsx,json}\"",
     "clean": "rimraf build"
   },
   "repository": {
@@ -120,6 +121,7 @@
     "file-loader": "^5.1.0",
     "fork-ts-checker-webpack-plugin": "^4.1.2",
     "html-webpack-plugin": "^4.0.4",
+    "husky": "^4.2.3",
     "json-loader": "^0.5.7",
     "nanoid": "^3.0.2",
     "nodemon": "^2.0.2",

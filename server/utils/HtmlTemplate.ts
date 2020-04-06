@@ -1,5 +1,5 @@
-import serialize from 'serialize-javascript';
-import { minify } from 'html-minifier';
+import serialize from "serialize-javascript";
+import { minify } from "html-minifier";
 // import cheerio from 'cheerio';
 
 // export const renderHtml = (
@@ -33,7 +33,7 @@ const HtmlTemplate = (
   style: any,
   linkTags: any,
   initialState = {},
-  scripts: any
+  scripts: any,
 ) => {
   const document = `
     <!doctype html>
@@ -71,9 +71,10 @@ const HtmlTemplate = (
     minifyURLs: true,
   };
 
-  // Minify html in production
   // TODO ? minify(document, minifyConfig)
-  return process.env.NODE_ENV === 'production' ? document : document;
+  return process.env.NODE_ENV === "production"
+    ? minify(document, minifyConfig)
+    : document;
 };
 
-export default HtmlTemplate
+export default HtmlTemplate;

@@ -1,56 +1,56 @@
-import path from 'path';
-import express from 'express';
-import compression from 'compression';
-import helmet from 'helmet';
-import webpack from 'webpack';
-import render from './render';
-import expressStaticGzip from 'express-static-gzip';
-import {nanoid} from 'nanoid';
+import path from "path";
+import express from "express";
+import compression from "compression";
+import helmet from "helmet";
+import webpack from "webpack";
+import render from "./render";
+import expressStaticGzip from "express-static-gzip";
+import { nanoid } from "nanoid";
 
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 
 app.use(helmet());
 app.use(compression());
 
-if (process.env.NODE_ENV === 'development') {
-  const webpackClientConfig = require('../tools/webpack/webpack.config');
+if (process.env.NODE_ENV === "development") {
+  const webpackClientConfig = require("../tools/webpack/webpack.config");
   const compiler = webpack(webpackClientConfig);
   const clientCompiler = compiler;
   const devServerProps = {
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    headers: { "Access-Control-Allow-Origin": "*" },
     hot: true,
     quiet: true,
     noInfo: true,
     writeToDisk: true,
-    stats: 'minimal',
+    stats: "minimal",
     serverSideRender: true,
-    index: false
+    index: false,
   };
-  const webpackDevMiddleware = require('webpack-dev-middleware')(
+  const webpackDevMiddleware = require("webpack-dev-middleware")(
     clientCompiler,
-    devServerProps
+    devServerProps,
   );
 
-  const webpackHotMiddlware = require('webpack-hot-middleware')(
+  const webpackHotMiddlware = require("webpack-hot-middleware")(
     clientCompiler,
-    devServerProps
+    devServerProps,
   );
-  app.use('/public', express.static(path.resolve('build/client')));
+  app.use("/public", express.static(path.resolve("build/client")));
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
 }
-app.use('/public', express.static(path.resolve('build/client')));
+app.use("/public", express.static(path.resolve("build/client")));
 app.use(
-    '/public',
-    expressStaticGzip(path.resolve('build/client'), {
-      enableBrotli: true
-    })
+  "/public",
+  expressStaticGzip(path.resolve("build/client"), {
+    enableBrotli: true,
+  }),
 );
 
-app.get('*', (req, res) => {
-  res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
+app.get("*", (req, res) => {
+  res.locals.nonce = Buffer.from(nanoid(32)).toString("base64");
   render(req, res);
 });
 
@@ -58,4 +58,3 @@ app.listen(process.env.PORT, () => {
   const url = `http://localhost:${process.env.PORT}`;
   console.info(`Listening at ${url}`);
 });
-
