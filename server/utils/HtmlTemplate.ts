@@ -1,8 +1,6 @@
 import serialize from 'serialize-javascript';
 import { minify } from 'html-minifier';
-import Helmet from 'react-helmet';
-import { resolve } from 'path';
-import cheerio from 'cheerio';
+// import cheerio from 'cheerio';
 
 // export const renderHtml = (
 //   html: string,
@@ -31,40 +29,33 @@ import cheerio from 'cheerio';
 
 const HtmlTemplate = (
   html: string,
-  css: any,
-  ids: any,
+  meta: string,
+  style: any,
+  linkTags: any,
   initialState = {},
-  extractor: any
+  scripts: any
 ) => {
-  const head = Helmet.renderStatic();
   const document = `
     <!doctype html>
-    <html ${head.htmlAttributes.toString()}>
+    <html lang="en">
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!--[if IE]>
           <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
         <![endif]-->
-
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link rel="shortcut icon" href="/favicon.ico">
-
-        ${head.title.toString()}
-        ${head.base.toString()}
-        ${head.meta.toString()}
-        ${head.link.toString()}
+        ${meta}
         <!-- Insert bundled styles into <link> tag -->
-        ${extractor.getLinkTags()}
-        ${extractor.getStyleTags()}
-        <style data-emotion-css="${ids.join(' ')}">${css}</style>
+        ${linkTags}
+        ${style}
       </head>
       <body>
         <!-- Insert the router, which passed from server-side -->
         <div id="app">${html}</div>
         <!-- Insert bundled scripts into <script> tag -->
-        ${extractor.getScriptTags()}
-        ${head.script.toString()}
+        ${scripts}
         <!-- Store the initial state into window -->
         <script>window.__INITIAL_STATE__ = ${serialize(initialState)}</script>
       </body>

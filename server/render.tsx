@@ -1,4 +1,4 @@
-import path from 'path';
+import {resolve} from 'path';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
@@ -13,31 +13,35 @@ import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
 import HtmlTemplate from './utils/HtmlTemplate';
 import routes from '../app/Router/Routes';
+import Helmet from 'react-helmet';
 
 const cssCache = createCache()
 const { extractCritical } = createEmotionServer(cssCache)
 
+const preloadData = (routes, path, store) => {
+  const branch = matchRoutes(routes, path);
+  const promises = branch.map(({ route, match }) => {
+    if (route.loadData) {
+      return Promise.all(
+        route
+          .loadData({ params: match.params, getState: store.getState })
+          .map((item: any) => store.dispatch(item))
+      );
+    }
+    return Promise.resolve(null);
+  });
+  return Promise.all(promises);
+};
+
+
 const render = async(req: any, res: any) => {
   const { url } = req
   const { store } = configureStore({ url });
-  const loadBranchData = () => {
-    const branch = matchRoutes(routes, req.path);
-    const promises = branch.map(({ route, match }) => {
-      if (route.loadData)
-        return Promise.all(
-          route
-            .loadData({ params: match.params, getState: store.getState })
-            .map((item: any) => store.dispatch(item))
-        );
-      return Promise.resolve(null);
-    });
-    return Promise.all(promises);
-  };
-  await loadBranchData();
-  const statsFile = path.resolve('build/client/loadable-stats.json');
+  await preloadData(routes, req.path, store);
+  const statsFile = resolve('build/client/loadable-stats.json');
   const extractor = new ChunkExtractor({ statsFile });
   const staticContext = {};
-  const rootJsx = (
+  const jsx = (
     <ChunkExtractorManager extractor={extractor}>
       <Provider store={store}>
         <StaticRouter location={url} context={staticContext}>
@@ -49,9 +53,26 @@ const render = async(req: any, res: any) => {
     </ChunkExtractorManager>
   );
   const initialState = store.getState();
-  const app = renderToString(rootJsx)
-  const { html, css, ids } = extractCritical(app);
-  const document = HtmlTemplate(html, css, ids, initialState, extractor);
+  const html = renderToString(jsx);
+  const { css, ids } = extractCritical(html);
+  const head = Helmet.renderStatic();
+  const meta = `
+    ${head.title.toString()}
+    ${head.base.toString()}
+    ${head.meta.toString()}
+    ${head.link.toString()}
+  `.trim();
+  const {nonce} = res.locals
+  const dscripts = extractor.getStyleTags();
+  console.log({dscripts})
+  const linkTags = `
+    ${extractor.getLinkTags({nonce})}
+    ${extractor.getStyleTags()}
+  `;
+  const scripts = extractor.getScriptTags({nonce});
+  const style = `<style data-emotion-css="${ids.join(' ')}">${css}</style>`;
+  console.log({style})
+  const document = HtmlTemplate(html, meta, style, linkTags, initialState, scripts);
   return res.send(document);
 };
 

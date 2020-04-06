@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import webpack from 'webpack';
 import render from './render';
 import expressStaticGzip from 'express-static-gzip';
+import {nanoid} from 'nanoid';
 
 require('dotenv').config();
 
@@ -44,11 +45,12 @@ app.use('/public', express.static(path.resolve('build/client')));
 app.use(
     '/public',
     expressStaticGzip(path.resolve('build/client'), {
-      enableBrotli: true,
+      enableBrotli: true
     })
 );
 
 app.get('*', (req, res) => {
+  res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
   render(req, res);
 });
 
