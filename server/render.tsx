@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import React from "react";
-import { renderToString } from "react-dom/server";
+import { renderToString, renderToNodeStream } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import { matchRoutes } from "react-router-config";
 import { Provider } from "react-redux";
@@ -9,10 +9,13 @@ import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/core";
 import { extractCritical } from "emotion-server";
+import serialize from "serialize-javascript";
+
 import App from "../app/App";
 import configureStore from "../app/redux/configureStore";
 import HtmlTemplate from "./utils/HtmlTemplate";
 import routes from "../app/Router/Routes";
+import { renderStylesToNodeStream } from "emotion-server";
 
 const cssCache = createCache();
 
@@ -53,7 +56,8 @@ const render = async (req: any, res: any) => {
     </ChunkExtractorManager>
   );
   const initialState = store.getState();
-  const { html, css, ids } = extractCritical(renderToString(Jsx));
+  const app = renderToString(Jsx);
+  const { html, css, ids } = extractCritical(app);
   const head = Helmet.renderStatic();
   const meta = `
     ${head.title.toString()}
@@ -62,10 +66,14 @@ const render = async (req: any, res: any) => {
     ${head.link.toString()}
   `.trim();
   const { nonce } = res.locals;
+  cssCache.nonce = nonce;
   const linkTags = `
     ${extractor.getLinkTags({ nonce })}
   `;
-  const scripts = extractor.getScriptTags({ nonce });
+  const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
+    ids
+  )}</script>`;
+  const scripts = `${extractor.getScriptTags({ nonce })} ${emotionId}`;
   const style = `<style data-emotion-css="${ids.join(
     " "
   )}" nonce=${nonce}>${css}</style>`;

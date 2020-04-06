@@ -1,5 +1,5 @@
 import serialize from "serialize-javascript";
-import { minify } from "html-minifier";
+// import { minify } from "html-minifier";
 // import cheerio from 'cheerio';
 
 // export const renderHtml = (
@@ -62,19 +62,16 @@ const HtmlTemplate = (
     </html>
   `;
   // html-minifier configuration, refer to "https://github.com/kangax/html-minifier" for more configuration
-  const minifyConfig = {
-    collapseWhitespace: true,
-    removeComments: true,
-    trimCustomFragments: true,
-    minifyCSS: true,
-    minifyJS: true,
-    minifyURLs: true
-  };
+  // const minifyConfig = {
+  //   collapseWhitespace: true,
+  //   removeComments: true,
+  //   trimCustomFragments: true,
+  //   minifyCSS: true,
+  //   minifyJS: true,
+  //   minifyURLs: true
+  // };
 
-  // TODO ? minify(document, minifyConfig)
-  return process.env.NODE_ENV === "production"
-    ? minify(document, minifyConfig)
-    : document;
+  return document;
 };
 
 export default HtmlTemplate;

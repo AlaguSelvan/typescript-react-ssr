@@ -8,13 +8,14 @@ const config = {
   entry: {
     main: [
       // Migrate to react-refresh on its release https://github.com/facebook/react/issues/16604#issuecomment-528663101
-      "react-hot-loader/patch",
-      `webpack-hot-middleware/client?path=http://localhost:${process.env.PORT}/__webpack_hmr`,
+      "@hot-loader/react-dom",
+      `webpack-hot-middleware/client`,
       resolve("app", "index.tsx")
     ]
   },
   output: {
-    filename: "[name].bundle.js"
+    filename: "[name]-bundle.[hash].js",
+    chunkFilename: "[name].[hash].js"
   },
   resolve: {
     modules: ["app", "node_modules"],

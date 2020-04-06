@@ -4,12 +4,13 @@ import { css } from "emotion";
 const color = "white";
 
 const Button = () => {
-  // const [count, setCount] = React.useState(0);
+  const [count, setCount] = React.useState(0);
   return (
-    <div
+    <button
+      onClick={() => setCount((count) => count + 2)}
       className={css`
         padding: 32px;
-        background-color: hotpink;
+        background-color: blue;
         font-size: 24px;
         border-radius: 4px;
         &:hover {
@@ -17,8 +18,8 @@ const Button = () => {
         }
       `}
     >
-      Hover to change color.
-    </div>
+      Clicked {count} Times
+    </button>
   );
 };
 
