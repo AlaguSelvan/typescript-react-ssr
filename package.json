@@ -10,9 +10,9 @@
     "build:server": "cross-env NODE_ENV=production BABEL_ENV=node babel ./server -d ./build/server --extensions '.ts,.tsx'",
     "build:live": "cross-env NODE_ENV=production BABEL_ENV=node babel ./app -d ./build/app --extensions '.ts,.tsx'",
     "build:client": "cross-env NODE_ENV=production webpack --config ./tools/webpack/webpack.config.js",
-    "build:storybook": "build-storybook -o build/storybook-static",
     "storybook": "start-storybook -p 6006 -c tools/storybook",
-    "deploy:storybook": "npm run build:storybook && storybook-to-ghpages",
+    "storybook:build": "build-storybook -o build/storybook-static",
+    "storybook:deploy": "npm run build:storybook && storybook-to-ghpages",
     "format": "prettier --write \"./**/**/*.{ts,tsx}\"",
     "lint": "eslint . --ext .ts,.tsx",
     "clean": "rimraf build"

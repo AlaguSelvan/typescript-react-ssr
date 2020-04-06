@@ -15,7 +15,7 @@ const routes = [
     // ]
   },
   {
-    path: "/gg",
+    path: "/about",
     exact: true,
     component: About
   }
