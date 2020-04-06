@@ -5,13 +5,13 @@ module.exports = {
       {
         targets: {
           browsers: ["last 2 versions"],
-          node: "current",
+          node: "current"
         },
-        debug: false,
-      },
+        debug: false
+      }
     ],
     "@babel/preset-typescript",
-    "@babel/preset-react",
+    "@babel/preset-react"
   ],
   plugins: [
     "react-hot-loader/babel",
@@ -20,6 +20,6 @@ module.exports = {
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import",
     "@loadable/babel-plugin",
-    "@babel/plugin-transform-runtime",
-  ],
+    "@babel/plugin-transform-runtime"
+  ]
 };

@@ -13,48 +13,48 @@ const options = {
       userAgent: "Googlebot",
       allow: "/",
       disallow: ["/admin", "/login"],
-      crawlDelay: 2,
+      crawlDelay: 2
     },
     {
       userAgent: "OtherBot",
       allow: ["/allow-for-all-bots", "/allow-only-for-other-bot"],
       disallow: ["/admin", "/login"],
-      crawlDelay: 2,
+      crawlDelay: 2
     },
     {
       userAgent: "*",
       allow: "/",
       // disallow: ["/admin", "/login"],
       crawlDelay: 10,
-      cleanParam: "ref /articles/",
-    },
+      cleanParam: "ref /articles/"
+    }
   ],
-  sitemap: `http://${process.env.HOST}/sitemap.xml`,
+  sitemap: `http://${process.env.HOST}/sitemap.xml`
   // host: "http://example.com",
 };
 
 const config = {
   mode: "production",
   entry: {
-    main: [resolve("app", "index.tsx")],
+    main: [resolve("app", "index.tsx")]
   },
   output: {
     filename: "[name].[contenthash].bundle.js",
-    chunkFilename: "[name].[contenthash].[id].bundle.js",
+    chunkFilename: "[name].[contenthash].[id].bundle.js"
   },
   plugins: [
     new UglifyJSPlugin(),
     new CompressionPlugin({
-      algorithm: "brotliCompress",
+      algorithm: "brotliCompress"
     }),
     new BrotliPlugin(),
     new BundleAnalyzerPlugin({
       analyzerMode: "static",
-      openAnalyzer: false,
+      openAnalyzer: false
     }),
     new ManifestPlugin(),
-    new RobotstxtPlugin(options),
-  ],
+    new RobotstxtPlugin(options)
+  ]
 };
 
 module.exports = config;

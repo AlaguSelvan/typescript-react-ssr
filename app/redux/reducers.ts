@@ -7,7 +7,7 @@ import HomeReducer from "./home/reducer";
 const rootReducer = (history: History) =>
   combineReducers({
     HomeReducer,
-    router: connectRouter(history),
+    router: connectRouter(history)
   });
 
 export default rootReducer;

@@ -1,13 +1,18 @@
 import path from "path";
 import express from "express";
+import dotenv from "dotenv";
 import compression from "compression";
 import helmet from "helmet";
 import webpack from "webpack";
 import render from "./render";
 import expressStaticGzip from "express-static-gzip";
 import { nanoid } from "nanoid";
+import webpackHotMiddlware from "webpack-hot-middleware";
 
-require("dotenv").config();
+import webpackClientConfig from "../tools/webpack/webpack.config";
+import webpackDevMiddleware from "webpack-dev-middleware";
+
+dotenv.config();
 
 const app = express();
 
@@ -15,7 +20,6 @@ app.use(helmet());
 app.use(compression());
 
 if (process.env.NODE_ENV === "development") {
-  const webpackClientConfig = require("../tools/webpack/webpack.config");
   const compiler = webpack(webpackClientConfig);
   const clientCompiler = compiler;
   const devServerProps = {
@@ -26,27 +30,21 @@ if (process.env.NODE_ENV === "development") {
     writeToDisk: true,
     stats: "minimal",
     serverSideRender: true,
-    index: false,
+    index: false
   };
-  const webpackDevMiddleware = require("webpack-dev-middleware")(
-    clientCompiler,
-    devServerProps,
-  );
+  const webpackDevServer = webpackDevMiddleware(clientCompiler, devServerProps);
 
-  const webpackHotMiddlware = require("webpack-hot-middleware")(
-    clientCompiler,
-    devServerProps,
-  );
+  const webpackHotServer = webpackHotMiddlware(clientCompiler, devServerProps);
   app.use("/public", express.static(path.resolve("build/client")));
-  app.use(webpackDevMiddleware);
-  app.use(webpackHotMiddlware);
+  app.use(webpackDevServer);
+  app.use(webpackHotServer);
 }
 app.use("/public", express.static(path.resolve("build/client")));
 app.use(
   "/public",
   expressStaticGzip(path.resolve("build/client"), {
-    enableBrotli: true,
-  }),
+    enableBrotli: true
+  })
 );
 
 app.get("*", (req, res) => {

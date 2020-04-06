@@ -24,9 +24,9 @@ const preloadData = (routes, path, store) => {
         route
           .loadData({
             params: match.params,
-            getState: store.getState,
+            getState: store.getState
           })
-          .map((item: any) => store.dispatch(item)),
+          .map((item: any) => store.dispatch(item))
       );
     }
     return Promise.resolve(null);
@@ -67,7 +67,7 @@ const render = async (req: any, res: any) => {
   `;
   const scripts = extractor.getScriptTags({ nonce });
   const style = `<style data-emotion-css="${ids.join(
-    " ",
+    " "
   )}" nonce=${nonce}>${css}</style>`;
   const document = HtmlTemplate(
     html,
@@ -75,7 +75,7 @@ const render = async (req: any, res: any) => {
     style,
     linkTags,
     initialState,
-    scripts,
+    scripts
   );
   return res.send(document);
 };

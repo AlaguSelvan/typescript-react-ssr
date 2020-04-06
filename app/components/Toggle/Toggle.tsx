@@ -1,10 +1,10 @@
 import React from "react";
-import { css, cx } from "emotion";
+import { css } from "emotion";
 
 const color = "white";
 
 const Toggle = () => {
-  const [count, setCount] = React.useState(0);
+  // const [count, setCount] = React.useState(0);
   return (
     <div
       className={css`

@@ -4,7 +4,7 @@ import { configure, addDecorator } from "@storybook/react";
 
 configure(
   requireContext("../../app/components", true, /\.stories\.tsx?$/),
-  module,
+  module
 );
 
 addDecorator((tree) => (

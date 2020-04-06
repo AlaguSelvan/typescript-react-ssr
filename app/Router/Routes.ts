@@ -1,7 +1,6 @@
-import * as React from "react";
 import loadable from "@loadable/component";
 
-const Loading = () => <div>...Loading</div>;
+// const Loading = () => <div>...Loading</div>;
 
 export const Home = loadable(() => import("../container/Home"));
 
@@ -11,15 +10,15 @@ const routes = [
   {
     path: "/",
     exact: true,
-    component: Home,
+    component: Home
     // loadData: () => [
     // ]
   },
   {
     path: "/about",
     exact: true,
-    component: About,
-  },
+    component: About
+  }
 ];
 
 export default routes;

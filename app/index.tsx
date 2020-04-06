@@ -9,6 +9,7 @@ import configureStore from "./redux/configureStore";
 import { ConnectedRouter } from "connected-react-router";
 import App from "./App";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({ initialState });
@@ -26,7 +27,7 @@ function startRender() {
         </ConnectedRouter>
       </Provider>
     </AppContainer>,
-    document.getElementById("app"),
+    document.getElementById("app")
   );
 }
 
@@ -38,7 +39,7 @@ if (module.hot) {
   // Enable webpack hot module replacement for routes
   module.hot.accept("./Router/index.ts", () => {
     try {
-      const nextRoutes = require("./Router/index.ts").default;
+      require("./Router/index.ts").default;
 
       startRender();
     } catch (error) {

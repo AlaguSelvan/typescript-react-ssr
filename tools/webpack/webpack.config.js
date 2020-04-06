@@ -15,23 +15,23 @@ const config =
 const base = {
   name: "client",
   entry: {
-    vendor: ["react", "react-dom"],
+    vendor: ["react", "react-dom"]
   },
   output: {
     path: resolve("build", "client"),
-    publicPath: "/public/",
+    publicPath: "/public/"
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ["babel-loader", "ts-loader"],
-      },
-    ],
+        use: ["babel-loader", "ts-loader"]
+      }
+    ]
   },
   resolve: {
     modules: ["node_modules"],
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: [".ts", ".tsx", ".js"]
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
@@ -41,8 +41,8 @@ const base = {
     new CleanWebpackPlugin(),
     new LoadablePlugin({
       writeToDisk: true,
-      fileName: resolve(process.cwd(), "build/client/loadable-stats.json"),
-    }),
+      fileName: resolve(process.cwd(), "build/client/loadable-stats.json")
+    })
   ],
   optimization: {
     splitChunks: {
@@ -58,22 +58,22 @@ const base = {
           chunks: "all",
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          reuseExistingChunk: true,
+          reuseExistingChunk: true
         },
         default: {
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true,
-        },
-      },
-    },
+          reuseExistingChunk: true
+        }
+      }
+    }
   },
   node: {
     fs: "empty",
     vm: "empty",
     net: "empty",
-    tls: "empty",
-  },
+    tls: "empty"
+  }
 };
 
 module.exports = smart(base, config);

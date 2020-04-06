@@ -33,7 +33,7 @@ const HtmlTemplate = (
   style: any,
   linkTags: any,
   initialState = {},
-  scripts: any,
+  scripts: any
 ) => {
   const document = `
     <!doctype html>
@@ -68,7 +68,7 @@ const HtmlTemplate = (
     trimCustomFragments: true,
     minifyCSS: true,
     minifyJS: true,
-    minifyURLs: true,
+    minifyURLs: true
   };
 
   // TODO ? minify(document, minifyConfig)

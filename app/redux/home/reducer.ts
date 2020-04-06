@@ -1,7 +1,7 @@
 import HomeActionTypes from "./types";
 
 export const initialState = {
-  isLoaded: false,
+  isLoaded: false
 };
 
 export default (state = initialState, action: any) => {
@@ -10,7 +10,7 @@ export default (state = initialState, action: any) => {
     case TOGGLE_LOADED:
       return {
         ...state,
-        isLoaded: true,
+        isLoaded: true
       };
     default:
       return state;
