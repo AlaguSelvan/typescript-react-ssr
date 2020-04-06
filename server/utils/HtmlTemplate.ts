@@ -47,7 +47,7 @@ const HtmlTemplate = (
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link rel="shortcut icon" href="/favicon.ico">
         ${meta}
-        <!-- Insert bundled styles into <link> tag -->
+        <!-- Insert bundled Js into <link> tag -->
         ${linkTags}
         ${style}
       </head>
@@ -72,9 +72,8 @@ const HtmlTemplate = (
   };
 
   // Minify html in production
-  return process.env.NODE_ENV === 'production'
-    ? minify(document, minifyConfig)
-    : document;
+  // TODO ? minify(document, minifyConfig)
+  return process.env.NODE_ENV === 'production' ? document : document;
 };
 
 export default HtmlTemplate

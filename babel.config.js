@@ -15,6 +15,7 @@ module.exports = {
   ],
   plugins: [
     'react-hot-loader/babel',
+    'emotion',
     '@babel/plugin-transform-async-to-generator',
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-syntax-dynamic-import',
