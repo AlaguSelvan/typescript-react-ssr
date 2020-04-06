@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import React from "react";
-import { renderToString, renderToNodeStream } from "react-dom/server";
+import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import { matchRoutes } from "react-router-config";
 import { Provider } from "react-redux";
@@ -9,13 +9,12 @@ import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/core";
 import { extractCritical } from "emotion-server";
-import serialize from "serialize-javascript";
+// import serialize from "serialize-javascript";
 
 import App from "../app/App";
 import configureStore from "../app/redux/configureStore";
 import HtmlTemplate from "./utils/HtmlTemplate";
 import routes from "../app/Router/Routes";
-import { renderStylesToNodeStream } from "emotion-server";
 
 const cssCache = createCache();
 
