@@ -1,9 +1,9 @@
-import React from "react";
-import Button from "./Button";
+import React from 'react';
+import Button from './Button';
 
 export default {
   component: Button,
-  title: "Button"
+  title: 'Button'
 };
 
 export const Base = () => {

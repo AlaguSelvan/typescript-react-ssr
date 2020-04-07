@@ -4,7 +4,7 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    sourceType: "module",
+    sourceType: 'module',
     ecmaVersion: 2018,
     ecmaFeatures: {
       jsx: true
@@ -12,32 +12,32 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["*.js"],
-      extends: ["eslint:recommended", "plugin:prettier/recommended"],
+      files: ['*.js'],
+      extends: ['eslint:recommended', 'plugin:prettier/recommended'],
       rules: {
         // for samples
-        "no-unused-vars": 0
+        'no-unused-vars': 0
       }
     },
     {
-      files: ["*.ts", "*.tsx"],
+      files: ['*.ts', '*.tsx'],
       extends: [
-        "eslint:recommended",
-        "plugin:prettier/recommended",
-        "prettier/@typescript-eslint",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:react/recommended"
+        'eslint:recommended',
+        'plugin:prettier/recommended',
+        'prettier/@typescript-eslint',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:react/recommended'
       ],
-      plugins: ["@typescript-eslint", "react", "react-hooks"],
-      parser: "@typescript-eslint/parser",
+      plugins: ['@typescript-eslint', 'react', 'react-hooks'],
+      parser: '@typescript-eslint/parser',
       rules: {
-        "@typescript-eslint/no-empty-function": 0,
-        "@typescript-eslint/no-use-before-define": 0, // bug?
-        "@typescript-eslint/explicit-function-return-type": 0,
-        "@typescript-eslint/no-explicit-any": 0, // for tests
-        "react/display-name": 0, // for tests
-        "react/prop-types": 0
+        '@typescript-eslint/no-empty-function': 0,
+        '@typescript-eslint/no-use-before-define': 0, // bug?
+        '@typescript-eslint/explicit-function-return-type': 0,
+        '@typescript-eslint/no-explicit-any': 0, // for tests
+        'react/display-name': 0, // for tests
+        'react/prop-types': 0
       }
     }
   ]

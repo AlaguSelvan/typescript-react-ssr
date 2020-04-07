@@ -1,32 +1,33 @@
-const { resolve } = require("path");
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
-const CompressionPlugin = require("compression-webpack-plugin");
-const ManifestPlugin = require("webpack-manifest-plugin");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const BrotliPlugin = require("brotli-webpack-plugin");
-const RobotstxtPlugin = require("robotstxt-webpack-plugin");
+const { resolve } = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const BrotliPlugin = require('brotli-webpack-plugin');
+const RobotstxtPlugin = require('robotstxt-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const options = {
-  filePath: "../../build/robots.txt",
+  filePath: '../../build/robots.txt',
   policy: [
     {
-      userAgent: "Googlebot",
-      allow: "/",
-      disallow: ["/admin", "/login"],
+      userAgent: 'Googlebot',
+      allow: '/',
+      disallow: ['/admin', '/login'],
       crawlDelay: 2
     },
     {
-      userAgent: "OtherBot",
-      allow: ["/allow-for-all-bots", "/allow-only-for-other-bot"],
-      disallow: ["/admin", "/login"],
+      userAgent: 'OtherBot',
+      allow: ['/allow-for-all-bots', '/allow-only-for-other-bot'],
+      disallow: ['/admin', '/login'],
       crawlDelay: 2
     },
     {
-      userAgent: "*",
-      allow: "/",
+      userAgent: '*',
+      allow: '/',
       // disallow: ["/admin", "/login"],
       crawlDelay: 10,
-      cleanParam: "ref /articles/"
+      cleanParam: 'ref /articles/'
     }
   ],
   sitemap: `http://${process.env.HOST}/sitemap.xml`
@@ -34,25 +35,30 @@ const options = {
 };
 
 const config = {
-  mode: "production",
+  mode: 'production',
   entry: {
-    main: [resolve("app", "index.tsx")]
+    main: [resolve('app', 'index.tsx')]
   },
   output: {
-    filename: "[name].[contenthash].bundle.js",
-    chunkFilename: "[name].[contenthash].[id].bundle.js"
+    filename: '[name].[contenthash].bundle.js',
+    chunkFilename: '[name].[contenthash].[id].bundle.js'
   },
   plugins: [
     new UglifyJSPlugin(),
     new CompressionPlugin({
-      algorithm: "brotliCompress"
+      algorithm: 'brotliCompress'
     }),
     new BrotliPlugin(),
     new BundleAnalyzerPlugin({
-      analyzerMode: "static",
+      analyzerMode: 'static',
       openAnalyzer: false
     }),
     new ManifestPlugin(),
+    new HtmlWebpackPlugin({
+      filename: resolve('build', 'client', 'index.html'),
+      template: resolve('public', 'index.html'),
+      minify: true
+    }),
     new RobotstxtPlugin(options)
   ]
 };

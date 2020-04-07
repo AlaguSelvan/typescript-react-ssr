@@ -1,15 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { loadableReady } from "@loadable/component";
-import { AppContainer } from "react-hot-loader";
-import { CacheProvider } from "@emotion/core";
-import createCache from "@emotion/cache";
-import { Provider } from "react-redux";
-import configureStore from "./redux/configureStore";
-import { ConnectedRouter } from "connected-react-router";
-import { hydrate as emotionHydrate } from "emotion";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { loadableReady } from '@loadable/component';
+import { AppContainer } from 'react-hot-loader';
+import { CacheProvider } from '@emotion/core';
+import createCache from '@emotion/cache';
+import { Provider } from 'react-redux';
+import configureStore from './redux/configureStore';
+import { ConnectedRouter } from 'connected-react-router';
+import { hydrate as emotionHydrate } from 'emotion';
 
-import App from "./App";
+import App from './App';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
@@ -20,30 +20,30 @@ const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
 
 const render = () => {
   renderMethod(
-    <AppContainer>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <CacheProvider value={cache}>
-            <App />
-          </CacheProvider>
-        </ConnectedRouter>
-      </Provider>
-    </AppContainer>,
-    document.getElementById("app")
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <CacheProvider value={cache}>
+          <App />
+        </CacheProvider>
+      </ConnectedRouter>
+    </Provider>,
+    document.getElementById('root')
   );
 };
 
-loadableReady(() => {
-  render();
-});
-
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
+  loadableReady(() => {
+    render();
+  });
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   const emotionIds = window.__emotion;
-  emotionHydrate(emotionIds);
-}
-
-if (module.hot) {
-  module.hot.accept();
+  if (emotionIds) emotionHydrate(emotionIds);
+  if ((module as any).hot) {
+    // Enable webpack hot module replacement for routes
+    (module as any).hot.accept('./Router');
+    (module as any).hot.accept();
+  }
+} else {
+  render();
 }

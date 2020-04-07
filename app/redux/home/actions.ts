@@ -1,4 +1,4 @@
-import HomeActionTypes from "./types";
+import HomeActionTypes from './types';
 
 export const loadPage = () => ({
   type: HomeActionTypes.TOGGLE_LOADED
