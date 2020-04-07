@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { loadableReady } from '@loadable/component';
-import { AppContainer } from 'react-hot-loader';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import { Provider } from 'react-redux';
@@ -40,7 +39,6 @@ if (process.env.NODE_ENV === 'development') {
   const emotionIds = window.__emotion;
   if (emotionIds) emotionHydrate(emotionIds);
   if ((module as any).hot) {
-    // Enable webpack hot module replacement for routes
     (module as any).hot.accept('./Router');
     (module as any).hot.accept();
   }
