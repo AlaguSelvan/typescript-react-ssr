@@ -1,20 +1,20 @@
-import { resolve } from "path";
-import React from "react";
-import { renderToString } from "react-dom/server";
-import { StaticRouter } from "react-router-dom";
-import { matchRoutes } from "react-router-config";
-import { Provider } from "react-redux";
-import Helmet from "react-helmet";
-import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
-import createCache from "@emotion/cache";
-import { CacheProvider } from "@emotion/core";
-import { extractCritical } from "emotion-server";
+import { resolve } from 'path';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom';
+import { matchRoutes } from 'react-router-config';
+import { Provider } from 'react-redux';
+import Helmet from 'react-helmet';
+import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/core';
+import { extractCritical } from 'emotion-server';
 // import serialize from "serialize-javascript";
 
-import App from "../app/App";
-import configureStore from "../app/redux/configureStore";
-import HtmlTemplate from "./utils/HtmlTemplate";
-import routes from "../app/Router";
+import App from '../app/App';
+import configureStore from '../app/redux/configureStore';
+import HtmlTemplate from './utils/HtmlTemplate';
+import routes from '../app/Router';
 
 const cssCache = createCache();
 
@@ -40,7 +40,7 @@ const render = async (req: any, res: any) => {
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
-  const statsFile = resolve("build/client/loadable-stats.json");
+  const statsFile = resolve('build/client/loadable-stats.json');
   const extractor = new ChunkExtractor({ statsFile });
   const staticContext = {};
   const Jsx = (
@@ -72,14 +72,16 @@ const render = async (req: any, res: any) => {
   const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
     ids
   )}</script>`;
-  const scripts = `${extractor.getScriptTags({ nonce })} ${emotionId}`;
+  const scripts = `${extractor.getScriptTags({ nonce })}`;
+  const criticalCssIds = `${emotionId}`;
   const style = `<style data-emotion-css="${ids.join(
-    " "
+    ' '
   )}" nonce=${nonce}>${css}</style>`;
   const document = HtmlTemplate(
     html,
     meta,
     style,
+    criticalCssIds,
     linkTags,
     initialState,
     scripts

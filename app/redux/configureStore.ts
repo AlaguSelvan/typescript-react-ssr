@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { createBrowserHistory, createMemoryHistory } from "history";
-import { createStore, applyMiddleware, compose } from "redux";
-import { routerMiddleware } from "connected-react-router";
-import thunk from "redux-thunk";
+import { createBrowserHistory, createMemoryHistory } from 'history';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { routerMiddleware } from 'connected-react-router';
+import thunk from 'redux-thunk';
 
-import createRootReducer from "./reducers";
+import createRootReducer from './reducers';
 
 interface Argv {
   initialState?: object;
@@ -12,12 +12,12 @@ interface Argv {
 }
 
 const configureStore = ({ initialState, url }: Argv) => {
-  const isServer = typeof window === "undefined";
-  const isDev = process.env.NODE_ENV === "development";
+  const isServer = typeof window === 'undefined';
+  const isDev = process.env.NODE_ENV === 'development';
   // Create a history depending on the environment
   const history = isServer
     ? createMemoryHistory({
-        initialEntries: [url || "/"]
+        initialEntries: [url || '/']
       })
     : createBrowserHistory();
   const middlewares = [
@@ -43,9 +43,9 @@ const configureStore = ({ initialState, url }: Argv) => {
 
   if ((module as any).hot) {
     // Enable Webpack hot module replacement for reducers
-    (module as any).hot.accept("./reducers", () => {
+    (module as any).hot.accept('./reducers', () => {
       try {
-        const createNextReducer = require("./reducers");
+        const createNextReducer = require('./reducers');
 
         store.replaceReducer(createNextReducer(history));
       } catch (error) {

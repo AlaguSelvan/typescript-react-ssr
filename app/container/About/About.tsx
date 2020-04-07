@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Toggle } from "../../components";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Toggle } from '../../components';
 
 const About = () => (
   <div>

@@ -1,21 +1,21 @@
-import loadable from "@loadable/component";
+import loadable from '@loadable/component';
 
 // const Loading = () => <div>...Loading</div>;
 
-export const Home = loadable(() => import("../container/Home"));
+export const Home = loadable(() => import('../container/Home'));
 
-export const About = loadable(() => import("../container/About"));
+export const About = loadable(() => import('../container/About'));
 
 const routes = [
   {
-    path: "/",
+    path: '/',
     exact: true,
     component: Home
     // loadData: () => [
     // ]
   },
   {
-    path: "/about",
+    path: '/about',
     exact: true,
     component: About
   }

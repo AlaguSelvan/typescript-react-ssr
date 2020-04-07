@@ -1,16 +1,16 @@
-import React from "react";
-import { css } from "emotion";
+import React from 'react';
+import { css } from 'emotion';
 
-const color = "white";
+const color = 'white';
 
 const Button = () => {
   const [count, setCount] = React.useState(0);
   return (
     <button
-      onClick={() => setCount((count) => count + 1)}
+      onClick={() => setCount(count + 2)}
       className={css`
         padding: 32px;
-        background-color: purple;
+        background-color: red;
         font-size: 24px;
         border-radius: 4px;
         &:hover {
