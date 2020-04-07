@@ -23,7 +23,7 @@ const HtmlTemplate = (
   template('head').append(meta);
   template('head').append(linkTags);
   template('head').append(style);
-  template('head').append(criticalCssIds);
+  template('head').append(style);
   template('#root').html(html);
   template('body').append(scripts);
   template('head').append(initialStateScript);
