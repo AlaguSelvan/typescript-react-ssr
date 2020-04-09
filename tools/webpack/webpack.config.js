@@ -106,8 +106,4 @@ const base = {
   }
 };
 
-const webpackConfig = smart(base, config);
-
-console.log(webpackConfig.resolve.alias, 'alias');
-
 module.exports = smart(base, config);
