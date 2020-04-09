@@ -1,10 +1,12 @@
 import loadable from '@loadable/component';
 
-// const Loading = () => <div>...Loading</div>;
+export const Home = loadable(() =>
+  import(/* webpackChunkName: "Home" */ '../container/Home')
+);
 
-export const Home = loadable(() => import('../container/Home'));
-
-export const About = loadable(() => import('../container/About'));
+export const About = loadable(() =>
+  import(/* webpackChunkName: "About" */ '../container/About')
+);
 
 const routes = [
   {

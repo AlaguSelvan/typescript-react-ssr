@@ -6,11 +6,15 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config =
   process.env.NODE_ENV === 'production'
     ? require('./webpack.prod')
     : require('./webpack.dev');
+
+const publicUrl = '/public';
 
 const base = {
   name: 'client',
@@ -19,7 +23,7 @@ const base = {
   },
   output: {
     path: resolve('build', 'client'),
-    publicPath: '/public/'
+    publicPath: publicUrl + '/'
   },
   module: {
     rules: [
@@ -51,17 +55,23 @@ const base = {
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js', '.json'],
+    alias: {
+      Components: resolve('app', 'components'),
+      Container: resolve('app', 'container')
+    }
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
     new ForkTsCheckerWebpackPlugin(),
     new webpack.NamedModulesPlugin(),
-    new webpack.ProgressPlugin(),
     new CleanWebpackPlugin(),
     new LoadablePlugin({
       writeToDisk: true,
       fileName: resolve(process.cwd(), 'build/client/loadable-stats.json')
+    }),
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
+      PUBLIC_URL: publicUrl
     })
   ],
   optimization: {
@@ -95,5 +105,9 @@ const base = {
     tls: 'empty'
   }
 };
+
+const webpackConfig = smart(base, config);
+
+console.log(webpackConfig.resolve.alias, 'alias');
 
 module.exports = smart(base, config);

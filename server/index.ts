@@ -43,11 +43,11 @@ if (process.env.NODE_ENV === 'development') {
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
 }
-app.use('/public', express.static(path.resolve('build/client')));
 app.use(
   '/public',
   expressStaticGzip(path.resolve('build/client'), {
-    enableBrotli: true
+    enableBrotli: true,
+    orderPreference: ['br', 'gz']
   })
 );
 
