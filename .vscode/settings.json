@@ -1,0 +1,5 @@
+{
+  "jumpToAliasFile.alias": {
+    "react-dom": "@hot-loader/react-dom"
+  }
+}

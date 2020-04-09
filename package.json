@@ -12,7 +12,6 @@
     "build:client": "cross-env NODE_ENV=production webpack --config ./tools/webpack/webpack.config.js",
     "storybook": "start-storybook -p 6006 -c tools/storybook",
     "storybook:build": "build-storybook -o build/storybook-static",
-    "storybook:deploy": "npm run build:storybook && storybook-to-ghpages",
     "format": "prettier --write \"./**/**/*.{js,ts,tsx}\"",
     "lint": "eslint . --ext .ts,.tsx",
     "clean": "rimraf build"
@@ -113,6 +112,7 @@
     "@typescript-eslint/parser": "^2.26.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-emotion": "^10.0.33",
+    "babel-plugin-module-resolver": "^4.0.0",
     "body-parser": "^1.19.0",
     "brotli-webpack-plugin": "^1.1.0",
     "cache-loader": "^4.1.0",
@@ -144,6 +144,7 @@
     "redux-devtools-extension": "^2.13.8",
     "require-context.macro": "^1.2.2",
     "robotstxt-webpack-plugin": "^7.0.0",
+    "terser-webpack-plugin": "^2.3.5",
     "ts-loader": "^6.2.2",
     "typescript": "^3.7.5",
     "uglifyjs-webpack-plugin": "^2.2.0",
