@@ -1,26 +1,58 @@
 /* eslint @typescript-eslint/no-var-requires: 0 */
-import path from 'path';
-import express from 'express';
-import dotenv from 'dotenv';
-import compression from 'compression';
-import helmet from 'helmet';
-import webpack from 'webpack';
-import render from './render';
-import expressStaticGzip from 'express-static-gzip';
-import { nanoid } from 'nanoid';
-import openBrowser from 'react-dev-utils/openBrowser';
+import path from 'path'
+import express from 'express'
+import dotenv from 'dotenv'
+import compression from 'compression'
+import helmet from 'helmet'
+import webpack from 'webpack'
+import expressStaticGzip from 'express-static-gzip'
+import openBrowser from 'react-dev-utils/openBrowser'
 
-dotenv.config();
+dotenv.config()
 
-const app = express();
+const app = express()
+let isBuilt = false
 
-app.use(helmet());
-app.use(compression());
+app.use(helmet())
+app.use(compression())
 
-if (process.env.NODE_ENV === 'development') {
-  const webpackClientConfig = require('../tools/webpack/webpack.config');
-  const compiler = webpack(webpackClientConfig);
-  const clientCompiler = compiler;
+const done = () => {
+  !isBuilt &&
+    app.listen(process.env.PORT, () => {
+      isBuilt = true
+      console.log(`Server listening on http://localhost:${process.env.PORT}.`)
+    })
+}
+
+app.use('/public', express.static(path.resolve('build/client')))
+
+if (process.env.NODE_ENV === 'production') {
+  const webpackClientConfig = require('../tools/webpack/client/webpack.config')
+  const webpackServerConfig = require('../tools/webpack/server/webpack.config')
+  webpack([webpackClientConfig, webpackServerConfig]).run((err, stats) => {
+    console.log(webpackServerConfig, 'webpackServerConfig')
+    const clientStats = stats.toJson().children[0]
+    //../../build/prod-server-bundle.js
+    const render = require('../build/server/prod-server-bundle').default
+    console.log(
+      stats.toString({
+        colors: true
+      })
+    )
+    app.use(
+      expressStaticGzip('build', {
+        enableBrotli: true
+      })
+    )
+    app.use(render({ clientStats }))
+    done()
+  })
+} else if (process.env.NODE_ENV === 'development') {
+  const webpackClientConfig = require('../tools/webpack/client/webpack.config')
+  const webpackServerConfig = require('../tools/webpack/server/webpack.config')
+  const compiler = webpack([webpackClientConfig, webpackServerConfig])
+  const clientCompiler = compiler.compilers[0]
+  const serverCompiler = compiler.compilers[1]
   const devServerProps = {
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
@@ -30,38 +62,29 @@ if (process.env.NODE_ENV === 'development') {
     stats: 'minimal',
     serverSideRender: true,
     index: false
-  };
+  }
   const webpackDevMiddleware = require('webpack-dev-middleware')(
     clientCompiler,
     devServerProps
-  );
+  )
   const webpackHotMiddlware = require('webpack-hot-middleware')(
     clientCompiler,
     devServerProps
-  );
-  app.use('/public', express.static(path.resolve('build/client')));
-  app.use(webpackDevMiddleware);
-  app.use(webpackHotMiddlware);
+  )
+  const webpackServerMiddlware = require('webpack-hot-server-middleware')(
+    compiler
+  )
+  app.use(webpackDevMiddleware)
+  app.use(webpackHotMiddlware)
+  app.use(webpackServerMiddlware)
+  webpackDevMiddleware.waitUntilValid(done)
 }
-app.use(
-  '/public',
-  expressStaticGzip(path.resolve('build/client'), {
-    enableBrotli: true,
-    orderPreference: ['br', 'gz']
-  })
-);
-
-app.get('*', (req, res) => {
-  res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
-  render(req, res);
-});
-
 app.listen(process.env.PORT, () => {
-  const url = `http://localhost:${process.env.PORT}`;
-  console.info(`Listening at ${url}`);
+  const url = `http://localhost:${process.env.PORT}`
+  console.info(`Listening at ${url}`)
   if (process.env.NODE_ENV === 'development') {
     if (openBrowser(url)) {
-      console.info("==> 🖥️  Opened on your browser's tab!");
+      console.info("==> 🖥️  Opened on your browser's tab!")
     }
   }
-});
+})

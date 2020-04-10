@@ -1,7 +1,7 @@
-import React from 'react';
-import { css } from 'emotion';
+import React from 'react'
+import { css } from 'emotion'
 
-const color = 'white';
+const color = 'white'
 
 const Toggle = () => {
   // const [count, setCount] = React.useState(0);
@@ -19,7 +19,7 @@ const Toggle = () => {
     >
       Hover to change color.
     </div>
-  );
-};
+  )
+}
 
-export default Toggle;
+export default Toggle

@@ -1,10 +1,10 @@
-import React from 'react';
-import Button from './Button';
+import React from 'react'
+import Button from './Button'
 
 export default {
   component: Button,
   title: 'Button'
-};
+}
 
 export const Base = () => {
   // const [title, updateTitle] = useState('');
@@ -19,5 +19,5 @@ export const Base = () => {
       <Button />
       {/* <p>title: {title}</p> */}
     </>
-  );
-};
+  )
+}
