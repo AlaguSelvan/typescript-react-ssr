@@ -13,7 +13,7 @@ const base = {
   target: 'node',
   externals,
   mode: process.env.NODE_ENV,
-  entry: resolve('server', 'render.tsx'),
+  entry: './server/render.tsx',
   output: {
     path: resolve('build', 'server'),
     libraryTarget: 'commonjs2'
@@ -21,8 +21,26 @@ const base = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: ['babel-loader', 'ts-loader']
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader'
+          }
+        ]
+      },
+      {
+        test: /\.ts(x?)$/,
+        exclude: /node_modules/,
+        loader: [
+          'babel-loader',
+          {
+            loader: 'awesome-typescript-loader',
+            options: {
+              useCache: true
+            }
+          }
+        ]
       }
     ]
   },

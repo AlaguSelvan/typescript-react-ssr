@@ -4,7 +4,7 @@
   "description": "A Boilerplate for Modern Web apps With Best development experience & best practices",
   "main": "./server/index.ts",
   "scripts": {
-    "start": "cross-env NODE_ENV=development npm-run-all clean && nodemon ./server/index.ts",
+    "start": "cross-env NODE_ENV=development nodemon ./server/index.ts",
     "start:prod": "cross-env NODE_ENV=production node ./build/server/index.js",
     "build": "npm-run-all clean build:*",
     "build:server": "cross-env NODE_ENV=production BABEL_ENV=node babel ./server -d ./build/server --extensions '.ts,.tsx'",

@@ -24,13 +24,12 @@ const done = () => {
     });
 };
 
-app.use('/public', express.static(path.resolve('build/client')));
+app.use(express.static(path.resolve('build', 'client')));
 
 if (process.env.NODE_ENV === 'production') {
   const webpackClientConfig = require('../tools/webpack/client/webpack.config');
   const webpackServerConfig = require('../tools/webpack/server/webpack.config');
   webpack([webpackClientConfig, webpackServerConfig]).run((err, stats) => {
-    console.log(webpackServerConfig, 'webpackServerConfig');
     const clientStats = stats.toJson().children[0];
     //../../build/prod-server-bundle.js
     const render = require('../build/server/prod-server-bundle').default;
@@ -74,9 +73,9 @@ if (process.env.NODE_ENV === 'production') {
   const webpackHotServerMiddlware = require('webpack-hot-server-middleware')(
     compiler
   );
-  app.use(webpackHotServerMiddlware);
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
+  app.use(webpackHotServerMiddlware);
   webpackDevMiddleware.waitUntilValid(done);
 }
 app.listen(process.env.PORT, () => {

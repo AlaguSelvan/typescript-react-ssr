@@ -3,7 +3,6 @@ const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 const config = {
   mode: 'development',
@@ -39,8 +38,7 @@ const config = {
       inject: true,
       filename: resolve('build', 'client', 'index.html'),
       template: resolve('public', 'index.html')
-    }),
-    new WatchMissingNodeModulesPlugin(resolve('node_modules'))
+    })
   ]
 };
 
