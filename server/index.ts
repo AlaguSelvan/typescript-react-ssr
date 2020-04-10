@@ -74,9 +74,9 @@ if (process.env.NODE_ENV === 'production') {
   const webpackHotServerMiddlware = require('webpack-hot-server-middleware')(
     compiler
   );
+  app.use(webpackHotServerMiddlware);
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
-  app.use(webpackHotServerMiddlware);
   webpackDevMiddleware.waitUntilValid(done);
 }
 app.listen(process.env.PORT, () => {

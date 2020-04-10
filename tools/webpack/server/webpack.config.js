@@ -21,17 +21,8 @@ const base = {
   module: {
     rules: [
       {
-        test: /\.ts(x?)$/,
-        exclude: /node_modules/,
-        loader: [
-          'babel-loader',
-          {
-            loader: 'awesome-typescript-loader',
-            options: {
-              useCache: true
-            }
-          }
-        ]
+        test: /\.tsx?$/,
+        use: ['babel-loader', 'ts-loader']
       }
     ]
   },

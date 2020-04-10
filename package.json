@@ -16,7 +16,7 @@
     "storybook:build": "build-storybook -o build/storybook-static",
     "format": "prettier --write \"./**/**/*.{js,ts,tsx}\"",
     "lint": "eslint . --ext .ts,.tsx --fix",
-    "clean": "rimraf build"
+    "clean": "rimraf build .awcache"
   },
   "repository": {
     "type": "git",
