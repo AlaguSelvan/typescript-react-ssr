@@ -32,7 +32,7 @@ const render = () => {
 
 if (process.env.NODE_ENV === 'development') {
   // loadableReady(() => {
-    render();
+  render();
   // });
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
