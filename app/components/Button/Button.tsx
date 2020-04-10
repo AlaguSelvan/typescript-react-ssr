@@ -1,10 +1,10 @@
-import React from 'react'
-import { css } from 'emotion'
+import React from 'react';
+import { css } from 'emotion';
 
-const color = 'white'
+const color = 'white';
 
 const Button = () => {
-  const [count, setCount] = React.useState(0)
+  const [count, setCount] = React.useState(0);
   return (
     <button
       onClick={() => setCount(count + 2)}
@@ -20,7 +20,7 @@ const Button = () => {
     >
       Clicked {count} Times
     </button>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

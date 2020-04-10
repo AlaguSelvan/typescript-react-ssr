@@ -1,20 +1,20 @@
-const webpack = require('webpack')
-const { resolve } = require('path')
-const { smart } = require('webpack-merge')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const ManifestPlugin = require('webpack-manifest-plugin')
-const LoadablePlugin = require('@loadable/webpack-plugin')
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack');
+const { resolve } = require('path');
+const { smart } = require('webpack-merge');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config =
   process.env.NODE_ENV === 'production'
     ? require('./webpack.prod')
-    : require('./webpack.dev')
+    : require('./webpack.dev');
 
-const publicUrl = '/public'
+const publicUrl = '/public';
 
 const base = {
   name: 'client',
@@ -104,6 +104,6 @@ const base = {
     net: 'empty',
     tls: 'empty'
   }
-}
+};
 
-module.exports = smart(base, config)
+module.exports = smart(base, config);

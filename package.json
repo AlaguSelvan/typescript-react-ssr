@@ -15,7 +15,7 @@
     "storybook": "start-storybook -p 6006 -c tools/storybook",
     "storybook:build": "build-storybook -o build/storybook-static",
     "format": "prettier --write \"./**/**/*.{js,ts,tsx}\"",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint . --ext .ts,.tsx --fix",
     "clean": "rimraf build"
   },
   "repository": {

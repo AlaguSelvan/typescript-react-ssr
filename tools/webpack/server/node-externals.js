@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
 
 // const res = (p) => path.resolve(__dirname, p);
 // const nodeModules = res('../../../node_modules');
@@ -14,9 +14,9 @@ const path = require('path')
 //   }, {});
 // externals['react-dom/server'] = 'commonjs react-dom/server';
 
-const res = (p) => path.resolve(__dirname, p)
+const res = (p) => path.resolve(__dirname, p);
 
-const nodeModules = res('../../../node_modules')
+const nodeModules = res('../../../node_modules');
 // const entry = res('../../server/render.js');
 // const output = res('../../buildServer');
 
@@ -30,9 +30,9 @@ const externals = fs
     (x) => !/\.bin|react-universal-component|webpack-flush-chunks/.test(x)
   )
   .reduce((externals, mod) => {
-    externals[mod] = `commonjs ${mod}`
-    return externals
-  }, {})
-externals['react-dom/server'] = 'commonjs react-dom/server'
+    externals[mod] = `commonjs ${mod}`;
+    return externals;
+  }, {});
+externals['react-dom/server'] = 'commonjs react-dom/server';
 
-module.exports = externals
+module.exports = externals;

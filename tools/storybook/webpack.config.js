@@ -1,9 +1,9 @@
-const { smart } = require('webpack-merge')
-const base = require('../webpack/webpack.config')
+const { smart } = require('webpack-merge');
+const base = require('../webpack/webpack.config');
 
 module.exports = async ({ config, mode }) => {
   // delete files of an entry point
-  base.entry = []
+  base.entry = [];
 
-  return smart(base, config)
-}
+  return smart(base, config);
+};

@@ -1,12 +1,12 @@
-const webpack = require('webpack')
-const { resolve } = require('path')
-const { smart } = require('webpack-merge')
-const externals = require('./node-externals')
+const webpack = require('webpack');
+const { resolve } = require('path');
+const { smart } = require('webpack-merge');
+const externals = require('./node-externals');
 
 const config =
   process.env.NODE_ENV === 'production'
     ? require('./webpack.prod')
-    : require('./webpack.dev')
+    : require('./webpack.dev');
 
 const base = {
   name: 'server',
@@ -43,6 +43,6 @@ const base = {
       maxChunks: 1
     })
   ]
-}
+};
 
-module.exports = smart(base, config)
+module.exports = smart(base, config);

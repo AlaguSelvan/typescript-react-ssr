@@ -1,9 +1,9 @@
-const webpack = require('webpack')
-const { resolve } = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
+const webpack = require('webpack');
+const { resolve } = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 const config = {
   mode: 'development',
@@ -42,6 +42,6 @@ const config = {
     }),
     new WatchMissingNodeModulesPlugin(resolve('node_modules'))
   ]
-}
+};
 
-module.exports = config
+module.exports = config;

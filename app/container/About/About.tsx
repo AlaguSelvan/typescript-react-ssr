@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Toggle } from '../../components'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Toggle } from '../../components';
 
 const About = () => (
   <div>
@@ -10,6 +10,6 @@ const About = () => (
       <p>goto prev page</p>
     </Link>
   </div>
-)
+);
 
-export default About
+export default About;

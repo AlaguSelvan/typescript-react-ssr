@@ -1,15 +1,15 @@
-const { resolve } = require('path')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-const CompressionPlugin = require('compression-webpack-plugin')
-const ManifestPlugin = require('webpack-manifest-plugin')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const BrotliPlugin = require('brotli-webpack-plugin')
-const RobotstxtPlugin = require('robotstxt-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
+const { resolve } = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const BrotliPlugin = require('brotli-webpack-plugin');
+const RobotstxtPlugin = require('robotstxt-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
-const shouldUseSourceMap = false
+const shouldUseSourceMap = false;
 
 const options = {
   filePath: '../../build/robots.txt',
@@ -36,7 +36,7 @@ const options = {
   ],
   sitemap: `http://${process.env.HOST}/sitemap.xml`
   // host: "http://example.com",
-}
+};
 
 const config = {
   mode: 'production',
@@ -129,6 +129,6 @@ const config = {
     }),
     new RobotstxtPlugin(options)
   ]
-}
+};
 
-module.exports = config
+module.exports = config;

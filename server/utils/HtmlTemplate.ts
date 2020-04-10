@@ -1,9 +1,9 @@
 /* eslint @typescript-eslint/no-var-requires: 0 */
-import fs from 'fs'
-import { resolve } from 'path'
-import serialize from 'serialize-javascript'
+import fs from 'fs';
+import { resolve } from 'path';
+import serialize from 'serialize-javascript';
 // import { minify } from "html-minifier";
-import cheerio from 'cheerio'
+import cheerio from 'cheerio';
 
 const HtmlTemplate = (
   html: string,
@@ -14,21 +14,21 @@ const HtmlTemplate = (
   initialState = {},
   scripts: any
 ) => {
-  const htmlTemplate = resolve('build', 'client', 'index.html')
-  const HTML_TEMPLATE = fs.readFileSync(htmlTemplate).toString()
+  const htmlTemplate = resolve('build', 'client', 'index.html');
+  const HTML_TEMPLATE = fs.readFileSync(htmlTemplate).toString();
   const initialStateScript = `<script>window.__INITIAL_STATE__ = ${serialize(
     initialState
-  )}</script>`
-  const template = cheerio.load(HTML_TEMPLATE)
-  template('head').append(meta)
-  template('head').append(linkTags)
-  template('head').append(style)
-  template('head').append(style)
-  template('#root').html(html)
-  template('body').append(scripts)
-  template('head').append(initialStateScript)
-  return template.html()
-}
+  )}</script>`;
+  const template = cheerio.load(HTML_TEMPLATE);
+  template('head').append(meta);
+  template('head').append(linkTags);
+  template('head').append(style);
+  template('head').append(style);
+  template('#root').html(html);
+  template('body').append(scripts);
+  template('head').append(initialStateScript);
+  return template.html();
+};
 
 // const HtmlTemplate = (
 //   html: string,
@@ -77,4 +77,4 @@ const HtmlTemplate = (
 //   return document;
 // };
 
-export default HtmlTemplate
+export default HtmlTemplate;

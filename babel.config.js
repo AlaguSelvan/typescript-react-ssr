@@ -22,4 +22,4 @@ module.exports = {
     '@loadable/babel-plugin',
     '@babel/plugin-transform-runtime'
   ]
-}
+};
