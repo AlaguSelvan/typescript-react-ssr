@@ -18,7 +18,7 @@ const Button = (props: any) => {
         }
       `}
     >
-      {props.children}
+      {props.children} {count} times
     </button>
   );
 };

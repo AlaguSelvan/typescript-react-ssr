@@ -65,10 +65,10 @@ const config = {
       threshold: 10240,
       minRatio: 0.8
     }),
-    new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      openAnalyzer: false
-    }),
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'static',
+    //   openAnalyzer: false
+    // }),
     new ManifestPlugin(),
     new HtmlWebpackPlugin({
       filename: resolve('build', 'client', 'index.html'),

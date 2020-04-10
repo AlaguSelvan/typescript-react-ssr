@@ -2,13 +2,15 @@
 import fs from 'fs';
 import { resolve } from 'path';
 import serialize from 'serialize-javascript';
+// import { minify } from "html-minifier";
 import cheerio from 'cheerio';
 
 const HtmlTemplate = (
   html: string,
   meta: string,
-  styles: any,
+  style: any,
   criticalCssIds: any,
+  linkTags: any,
   initialState = {},
   scripts: any
 ) => {
@@ -19,7 +21,8 @@ const HtmlTemplate = (
   )}</script>`;
   const template = cheerio.load(HTML_TEMPLATE);
   template('head').append(meta);
-  template('head').append(styles);
+  template('head').append(linkTags);
+  template('head').append(style);
   template('head').append(criticalCssIds);
   template('#root').html(html);
   template('body').append(scripts);

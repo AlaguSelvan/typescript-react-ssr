@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const { resolve } = require('path');
 const { smart } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
@@ -35,6 +35,15 @@ const base = {
         loader: 'html-loader'
       },
       {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader'
+          }
+        ]
+      },
+      {
         test: /\.(jpg|svg|png|ico|gif|eot|otf|woff|woff2|ttf)$/,
         use: [
           {
@@ -65,6 +74,10 @@ const base = {
     new ForkTsCheckerWebpackPlugin(),
     new webpack.NamedModulesPlugin(),
     new CleanWebpackPlugin(),
+    new LoadablePlugin({
+      writeToDisk: true,
+      fileName: resolve(process.cwd(), 'build/client/loadable-stats.json')
+    }),
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
       PUBLIC_URL: publicUrl
     })

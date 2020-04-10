@@ -13,7 +13,7 @@ const base = {
   target: 'node',
   externals,
   mode: process.env.NODE_ENV,
-  entry: './server/render.tsx',
+  entry: resolve('server', 'render.tsx'),
   output: {
     path: resolve('build', 'server'),
     libraryTarget: 'commonjs2'

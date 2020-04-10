@@ -29,17 +29,9 @@ if (process.env.NODE_ENV === 'production') {
   const webpackClientConfig = require('../tools/webpack/client/webpack.config');
   const webpackServerConfig = require('../tools/webpack/server/webpack.config');
   webpack([webpackClientConfig, webpackServerConfig]).run((err, stats) => {
-    const clientStats = stats.toJson().children[0];
-    //../../build/prod-server-bundle.js
-    const render = path.resolve('build', 'server', 'prod-server-bundle.js');
-    app.use(
-      expressStaticGzip('build', {
-        enableBrotli: true
-      })
-    );
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    //@ts-ignore
-    app.use(render({ clientStats }));
+    if (err) console.log(err.message);
+    const server = require('../build/server/index.js').default;
+    app.use(server());
     done();
   });
 } else {
@@ -62,10 +54,6 @@ if (process.env.NODE_ENV === 'production') {
     clientCompiler,
     devServerProps
   );
-  const webpackServerDevMiddleware = require('webpack-dev-middleware')(
-    serverCompiler,
-    devServerProps
-  );
   const devMiddleware = webpackDevMiddleware;
 
   const webpackHotMiddlware = require('webpack-hot-middleware')(
@@ -78,7 +66,6 @@ if (process.env.NODE_ENV === 'production') {
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
   app.use(webpackServerMiddlware);
-  // app.use(webpackServerDevMiddleware);
   devMiddleware.waitUntilValid(done);
 }
 

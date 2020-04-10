@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
   output: {
-    filename: 'prod-server-bundle.js'
+    filename: 'index.js'
   },
   plugins: []
 };
