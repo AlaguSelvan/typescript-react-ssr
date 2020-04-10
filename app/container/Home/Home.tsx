@@ -5,9 +5,10 @@ import Button from '../../components/Button';
 const About = () => (
   <div>
     <p>Home Page...</p>
-    <Button />
+    {/* <Button /> */}
     <Link to="/about">
-      <p>goto prev page</p>
+      <p>🔥 New State</p>
+      {/* <p>😭 Old State</p> */}
     </Link>
   </div>
 );

@@ -47,7 +47,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(render({ clientStats }));
     done();
   });
-} else if (process.env.NODE_ENV === 'development') {
+} else {
   const webpackClientConfig = require('../tools/webpack/client/webpack.config');
   const webpackServerConfig = require('../tools/webpack/server/webpack.config');
   const compiler = webpack([webpackClientConfig, webpackServerConfig]);
@@ -71,12 +71,12 @@ if (process.env.NODE_ENV === 'production') {
     clientCompiler,
     devServerProps
   );
-  const webpackServerMiddlware = require('webpack-hot-server-middleware')(
+  const webpackHotServerMiddlware = require('webpack-hot-server-middleware')(
     compiler
   );
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
-  app.use(webpackServerMiddlware);
+  app.use(webpackHotServerMiddlware);
   webpackDevMiddleware.waitUntilValid(done);
 }
 app.listen(process.env.PORT, () => {

@@ -11,6 +11,8 @@ import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
 // import serialize from "serialize-javascript";
 import { nanoid } from 'nanoid';
+import { flushChunkNames } from 'react-universal-component/server';
+import flushChunks from 'webpack-flush-chunks';
 
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
@@ -36,6 +38,8 @@ const preloadData = (routes: any, path: any, store: any) => {
   });
   return Promise.all(promises);
 };
+
+console.log('file hit')
 
 export default ({ clientStats }: any) => async (req: any, res: any) => {
   console.log(clientStats, 'clientStats');
@@ -69,25 +73,29 @@ export default ({ clientStats }: any) => async (req: any, res: any) => {
   `.trim();
   const { nonce } = res.locals;
   cssCache.nonce = nonce;
-  const linkTags = `
-    ${extractor.getLinkTags({ nonce })}
-  `;
+  // const linkTags = `
+  //   ${extractor.getLinkTags({ nonce })}
+  // `;
   const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
     ids
   )}</script>`;
-  const scripts = `${extractor.getScriptTags({ nonce })}`;
+  // const scripts = `${extractor.getScriptTags({ nonce })}`;
   const criticalCssIds = `${emotionId}`;
-  const style = `<style data-emotion-css="${ids.join(
-    ' '
-  )}" nonce=${nonce}>${css}</style>`;
+  const chunkNames = flushChunkNames();
+  const { js, styles, scripts, ...others } = flushChunks(clientStats, {
+    chunkNames
+  });
+  // const style = `<style data-emotion-css="${ids.join(
+  //   ' '
+  // )}" nonce=${nonce}>${css}</style>`;
   const document = HtmlTemplate(
     html,
     meta,
-    style,
+    styles,
     criticalCssIds,
-    linkTags,
+    scripts,
     initialState,
-    scripts
+    js
   );
   return res.send(document);
 };
