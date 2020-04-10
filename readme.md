@@ -1,1 +1,1 @@
-Typescript Modern React Boilerplate
+Typescript React Boilerplate
