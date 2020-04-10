@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { loadableReady } from '@loadable/component';
+// import { loadableReady } from '@loadable/component';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import { Provider } from 'react-redux';
@@ -31,9 +31,9 @@ const render = () => {
 };
 
 if (process.env.NODE_ENV === 'development') {
-  loadableReady(() => {
+  // loadableReady(() => {
     render();
-  });
+  // });
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   const emotionIds = window.__emotion;

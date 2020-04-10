@@ -5,7 +5,6 @@ import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import Helmet from 'react-helmet';
-import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
@@ -42,24 +41,20 @@ const preloadData = (routes: any, path: any, store: any) => {
 console.log('file hit');
 
 export default ({ clientStats }: any) => async (req: any, res: any) => {
-  console.log(clientStats, 'clientStats');
   res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
   const statsFile = resolve('build/client/loadable-stats.json');
-  const extractor = new ChunkExtractor({ statsFile });
   const staticContext = {};
   const Jsx = (
-    <ChunkExtractorManager extractor={extractor}>
-      <Provider store={store}>
-        <StaticRouter location={url} context={staticContext}>
-          <CacheProvider value={cssCache}>
-            <App />
-          </CacheProvider>
-        </StaticRouter>
-      </Provider>
-    </ChunkExtractorManager>
+    <Provider store={store}>
+      <StaticRouter location={url} context={staticContext}>
+        <CacheProvider value={cssCache}>
+          <App />
+        </CacheProvider>
+      </StaticRouter>
+    </Provider>
   );
   const initialState = store.getState();
   const app = renderToString(Jsx);
