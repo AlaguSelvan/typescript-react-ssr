@@ -6,7 +6,7 @@ const color = 'white';
 const Button = () => {
   const [count, setCount] = React.useState(0)
   return (
-    <div
+    <button
       className={css`
         padding: 32px;
         background-color: hotpink;
@@ -18,7 +18,7 @@ const Button = () => {
       `}
     >
       Hover to change color.
-    </div>
+    </button>
   );
 }
 

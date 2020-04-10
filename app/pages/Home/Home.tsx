@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import Button from '../../components/Button'
 
 const Home = () => (
   <div>
@@ -7,7 +8,7 @@ const Home = () => (
     Hello World...
     </p>
     <Link to="/about">
-    <p>goto Next page</p>
+    <Button />
       </Link>
   </div>
 )

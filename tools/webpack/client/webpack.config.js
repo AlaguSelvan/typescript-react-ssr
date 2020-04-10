@@ -1,54 +1,104 @@
+const webpack = require('webpack');
 const { resolve } = require('path');
-const { smart } = require('webpack-merge')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { smart } = require('webpack-merge');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config =
   process.env.NODE_ENV === 'production'
     ? require('./webpack.prod')
-    : require('./webpack.dev')
+    : require('./webpack.dev');
+
+const publicUrl = '/public';
 
 const base = {
   name: 'client',
-  target: 'web',
-  mode: process.env.NODE_ENV,
   entry: {
-    vendor: ['react', 'react-dom'],
+    vendor: ['react', 'react-dom']
   },
   output: {
     path: resolve('build', 'client'),
-    publicPath: '/',
+    publicPath: publicUrl + '/'
   },
   module: {
     rules: [
       {
-        test: /\.ts(x?)$/,
-        exclude: /node_modules/,
-        loader: [
-          'babel-loader',
-          {
-            loader: 'awesome-typescript-loader',
-            options: {
-              useCache: true,
-            },
-          },
-        ],
+        test: /\.tsx?$/,
+        use: ['babel-loader', 'ts-loader']
       },
-    ],
+      {
+        test: /\.html$/i,
+        loader: 'html-loader'
+      },
+      {
+        test: /\.(jpg|svg|png|ico|gif|eot|otf|woff|woff2|ttf)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              esModule: false,
+              name: 'images/[name].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
+      }
+    ]
   },
   resolve: {
+    modules: ['node_modules'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: {
-      'react-dom': '@hot-loader/react-dom',
-    },
-    extensions: ['.ts', '.tsx', '.js'],
+      Components: resolve('app', 'components'),
+      Container: resolve('app', 'container')
+    }
   },
   plugins: [
+    new CaseSensitivePathsPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
+    new webpack.NamedModulesPlugin(),
     new CleanWebpackPlugin(),
-    new ManifestPlugin({
-      fileName: resolve(process.cwd(), 'build/client/webpack-assets.json'),
-      filter: (file) => file.isInitial,
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
+      PUBLIC_URL: publicUrl
     })
   ],
+  optimization: {
+    splitChunks: {
+      chunks: 'async',
+      minSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 1,
+      maxInitialRequests: 1,
+      automaticNameDelimiter: '.',
+      name: true,
+      cacheGroups: {
+        vendors: {
+          chunks: 'all',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    }
+  },
+  node: {
+    fs: 'empty',
+    vm: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  }
 };
 
-module.exports = smart(base, config)
+module.exports = smart(base, config);

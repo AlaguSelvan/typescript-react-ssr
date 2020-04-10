@@ -28,11 +28,11 @@
   },
   "exclude": [
     "node_modules",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/client/**/*.stories.ts"
+    "app/**/*.test.ts",
+    "app/**/*.test.tsx",
+    "app/**/*.stories.ts"
   ],
   "include": [
-    "src/**/*"
+    "app/**/*"
   ]
 }

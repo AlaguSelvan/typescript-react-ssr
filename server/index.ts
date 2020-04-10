@@ -10,7 +10,7 @@ require('dotenv').config()
 const app = express();
 let isBuilt = false;
 
-const {PORT} = process.env
+const { PORT } = process.env
 const done = () => {
   !isBuilt &&
     app.listen(PORT, () => {
@@ -22,21 +22,15 @@ const done = () => {
 };
 app.use(helmet());
 app.use(compression());
-app.use(express.static(path.resolve('build', 'client')));
+app.use('/public', express.static(path.resolve('build', 'client')));
 
 if (process.env.NODE_ENV === 'production') {
   const webpackClientConfig = require('../tools/webpack/client/webpack.config');
   const webpackServerConfig = require('../tools/webpack/server/webpack.config');
   webpack([webpackClientConfig, webpackServerConfig]).run((err, stats) => {
-    console.log(webpackServerConfig, 'webpackServerConfig');
     const clientStats = stats.toJson().children[0];
     //../../build/prod-server-bundle.js
-    const render = require('../build/server/prod-server-bundle').default;
-    console.log(
-      stats.toString({
-        colors: true
-      })
-    );
+    const render = path.resolve('build', 'server', 'prod-server-bundle.js');
     app.use(
       expressStaticGzip('build', {
         enableBrotli: true

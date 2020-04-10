@@ -1,26 +1,47 @@
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const WriteFilePlugin = require('write-file-webpack-plugin') // here so you can see what chunks are built
-const webpack = require('webpack')
+const webpack = require('webpack');
+const { resolve } = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 const config = {
+  mode: 'development',
   entry: {
     main: [
-      'webpack-hot-middleware/client?reload=true',
-      'react-hot-loader/patch',
-      './app/index.tsx',
-    ],
+      // Migrate to react-refresh on its release https://github.com/facebook/react/issues/16604#issuecomment-528663101
+      '@hot-loader/react-dom',
+      `webpack-hot-middleware/client`,
+      resolve('app', 'index.tsx')
+    ]
   },
   output: {
-		filename: '[name]-bundle.[hash].js',
-		chunkFilename: '[name].[hash].js',
+    filename: '[name]-bundle.[hash].js',
+    chunkFilename: '[name].[hash].js'
   },
-  devtool: 'inline-source-map',
+  resolve: {
+    modules: ['app', 'node_modules'],
+    descriptionFiles: ['package.json'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+    alias: { 'react-dom': '@hot-loader/react-dom' }
+  },
+  devtool: 'inline-cheap-module-source-map',
   plugins: [
-    new WriteFilePlugin(),
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new ForkTsCheckerWebpackPlugin(),
-  ],
+    new ErrorOverlayPlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: 'public'
+      }
+    ]),
+    new HtmlWebpackPlugin({
+      hash: true,
+      inject: true,
+      filename: resolve('build', 'client', 'index.html'),
+      template: resolve('public', 'index.html')
+    }),
+    new WatchMissingNodeModulesPlugin(resolve('node_modules'))
+  ]
 };
 
-module.exports = config
+module.exports = config;

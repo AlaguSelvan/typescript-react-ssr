@@ -28,15 +28,9 @@ if (process.env.NODE_ENV === 'production') {
   const webpackClientConfig = require('../tools/webpack/client/webpack.config');
   const webpackServerConfig = require('../tools/webpack/server/webpack.config');
   webpack([webpackClientConfig, webpackServerConfig]).run((err, stats) => {
-    console.log(webpackServerConfig, 'webpackServerConfig');
     const clientStats = stats.toJson().children[0];
     //../../build/prod-server-bundle.js
     const render = require('../build/server/prod-server-bundle').default;
-    console.log(
-      stats.toString({
-        colors: true
-      })
-    );
     app.use(
       expressStaticGzip('build', {
         enableBrotli: true

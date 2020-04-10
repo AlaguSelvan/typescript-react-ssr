@@ -1,77 +1,96 @@
+import { resolve } from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import Helmet from 'react-helmet';
 import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
-import createEmotionServer from 'create-emotion-server';
+import Helmet from 'react-helmet';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
+import { extractCritical } from 'emotion-server';
+// import serialize from "serialize-javascript";
+import { nanoid } from 'nanoid';
 import { flushChunkNames } from 'react-universal-component/server';
 import flushChunks from 'webpack-flush-chunks';
-import { HelmetProvider } from "react-helmet-async";
-import serialize from 'serialize-javascript';
 
-import routes from '../app/Router';
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
-// import htmlTemplate from '../utils/renderHtml';
+import HtmlTemplate from './utils/HtmlTemplate';
+import routes from '../app/Router';
 
 const cssCache = createCache();
-const { extractCritical } = createEmotionServer(cssCache);
 
-export default ({ clientStats }: any) => (req: any, res: any) => {
-  const { url, path } = req;
-  const { store } = configureStore({ url });
-  const promises = matchRoutes(routes, path).map(({ route }) => {
-    route.loadData ? route.loadData(store) : null;
+const preloadData = (routes: any, path: any, store: any) => {
+  const branch = matchRoutes(routes, path);
+  const promises = branch.map(({ route, match }) => {
+    if (route.loadData) {
+      return Promise.all(
+        route
+          .loadData({
+            params: match.params,
+            getState: store.getState,
+          })
+          .map((item: any) => store.dispatch(item))
+      );
+    }
+    return Promise.resolve(null);
   });
-  Promise.all(promises).then(() => {
-    const staticContext = {};
-    const helmetContext = {};
-    const rootJsx = (
-      <HelmetProvider context={helmetContext}>
-        <Provider store={store}>
-          <StaticRouter location={url} context={staticContext}>
-            <CacheProvider value={cssCache}>
-              <App />
-            </CacheProvider>
-          </StaticRouter>
-        </Provider>
-      </HelmetProvider>
-    );
-    const element = renderToString(rootJsx)
-    const { html, css, ids } = extractCritical(element);
-    console.log(res.locals, 'locals')
-    //@ts-ignore
-    const { helmet } = helmetContext;
-    const chunkNames = flushChunkNames()
-    const { js, styles, scripts, ...others } = flushChunks(clientStats, {
-      chunkNames
-    });
-    // console.log('flush chunks', js, styles, cssHash, scripts, others);
-    const initialState = store.getState();
-    const template = `<!DOCTYPE html><html lang="en"><head><meta name="theme-color" content="#000000"/>${
-      helmet.title
-    }${helmet.meta.toString()}
-    ${helmet.link.toString()}
-    <style data-emotion-css="${ids.join(' ')}">${css}</style>
-    </head>
-    <body><div id="root">${html}</div>${js}
-    <script>window.__INITIAL_STATE__ = ${serialize(initialState)}</script>
-    </body></html>`;
-    return res
-      .status(200)
-      // .cookie(LOCALE_COOKIE_NAME, lang, {
-      //   maxAge: COOKIE_MAX_AGE,
-      //   httpOnly: false
-      // })
-      .header('Content-Type', 'text/html')
-      .send(template);
-    // return res.send(htmlTemplate(head, html, css, ids, initialState, extractor))
-  }).catch(error => {
-    return res.send(error.message)
-  })
-  // await loadBranchData();
+  return Promise.all(promises);
+};
+
+console.log('file hit');
+
+export default ({ clientStats }: any) => async (req: any, res: any) => {
+  res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
+  const { url } = req;
+  const { store } = configureStore({ url });
+  await preloadData(routes, req.path, store);
+  const statsFile = resolve('build/client/loadable-stats.json');
+  const staticContext = {};
+  const Jsx = (
+      <Provider store={store}>
+        <StaticRouter location={url} context={staticContext}>
+          <CacheProvider value={cssCache}>
+            <App />
+          </CacheProvider>
+        </StaticRouter>
+      </Provider>
+  );
+  const initialState = store.getState();
+  const app = renderToString(Jsx);
+  const { html, css, ids } = extractCritical(app);
   const head = Helmet.renderStatic();
+  const meta = `
+    ${head.title.toString()}
+    ${head.base.toString()}
+    ${head.meta.toString()}
+    ${head.link.toString()}
+  `.trim();
+  const { nonce } = res.locals;
+  cssCache.nonce = nonce;
+  // const linkTags = `
+  //   ${extractor.getLinkTags({ nonce })}
+  // `;
+  const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
+    ids
+  )}</script>`;
+  // const scripts = `${extractor.getScriptTags({ nonce })}`;
+  const criticalCssIds = `${emotionId}`;
+  const chunkNames = flushChunkNames();
+  const { js, styles, scripts, ...others } = flushChunks(clientStats, {
+    chunkNames,
+  });
+  // const style = `<style data-emotion-css="${ids.join(
+  //   ' '
+  // )}" nonce=${nonce}>${css}</style>`;
+  const document = HtmlTemplate(
+    html,
+    meta,
+    styles,
+    criticalCssIds,
+    scripts,
+    initialState,
+    js
+  );
+  return res.send(document);
 };
