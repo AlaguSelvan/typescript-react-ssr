@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import routes from './Router';
 import universal from 'react-universal-component';
 
-const Loading = () => <div>...Loading</div>;
+const Loading = () => <div>Loading...</div>;
 
 const UniversalComponent = universal(
   (props: any) => import(`./container/${props.page}`),
@@ -21,9 +21,8 @@ export default function App() {
           <Route
             key={route.path}
             render={(routeProps) => (
-              <UniversalComponent page={route.component} {...routeProps} />
+              <UniversalComponent page={component} {...routeProps} />
             )}
-            component={component}
             {...route}
           />
         );

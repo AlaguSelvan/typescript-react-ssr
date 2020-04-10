@@ -8,7 +8,6 @@ const RobotstxtPlugin = require('robotstxt-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
-// const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const shouldUseSourceMap = false;
 
 const options = {

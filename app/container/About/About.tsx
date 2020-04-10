@@ -7,7 +7,7 @@ const About = () => (
     <p>About Page...</p>
     <Toggle />
     <Link to="/">
-      <p>goto prev page</p>
+      <p>Go to Home</p>
     </Link>
   </div>
 );

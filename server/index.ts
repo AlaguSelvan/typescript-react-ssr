@@ -1,30 +1,29 @@
-/* eslint @typescript-eslint/no-var-requires: 0 */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import path from 'path';
 import express from 'express';
-import dotenv from 'dotenv';
 import compression from 'compression';
 import helmet from 'helmet';
 import webpack from 'webpack';
 import expressStaticGzip from 'express-static-gzip';
-import openBrowser from 'react-dev-utils/openBrowser';
 
-dotenv.config();
+require('dotenv').config();
 
 const app = express();
 let isBuilt = false;
 
-app.use(helmet());
-app.use(compression());
-
+const { PORT } = process.env;
 const done = () => {
   !isBuilt &&
-    app.listen(process.env.PORT, () => {
+    app.listen(PORT, () => {
       isBuilt = true;
-      console.log(`Server listening on http://localhost:${process.env.PORT}.`);
+      console.log(
+        `Server listening on http://localhost:${PORT} in ${process.env.NODE_ENV}🌎...`
+      );
     });
 };
-
-app.use(express.static(path.resolve('build', 'client')));
+app.use(helmet());
+app.use(compression());
+app.use('/public', express.static(path.resolve('build', 'client')));
 
 if (process.env.NODE_ENV === 'production') {
   const webpackClientConfig = require('../tools/webpack/client/webpack.config');
@@ -32,17 +31,14 @@ if (process.env.NODE_ENV === 'production') {
   webpack([webpackClientConfig, webpackServerConfig]).run((err, stats) => {
     const clientStats = stats.toJson().children[0];
     //../../build/prod-server-bundle.js
-    const render = require('../build/server/prod-server-bundle').default;
-    console.log(
-      stats.toString({
-        colors: true
-      })
-    );
+    const render = path.resolve('build', 'server', 'prod-server-bundle.js');
     app.use(
       expressStaticGzip('build', {
         enableBrotli: true
       })
     );
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    //@ts-ignore
     app.use(render({ clientStats }));
     done();
   });
@@ -52,6 +48,7 @@ if (process.env.NODE_ENV === 'production') {
   const compiler = webpack([webpackClientConfig, webpackServerConfig]);
   const clientCompiler = compiler.compilers[0];
   const serverCompiler = compiler.compilers[1];
+  compiler.apply(new webpack.ProgressPlugin());
   const devServerProps = {
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
@@ -59,31 +56,33 @@ if (process.env.NODE_ENV === 'production') {
     noInfo: true,
     writeToDisk: true,
     stats: 'minimal',
-    serverSideRender: true,
-    index: false
+    serverSideRender: true
   };
   const webpackDevMiddleware = require('webpack-dev-middleware')(
     clientCompiler,
     devServerProps
   );
+  const webpackServerDevMiddleware = require('webpack-dev-middleware')(
+    serverCompiler,
+    devServerProps
+  );
+  const devMiddleware = webpackDevMiddleware;
+
   const webpackHotMiddlware = require('webpack-hot-middleware')(
     clientCompiler,
     devServerProps
   );
-  const webpackHotServerMiddlware = require('webpack-hot-server-middleware')(
+  const webpackServerMiddlware = require('webpack-hot-server-middleware')(
     compiler
   );
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
-  app.use(webpackHotServerMiddlware);
-  webpackDevMiddleware.waitUntilValid(done);
+  app.use(webpackServerMiddlware);
+  // app.use(webpackServerDevMiddleware);
+  devMiddleware.waitUntilValid(done);
 }
+
 app.listen(process.env.PORT, () => {
   const url = `http://localhost:${process.env.PORT}`;
   console.info(`Listening at ${url}`);
-  if (process.env.NODE_ENV === 'development') {
-    if (openBrowser(url)) {
-      console.info("==> 🖥️  Opened on your browser's tab!");
-    }
-  }
 });

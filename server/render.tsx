@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
@@ -8,7 +7,6 @@ import Helmet from 'react-helmet';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
-// import serialize from "serialize-javascript";
 import { nanoid } from 'nanoid';
 import { flushChunkNames } from 'react-universal-component/server';
 import flushChunks from 'webpack-flush-chunks';
@@ -38,14 +36,11 @@ const preloadData = (routes: any, path: any, store: any) => {
   return Promise.all(promises);
 };
 
-console.log('file hit');
-
 export default ({ clientStats }: any) => async (req: any, res: any) => {
   res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
-  const statsFile = resolve('build/client/loadable-stats.json');
   const staticContext = {};
   const Jsx = (
     <Provider store={store}>
@@ -68,27 +63,22 @@ export default ({ clientStats }: any) => async (req: any, res: any) => {
   `.trim();
   const { nonce } = res.locals;
   cssCache.nonce = nonce;
-  // const linkTags = `
-  //   ${extractor.getLinkTags({ nonce })}
-  // `;
   const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
     ids
   )}</script>`;
-  // const scripts = `${extractor.getScriptTags({ nonce })}`;
   const criticalCssIds = `${emotionId}`;
   const chunkNames = flushChunkNames();
-  const { js, styles, scripts, ...others } = flushChunks(clientStats, {
+  const { js, styles, cssHash } = flushChunks(clientStats, {
     chunkNames
   });
-  // const style = `<style data-emotion-css="${ids.join(
-  //   ' '
-  // )}" nonce=${nonce}>${css}</style>`;
+  const style = `<style data-emotion-css="${ids.join(
+    ' '
+  )}" nonce=${nonce}>${css}</style>`;
   const document = HtmlTemplate(
     html,
     meta,
-    styles,
+    style,
     criticalCssIds,
-    scripts,
     initialState,
     js
   );

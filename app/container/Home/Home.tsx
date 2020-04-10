@@ -2,15 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
 
-const About = () => (
+const Home = () => (
   <div>
     <p>Home Page...</p>
-    {/* <Button /> */}
+    <Button>Hover</Button>
     <Link to="/about">
-      <p>🔥 New State</p>
+      <p>Go To About Page</p>
       {/* <p>😭 Old State</p> */}
     </Link>
   </div>
 );
 
-export default About;
+export default Home;

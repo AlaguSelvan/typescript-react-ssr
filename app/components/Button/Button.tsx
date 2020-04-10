@@ -3,7 +3,7 @@ import { css } from 'emotion';
 
 const color = 'white';
 
-const Button = () => {
+const Button = (props: any) => {
   const [count, setCount] = React.useState(0);
   return (
     <button
@@ -18,7 +18,7 @@ const Button = () => {
         }
       `}
     >
-      Clicked {count} Times
+      {props.children}
     </button>
   );
 };
