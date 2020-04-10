@@ -39,7 +39,7 @@ const preloadData = (routes: any, path: any, store: any) => {
   return Promise.all(promises);
 };
 
-console.log('file hit')
+console.log('file hit');
 
 export default ({ clientStats }: any) => async (req: any, res: any) => {
   console.log(clientStats, 'clientStats');
