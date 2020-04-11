@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { resolve } from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -10,6 +11,8 @@ import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
 // import serialize from "serialize-javascript";
+import { getBundles } from 'react-loadable/webpack';
+import Loadable from 'react-loadable';
 
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
@@ -40,11 +43,11 @@ const render = async (req: any, res: any) => {
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
-  const statsFile = resolve('build/client/loadable-stats.json');
-  const extractor = new ChunkExtractor({ statsFile });
+  // const statsFile = resolve('build/client/loadable-stats.json');
   const staticContext = {};
+  const modules = [];
   const Jsx = (
-    <ChunkExtractorManager extractor={extractor}>
+    <Loadable.Capture report={(moduleName) => modules.push(moduleName)}>
       <Provider store={store}>
         <StaticRouter location={url} context={staticContext}>
           <CacheProvider value={cssCache}>
@@ -52,10 +55,20 @@ const render = async (req: any, res: any) => {
           </CacheProvider>
         </StaticRouter>
       </Provider>
-    </ChunkExtractorManager>
+    </Loadable.Capture>
   );
   const initialState = store.getState();
   const app = renderToString(Jsx);
+  const loadableStats = fs.readFileSync('build/react-loadable.json');
+  // let stats = JSON.parse(loadableStats);
+  // const loadableStats = resolve('build/react-loadable.json');
+  const statsToJson = JSON.stringify(loadableStats);
+  const stats = JSON.parse(loadableStats);
+  const bundles = getBundles(stats, modules);
+  const bundleScripts = bundles
+    .map((bundle) => `<script src="${bundle.publicPath}"></script>`)
+    .join('');
+  // const extractor = new ChunkExtractor({ statsFile });
   const { html, css, ids } = extractCritical(app);
   const head = Helmet.renderStatic();
   const meta = `
@@ -66,13 +79,9 @@ const render = async (req: any, res: any) => {
   `.trim();
   const { nonce } = res.locals;
   cssCache.nonce = nonce;
-  const linkTags = `
-    ${extractor.getLinkTags({ nonce })}
-  `;
   const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
     ids
   )}</script>`;
-  const scripts = `${extractor.getScriptTags({ nonce })}`;
   const criticalCssIds = `${emotionId}`;
   const style = `<style data-emotion-css="${ids.join(
     ' '
@@ -82,9 +91,9 @@ const render = async (req: any, res: any) => {
     meta,
     style,
     criticalCssIds,
-    linkTags,
+    '',
     initialState,
-    scripts
+    bundleScripts
   );
   return res.send(document);
 };

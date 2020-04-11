@@ -3,6 +3,7 @@ import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import compression from 'compression';
+import Loadable from 'react-loadable';
 import helmet from 'helmet';
 import webpack from 'webpack';
 import render from './render';
@@ -16,7 +17,11 @@ const app = express();
 
 app.use(helmet());
 app.use(compression());
-
+app.use('/public', express.static(path.resolve('build/client')));
+app.use(
+  '/public/react-loadable.json',
+  express.static(path.resolve('build/react-loadable.json'))
+);
 if (process.env.NODE_ENV === 'development') {
   const webpackClientConfig = require('../tools/webpack/webpack.config');
   const compiler = webpack(webpackClientConfig);
@@ -39,29 +44,25 @@ if (process.env.NODE_ENV === 'development') {
     clientCompiler,
     devServerProps
   );
-  app.use('/public', express.static(path.resolve('build/client')));
+  const webpackHotServerMiddleware = require('webpack-hot-server-middleware');
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
+  // app.use(webpackHotServerMiddleware(compiler));
 }
-app.use(
-  '/public',
-  expressStaticGzip(path.resolve('build/client'), {
-    enableBrotli: true,
-    orderPreference: ['br', 'gz']
-  })
-);
 
 app.get('*', (req, res) => {
   res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
   render(req, res);
 });
 
-app.listen(process.env.PORT, () => {
-  const url = `http://localhost:${process.env.PORT}`;
-  console.info(`Listening at ${url}`);
-  if (process.env.NODE_ENV === 'development') {
-    if (openBrowser(url)) {
-      console.info("==> 🖥️  Opened on your browser's tab!");
+Loadable.preloadAll().then(() => {
+  app.listen(process.env.PORT, () => {
+    const url = `http://localhost:${process.env.PORT}`;
+    console.info(`Listening at ${url}`);
+    if (process.env.NODE_ENV === 'development') {
+      // if (openBrowser(url)) {
+      //   console.info("==> 🖥️  Opened on your browser's tab!");
+      // }
     }
-  }
+  });
 });

@@ -18,7 +18,7 @@ const Button = () => {
         }
       `}
     >
-      Clicked {count} Times
+      You Have Clicked {count} Times
     </button>
   );
 };

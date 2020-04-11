@@ -19,7 +19,7 @@ module.exports = {
     '@babel/plugin-transform-async-to-generator',
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-syntax-dynamic-import',
-    '@loadable/babel-plugin',
+    'react-loadable/babel',
     '@babel/plugin-transform-runtime'
   ]
 };

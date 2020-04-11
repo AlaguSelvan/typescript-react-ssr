@@ -3,11 +3,12 @@ const { resolve } = require('path');
 const { smart } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const LoadablePlugin = require('@loadable/webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ReactLoadablePlugin = require('react-loadable/webpack')
+  .ReactLoadablePlugin;
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -66,9 +67,8 @@ const base = {
     new ForkTsCheckerWebpackPlugin(),
     new webpack.NamedModulesPlugin(),
     new CleanWebpackPlugin(),
-    new LoadablePlugin({
-      writeToDisk: true,
-      fileName: resolve(process.cwd(), 'build/client/loadable-stats.json')
+    new ReactLoadablePlugin({
+      filename: resolve('build', 'react-loadable.json')
     }),
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
       PUBLIC_URL: publicUrl

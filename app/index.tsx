@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { loadableReady } from '@loadable/component';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import { Provider } from 'react-redux';
 import configureStore from './redux/configureStore';
 import { ConnectedRouter } from 'connected-react-router';
 import { hydrate as emotionHydrate } from 'emotion';
+import Loadable from 'react-loadable';
 
 import App from './App';
 
@@ -31,7 +31,7 @@ const render = () => {
 };
 
 if (process.env.NODE_ENV === 'development') {
-  loadableReady(() => {
+  Loadable.preloadReady().then(() => {
     render();
   });
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
