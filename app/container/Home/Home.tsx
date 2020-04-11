@@ -5,10 +5,12 @@ import Button from '../../components/Button';
 const Home = () => (
   <div>
     <p>Home Page...</p>
-    <Button>Hover</Button>
+    <Button>
+      {' '}
+      <p>Clicked</p>{' '}
+    </Button>
     <Link to="/about">
-      <p>Go To About Page</p>
-      {/* <p>😭 Old State</p> */}
+      <p>Go To prev page</p>
     </Link>
   </div>
 );
