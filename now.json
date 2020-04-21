@@ -7,14 +7,14 @@
       "use": "@now/static-build"
     },
     {
-      "src": "build/server/index.js",
+      "src": "/build/server/index.js",
       "use": "@now/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "build/server/index.js"
+      "dest": "/build/server/index.js"
     }
   ]
 }
