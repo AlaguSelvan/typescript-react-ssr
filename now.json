@@ -1,0 +1,20 @@
+{
+  "name": "react-typescript-ssr",
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build"
+    },
+    {
+      "src": "build/server/index.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "build/server/index.js"
+    }
+  ]
+}
