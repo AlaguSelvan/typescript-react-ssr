@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { ReactChild, ReactFragment, ReactPortal } from 'react';
 import { css } from 'emotion';
 
 const color = 'white';
 
-const Button = () => {
+interface Props {
+  children?:
+    | ReactChild
+    | ReactFragment
+    | ReactPortal
+    | boolean
+    | null
+    | undefined;
+  value?: string;
+}
+const Button: React.FC<Props> = ({ children, value }) => {
   const [count, setCount] = React.useState(0);
   return (
     <button
@@ -18,7 +28,7 @@ const Button = () => {
         }
       `}
     >
-      Clicked {count} Times
+      <span>{children || value}</span>
     </button>
   );
 };

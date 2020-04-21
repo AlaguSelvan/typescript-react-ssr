@@ -1,8 +1,8 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent, screen } from '@testing-library/react';
 import Button from './Button';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<Button />);
-  console.log(getByText);
+test('Shows the children when children is passed', () => {
+  const testMessage = 'Test Message';
+  render(<Button>{testMessage}</Button>);
 });

@@ -68,6 +68,7 @@ const render = async (req: any, res: any) => {
   cssCache.nonce = nonce;
   const linkTags = `
     ${extractor.getLinkTags({ nonce })}
+    ${extractor.getStyleTags({ nonce })}
   `;
   const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
     ids
