@@ -4,7 +4,7 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@now/node-server"
+      "use": "@now/static-build"
     },
     {
       "src": "build/server/index.js",
