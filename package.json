@@ -4,7 +4,7 @@
   "description": "A Boilerplate for Modern Web apps With Best development experience & best practices",
   "main": "./server/index.ts",
   "scripts": {
-    "start": "cross-env NODE_ENV=development npm-run-all clean && nodemon ./server/index.ts",
+    "start": "npm-run-all clean && nodemon ./server/index.ts",
     "start:prod": "cross-env NODE_ENV=production node ./build/server/index.js",
     "build": "npm-run-all clean build:*",
     "build:server": "cross-env NODE_ENV=production BABEL_ENV=node babel ./server -d ./build/server --extensions '.ts,.tsx'",
@@ -154,6 +154,7 @@
     "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.10.3",
     "webpack-hot-middleware": "^2.25.0",
+    "webpack-hot-server-middleware": "^0.6.0",
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-merge": "^4.2.2",
     "webpack-node-externals": "^1.7.2",

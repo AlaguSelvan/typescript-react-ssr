@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import { resolve } from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -18,6 +19,7 @@ import routes from '../app/Router';
 
 const cssCache = createCache();
 
+//@ts-ignore
 const preloadData = (routes, path, store) => {
   const branch = matchRoutes(routes, path);
   const promises = branch.map(({ route, match }) => {
@@ -36,7 +38,9 @@ const preloadData = (routes, path, store) => {
   return Promise.all(promises);
 };
 
-const render = async (req: any, res: any) => {
+//@ts-ignore
+export default ({ clientStats }: any) => async (req: any, res: any) => {
+  console.log({ clientStats });
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
@@ -89,5 +93,3 @@ const render = async (req: any, res: any) => {
   );
   return res.send(document);
 };
-
-export default render;

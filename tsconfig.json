@@ -26,5 +26,5 @@
     "app/**/*.test.tsx",
     "app/**/*.stories.ts"
   ],
-  "include": ["app/**/*"]
+  "include": ["app/**/*", "server/**/*"]
 }
