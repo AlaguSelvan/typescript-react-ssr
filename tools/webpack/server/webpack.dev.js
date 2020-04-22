@@ -4,7 +4,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 
 module.exports = {
-  // output: {
-  //   filename: 'dev-server-bundle.js'
-  // }
+  output: {
+    filename: 'dev-server-bundle.js'
+  },
+  plugins: [new webpack.HotModuleReplacementPlugin()]
 };

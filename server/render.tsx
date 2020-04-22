@@ -12,6 +12,8 @@ import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
 // import serialize from "serialize-javascript";
 
+console.log('server file hit');
+
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
 import HtmlTemplate from './utils/HtmlTemplate';
@@ -20,7 +22,7 @@ import routes from '../app/Router';
 const cssCache = createCache();
 
 //@ts-ignore
-const preloadData = (routes, path, store) => {
+const preloadData = (routes: any, path: any, store: any) => {
   const branch = matchRoutes(routes, path);
   const promises = branch.map(({ route, match }) => {
     if (route.loadData) {
@@ -39,7 +41,7 @@ const preloadData = (routes, path, store) => {
 };
 
 //@ts-ignore
-export default ({ clientStats }: any) => async (req: any, res: any) => {
+export default ({ clientStats }) => async (req, res) => {
   console.log({ clientStats });
   const { url } = req;
   const { store } = configureStore({ url });
@@ -63,17 +65,17 @@ export default ({ clientStats }: any) => async (req: any, res: any) => {
   const { html, css, ids } = extractCritical(app);
   const head = Helmet.renderStatic();
   const meta = `
-    ${head.title.toString()}
-    ${head.base.toString()}
-    ${head.meta.toString()}
-    ${head.link.toString()}
-  `.trim();
+${head.title.toString()}
+${head.base.toString()}
+${head.meta.toString()}
+${head.link.toString()}
+`.trim();
   const { nonce } = res.locals;
   cssCache.nonce = nonce;
   const linkTags = `
-    ${extractor.getLinkTags({ nonce })}
-    ${extractor.getStyleTags({ nonce })}
-  `;
+${extractor.getLinkTags({ nonce })}
+${extractor.getStyleTags({ nonce })}
+`;
   const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
     ids
   )}</script>`;

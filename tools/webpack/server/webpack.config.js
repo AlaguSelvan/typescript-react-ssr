@@ -1,7 +1,8 @@
 const webpack = require('webpack');
-const { resolve } = require('path');
+const { join, resolve } = require('path');
 const { smart } = require('webpack-merge');
 const externals = require('./node-externals');
+const nodeExternals = require('webpack-node-externals');
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -15,12 +16,12 @@ const filename =
 const base = {
   name: 'server',
   target: 'node',
-  externals,
   mode: process.env.NODE_ENV,
-  entry: './server/render.tsx',
+  entry: resolve('server', 'render.tsx'),
   output: {
+    filename,
     path: resolve('build', 'server'),
-    filename
+    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
@@ -39,7 +40,10 @@ const base = {
         loader: [
           'babel-loader',
           {
-            loader: 'ts-loader'
+            loader: 'awesome-typescript-loader',
+            options: {
+              useCache: true
+            }
           }
         ]
       }
@@ -52,7 +56,8 @@ const base = {
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     })
-  ]
+  ],
+  externals: [nodeExternals()]
 };
 
 module.exports = smart(base, config);
