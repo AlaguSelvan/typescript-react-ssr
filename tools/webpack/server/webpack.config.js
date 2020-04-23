@@ -17,7 +17,7 @@ const base = {
   name: 'server',
   target: 'node',
   mode: process.env.NODE_ENV,
-  entry: [resolve('server', 'render.tsx')],
+  entry: resolve('server', 'render.tsx'),
   output: {
     filename,
     path: resolve('build', 'server'),
@@ -43,9 +43,9 @@ const base = {
         loader: [
           'babel-loader',
           {
-            loader: 'awesome-typescript-loader',
+            loader: 'ts-loader',
             options: {
-              useCache: true
+              configFile: 'tsconfig.server.json'
             }
           }
         ]

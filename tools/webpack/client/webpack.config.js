@@ -29,7 +29,7 @@ const base = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['babel-loader', 'awesome-typescript-loader']
+        use: ['babel-loader', 'ts-loader']
       },
       {
         test: /\.html$/i,
