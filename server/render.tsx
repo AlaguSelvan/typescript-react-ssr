@@ -5,13 +5,12 @@ import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import Helmet from 'react-helmet';
+import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
+import nanoid from 'nanoid';
 // import serialize from "serialize-javascript";
-import { nanoid } from 'nanoid';
-import { flushChunkNames } from 'react-universal-component/server';
-import flushChunks from 'webpack-flush-chunks';
 
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
@@ -38,16 +37,17 @@ const preloadData = (routes: any, path: any, store: any) => {
   return Promise.all(promises);
 };
 
-console.log('file hit');
-
 export default ({ clientStats }: any) => async (req: any, res: any) => {
+  //@ts-ignore
   res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
   const statsFile = resolve('build/client/loadable-stats.json');
+  const extractor = new ChunkExtractor({ statsFile });
   const staticContext = {};
   const Jsx = (
+    <ChunkExtractorManager extractor={extractor}>
       <Provider store={store}>
         <StaticRouter location={url} context={staticContext}>
           <CacheProvider value={cssCache}>
@@ -55,6 +55,7 @@ export default ({ clientStats }: any) => async (req: any, res: any) => {
           </CacheProvider>
         </StaticRouter>
       </Provider>
+    </ChunkExtractorManager>
   );
   const initialState = store.getState();
   const app = renderToString(Jsx);
@@ -66,31 +67,29 @@ export default ({ clientStats }: any) => async (req: any, res: any) => {
     ${head.meta.toString()}
     ${head.link.toString()}
   `.trim();
-  const { nonce } = res.locals;
+  const nonce = '1234';
   cssCache.nonce = nonce;
-  // const linkTags = `
-  //   ${extractor.getLinkTags({ nonce })}
-  // `;
+  const linkTags = `
+    ${extractor.getLinkTags({ nonce })}
+    ${extractor.getStyleTags({ nonce })}
+  `;
   const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
     ids
   )}</script>`;
-  // const scripts = `${extractor.getScriptTags({ nonce })}`;
+  const scripts = `${extractor.getScriptTags({ nonce })}`;
   const criticalCssIds = `${emotionId}`;
-  const chunkNames = flushChunkNames();
-  const { js, styles, scripts, ...others } = flushChunks(clientStats, {
-    chunkNames,
-  });
-  // const style = `<style data-emotion-css="${ids.join(
-  //   ' '
-  // )}" nonce=${nonce}>${css}</style>`;
+  const style = `<style data-emotion-css="${ids.join(
+    ' '
+  )}" nonce=${nonce}>${css}</style>`;
+  console.log({ html })
   const document = HtmlTemplate(
     html,
     meta,
-    styles,
+    style,
     criticalCssIds,
-    scripts,
+    linkTags,
     initialState,
-    js
+    scripts
   );
   return res.send(document);
 };

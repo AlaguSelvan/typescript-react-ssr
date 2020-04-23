@@ -7,6 +7,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -18,21 +19,21 @@ const publicUrl = '/public';
 const base = {
   name: 'client',
   entry: {
-    vendor: ['react', 'react-dom']
+    vendor: ['react', 'react-dom'],
   },
   output: {
     path: resolve('build', 'client'),
-    publicPath: publicUrl + '/'
+    publicPath: publicUrl + '/',
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['babel-loader', 'ts-loader']
+        use: ['babel-loader', 'ts-loader'],
       },
       {
         test: /\.html$/i,
-        loader: 'html-loader'
+        loader: 'html-loader',
       },
       {
         test: /\.(jpg|svg|png|ico|gif|eot|otf|woff|woff2|ttf)$/,
@@ -41,33 +42,37 @@ const base = {
             loader: 'file-loader',
             options: {
               esModule: false,
-              name: 'images/[name].[ext]'
-            }
-          }
-        ]
+              name: 'images/[name].[ext]',
+            },
+          },
+        ],
       },
       {
         test: /\.json$/,
-        loader: 'json-loader'
-      }
-    ]
+        loader: 'json-loader',
+      },
+    ],
   },
   resolve: {
     modules: ['node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: {
       Components: resolve('app', 'components'),
-      Container: resolve('app', 'container')
-    }
+      Container: resolve('app', 'container'),
+    },
   },
   plugins: [
     new CaseSensitivePathsPlugin(),
     new ForkTsCheckerWebpackPlugin(),
+    new LoadablePlugin({
+      writeToDisk: true,
+      fileName: resolve(process.cwd(), 'build/client/loadable-stats.json'),
+    }),
     new webpack.NamedModulesPlugin(),
     new CleanWebpackPlugin(),
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
-      PUBLIC_URL: publicUrl
-    })
+      PUBLIC_URL: publicUrl,
+    }),
   ],
   optimization: {
     splitChunks: {
@@ -83,22 +88,22 @@ const base = {
           chunks: 'all',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          reuseExistingChunk: true
+          reuseExistingChunk: true,
         },
         default: {
           minChunks: 2,
           priority: -20,
-          reuseExistingChunk: true
-        }
-      }
-    }
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
   node: {
     fs: 'empty',
     vm: 'empty',
     net: 'empty',
-    tls: 'empty'
-  }
+    tls: 'empty',
+  },
 };
 
 module.exports = smart(base, config);
