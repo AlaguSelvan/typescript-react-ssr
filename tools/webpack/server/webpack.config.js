@@ -17,11 +17,14 @@ const base = {
   name: 'server',
   target: 'node',
   mode: process.env.NODE_ENV,
-  entry: resolve('server', 'render.tsx'),
+  entry: [resolve('server', 'render.tsx')],
   output: {
     filename,
     path: resolve('build', 'server'),
     libraryTarget: 'commonjs2'
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.json']
   },
   module: {
     rules: [
@@ -48,9 +51,6 @@ const base = {
         ]
       }
     ]
-  },
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json']
   },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({

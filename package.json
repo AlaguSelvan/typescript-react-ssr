@@ -5,6 +5,7 @@
   "main": "./server/index.ts",
   "scripts": {
     "start": "npm-run-all clean && nodemon ./server/index.ts",
+    "webpack:server": "webpack ./tools/webpack/server/webpack.config.js",
     "start:prod": "cross-env NODE_ENV=production node ./build/server/index.js",
     "build": "npm-run-all clean build:*",
     "build:server": "cross-env NODE_ENV=production BABEL_ENV=node babel ./server -d ./build/server --extensions '.ts,.tsx'",

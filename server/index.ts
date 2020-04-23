@@ -48,16 +48,18 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   const webpackClientConfig = require('../tools/webpack/client/webpack.config');
   const webpackServerConfig = require('../tools/webpack/server/webpack.config');
-  const compiler = webpack([webpackClientConfig, webpackServerConfig]);
-  const clientCompiler = compiler.compilers[0];
-  const serverCompiler = compiler.compilers[1];
+  const webpackConfig = [
+    { name: 'client', ...webpackClientConfig },
+    { name: 'server', ...webpackServerConfig }
+  ];
+  const compiler = webpack(webpackConfig);
+  // const clientCompiler = compiler.compilers[0];
+  const clientCompiler = compiler.compilers.find(
+    (compiler) => compiler.name === 'client'
+  );
+  console.log(clientCompiler?.outputPath, 'clientCompiler');
   const devServerProps = {
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    hot: true,
-    quiet: true,
-    noInfo: true,
-    writeToDisk: true,
-    stats: 'minimal',
+    publicPath: clientCompiler?.outputPath,
     serverSideRender: true,
     index: false
   };
@@ -66,15 +68,10 @@ if (process.env.NODE_ENV === 'production') {
     clientCompiler,
     devServerProps
   );
-  //@ts-ignore
-  const webpackHotMiddlware = WebpackHotMiddleware(clientCompiler);
-  const webpackServerMiddlware = WebpackHotServerMiddleware(compiler);
   // app.use('/public', express.static(path.resolve('build/client')));
   app.use(webpackDevMiddleware);
-  app.use(webpackHotMiddlware);
-  app.use(webpackServerMiddlware);
-  // webpackDevMiddleware.waitUntilValid(done);
-  app.listen(process.env.PORT, () => {
-    console.log(`Listening on port ${process.env.PORT}`);
-  });
+  //@ts-ignore
+  app.use(WebpackHotMiddleware(clientCompiler));
+  app.use(WebpackHotServerMiddleware(compiler));
+  webpackDevMiddleware.waitUntilValid(done);
 }
