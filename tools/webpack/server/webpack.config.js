@@ -43,10 +43,7 @@ const base = {
         loader: [
           'babel-loader',
           {
-            loader: 'ts-loader',
-            options: {
-              configFile: 'tsconfig.server.json'
-            }
+            loader: 'ts-loader'
           }
         ]
       }

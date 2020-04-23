@@ -17,7 +17,7 @@ const Button: React.FC<Props> = ({ children, value }) => {
   const [count, setCount] = React.useState(0);
   return (
     <button
-      onClick={() => setCount(count + 2)}
+      onClick={() => setCount(count + 1)}
       className={css`
         padding: 32px;
         background-color: red;
@@ -28,7 +28,7 @@ const Button: React.FC<Props> = ({ children, value }) => {
         }
       `}
     >
-      <span>{children || value}</span>
+      <span>{children || value || `clicked ${count} times`}</span>
     </button>
   );
 };

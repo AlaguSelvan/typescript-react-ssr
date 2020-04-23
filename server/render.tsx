@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import { resolve } from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -10,18 +9,17 @@ import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
+import nanoid from 'nanoid';
 // import serialize from "serialize-javascript";
-
-console.log('server file hit');
 
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
 import HtmlTemplate from './utils/HtmlTemplate';
 import routes from '../app/Router';
+import { Stats } from 'webpack';
 
 const cssCache = createCache();
 
-//@ts-ignore
 const preloadData = (routes: any, path: any, store: any) => {
   const branch = matchRoutes(routes, path);
   const promises = branch.map(({ route, match }) => {
@@ -40,14 +38,13 @@ const preloadData = (routes: any, path: any, store: any) => {
   return Promise.all(promises);
 };
 
-//@ts-ignore
-export default ({ clientStats }) => async (req, res) => {
-  console.log({ clientStats });
+export const render = async (req: any, res: any, clientStats: Stats) => {
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
   const statsFile = resolve('build/client/loadable-stats.json');
   const extractor = new ChunkExtractor({ statsFile });
+  console.log('server hit here');
   const staticContext = {};
   const Jsx = (
     <ChunkExtractorManager extractor={extractor}>
@@ -65,17 +62,17 @@ export default ({ clientStats }) => async (req, res) => {
   const { html, css, ids } = extractCritical(app);
   const head = Helmet.renderStatic();
   const meta = `
-${head.title.toString()}
-${head.base.toString()}
-${head.meta.toString()}
-${head.link.toString()}
-`.trim();
-  const { nonce } = res.locals;
+    ${head.title.toString()}
+    ${head.base.toString()}
+    ${head.meta.toString()}
+    ${head.link.toString()}
+  `.trim();
+  const nonce = '1234';
   cssCache.nonce = nonce;
   const linkTags = `
-${extractor.getLinkTags({ nonce })}
-${extractor.getStyleTags({ nonce })}
-`;
+    ${extractor.getLinkTags({ nonce })}
+    ${extractor.getStyleTags({ nonce })}
+  `;
   const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
     ids
   )}</script>`;
@@ -84,6 +81,7 @@ ${extractor.getStyleTags({ nonce })}
   const style = `<style data-emotion-css="${ids.join(
     ' '
   )}" nonce=${nonce}>${css}</style>`;
+  console.log({ html });
   const document = HtmlTemplate(
     html,
     meta,
@@ -95,3 +93,10 @@ ${extractor.getStyleTags({ nonce })}
   );
   return res.send(document);
 };
+
+export default function middlewareRenderer({
+  clientStats,
+  serverStats
+}: any): any {
+  return (req: any, res: any) => render(req, res, clientStats);
+}
