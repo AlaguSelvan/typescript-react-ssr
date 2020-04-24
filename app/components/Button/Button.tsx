@@ -28,7 +28,7 @@ const Button: React.FC<Props> = ({ children, value }) => {
         }
       `}
     >
-      <span>{children || value || `clicked ${count} times`}</span>
+      <span>{children || value || `clicked ${count} times 🔥`}</span>
     </button>
   );
 };

@@ -84,7 +84,6 @@ if (process.env.NODE_ENV === 'production') {
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
   app.use(webpackServerMiddlware);
-  // app.use(webpackServerDevMiddleware);
   devMiddleware.waitUntilValid(done);
 }
 

@@ -81,7 +81,6 @@ export const render = async (req: any, res: any, clientStats: Stats) => {
   const style = `<style data-emotion-css="${ids.join(
     ' '
   )}" nonce=${nonce}>${css}</style>`;
-  console.log({ html });
   const document = HtmlTemplate(
     html,
     meta,
@@ -99,4 +98,10 @@ export default function middlewareRenderer({
   serverStats
 }: any): any {
   return (req: any, res: any) => render(req, res, clientStats);
+}
+
+if ((module as any).hot) {
+  (module as any).hot.accept('../app', () => {
+    console.log('server side HMR 🔥');
+  });
 }

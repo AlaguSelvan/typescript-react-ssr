@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Toggle } from '../../components';
+import { Toggle, Button } from '../../components';
 
 const About = () => (
   <div>
     <p>About Page...</p>
-    <Toggle />
+    <Button />
     <Link to="/">
       <p>goto prev page</p>
     </Link>
