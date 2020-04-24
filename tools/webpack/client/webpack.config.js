@@ -47,10 +47,6 @@ const base = {
             }
           }
         ]
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
       }
     ]
   },

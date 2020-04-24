@@ -6,19 +6,16 @@ const color = 'white';
 const Toggle = () => {
   // const [count, setCount] = React.useState(0);
   return (
-    <div
-      className={css`
-        padding: 32px;
-        background-color: red;
-        font-size: 24px;
-        border-radius: 4px;
-        &:hover {
-          color: ${color};
-        }
-      `}
-    >
-      Hover to change color.
-    </div>
+    <input
+      type="checkbox"
+      name={'this.props.Name'}
+      className="toggle-switch-checkbox"
+      // id={this.props.id}
+      checked={true}
+      // defaultChecked={this.props.defaultChecked}
+      // onChange={this.onChange}
+      // disabled={this.props.disabled}
+    />
   );
 };
 

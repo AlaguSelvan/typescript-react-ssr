@@ -5,7 +5,7 @@ import { Toggle, Button } from '../../components';
 const About = () => (
   <div>
     <p>About Page...</p>
-    <Button />
+    <Toggle />
     <Link to="/">
       <p>goto 👈 prev page</p>
     </Link>

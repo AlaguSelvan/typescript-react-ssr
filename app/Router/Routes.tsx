@@ -1,4 +1,5 @@
 import loadable from '@loadable/component';
+import * as homeActions from '../redux/home/actions';
 
 export const Home = loadable(() =>
   import(
@@ -14,9 +15,8 @@ const routes = [
   {
     path: '/',
     exact: true,
-    component: Home
-    // loadData: () => [
-    // ]
+    component: Home,
+    loadData: () => [homeActions.fetchUserData()]
   },
   {
     path: '/about',
