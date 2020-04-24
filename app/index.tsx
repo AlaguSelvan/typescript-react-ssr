@@ -15,7 +15,7 @@ import App from './App';
 const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({ initialState });
 const cache = createCache();
-const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
+const renderMethod = module.hot ? ReactDOM.hydrate : ReactDOM.hydrate;
 
 const render = () => {
   renderMethod(

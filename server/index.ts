@@ -5,6 +5,7 @@ import compression from 'compression';
 import helmet from 'helmet';
 import webpack from 'webpack';
 import expressStaticGzip from 'express-static-gzip';
+import openBrowser from 'react-dev-utils/openBrowser';
 
 require('dotenv').config();
 
@@ -16,7 +17,9 @@ const done = () => {
   !isBuilt &&
     app.listen(PORT, () => {
       isBuilt = true;
-      console.log(`Server listening on http://localhost:${process.env.PORT}`);
+      const url = `http://localhost:${process.env.PORT}`;
+      openBrowser(url);
+      console.log(`Server listening on ${url}`);
     });
 };
 app.use(helmet());
@@ -62,16 +65,9 @@ if (process.env.NODE_ENV === 'production') {
   };
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const webpackDevMiddleware = require('webpack-dev-middleware')(
-    clientCompiler,
+    compiler,
     devServerProps
   );
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const webpackServerDevMiddleware = require('webpack-dev-middleware')(
-    serverCompiler,
-    devServerProps
-  );
-  const devMiddleware = webpackDevMiddleware;
-
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const webpackHotMiddlware = require('webpack-hot-middleware')(
     clientCompiler,
@@ -84,7 +80,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
   app.use(webpackServerMiddlware);
-  devMiddleware.waitUntilValid(done);
+  webpackDevMiddleware.waitUntilValid(done);
 }
 
 app.listen(process.env.PORT, () => {

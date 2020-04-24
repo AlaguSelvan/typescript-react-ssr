@@ -7,7 +7,7 @@ const About = () => (
     <p>About Page...</p>
     <Button />
     <Link to="/">
-      <p>goto prev page</p>
+      <p>goto 👈 prev page</p>
     </Link>
   </div>
 );

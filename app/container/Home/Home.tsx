@@ -5,9 +5,9 @@ import Button from '../../components/Button';
 const Home = () => (
   <div>
     <p>Home Page...</p>
-    <Button />
+    <Button value={'Hello World'} />
     <Link to="/about">
-      <p>goto prev page</p>
+      <p>goto next 👉 page</p>
     </Link>
   </div>
 );

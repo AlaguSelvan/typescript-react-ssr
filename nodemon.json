@@ -2,12 +2,11 @@
   "verbose": true,
   "ignore": [
     "build",
-    "app",
-    "server/render.tsx"
+    "app"
   ],
   "exec": "babel-node --extensions \".ts,.tsx\"",
   "ext": "ts,tsx,js,json",
   "watch": [
-    "server/index.ts"
+    "server/*"
   ]
 }
