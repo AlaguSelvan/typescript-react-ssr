@@ -6,6 +6,8 @@ import helmet from 'helmet';
 import webpack from 'webpack';
 import expressStaticGzip from 'express-static-gzip';
 import openBrowser from 'react-dev-utils/openBrowser';
+import { nanoid } from 'nanoid';
+import { render } from './render';
 
 require('dotenv').config();
 
@@ -19,31 +21,23 @@ const done = () => {
       isBuilt = true;
       const url = `http://localhost:${process.env.PORT}`;
       openBrowser(url);
-      console.log(`Server listening on ${url}`);
+      console.info(`Client Running on ${url}`);
     });
 };
 app.use(helmet());
 app.use(compression());
-app.use('/public', express.static(path.resolve('build', 'client')));
 
 if (process.env.NODE_ENV === 'production') {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const webpackClientConfig = require('../tools/webpack/client/webpack.config');
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const webpackServerConfig = require('../tools/webpack/server/webpack.config');
-  webpack([webpackClientConfig, webpackServerConfig]).run((err, stats) => {
-    //@ts-ignore
-    const clientStats = stats.toJson().children[0];
-    //../../build/prod-server-bundle.js
-    const render = path.resolve('build', 'server', 'prod-server-bundle.js');
-    app.use(
-      expressStaticGzip('build', {
-        enableBrotli: true
-      })
-    );
-    //@ts-ignore
-    app.use(render({ clientStats }));
-    done();
+  app.use(
+    '/public',
+    expressStaticGzip('build/client', {
+      enableBrotli: true,
+      orderPreference: ['br', 'gz']
+    })
+  );
+  app.get('*', (req, res) => {
+    res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
+    render(req, res);
   });
 } else {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -52,7 +46,6 @@ if (process.env.NODE_ENV === 'production') {
   const webpackServerConfig = require('../tools/webpack/server/webpack.config');
   const compiler = webpack([webpackClientConfig, webpackServerConfig]);
   const clientCompiler = compiler.compilers[0];
-  const serverCompiler = compiler.compilers[1];
   compiler.apply(new webpack.ProgressPlugin());
   const devServerProps = {
     headers: { 'Access-Control-Allow-Origin': '*' },
@@ -63,6 +56,7 @@ if (process.env.NODE_ENV === 'production') {
     stats: 'minimal',
     serverSideRender: true
   };
+  app.use('/public', express.static(path.resolve('build', 'client')));
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const webpackDevMiddleware = require('webpack-dev-middleware')(
     compiler,

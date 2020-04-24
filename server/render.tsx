@@ -16,7 +16,6 @@ import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
 import HtmlTemplate from './utils/HtmlTemplate';
 import routes from '../app/Router';
-import { Stats } from 'webpack';
 
 const cssCache = createCache();
 
@@ -38,13 +37,12 @@ const preloadData = (routes: any, path: any, store: any) => {
   return Promise.all(promises);
 };
 
-export const render = async (req: any, res: any, clientStats: Stats) => {
+export const render = async (req: any, res: any) => {
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
   const statsFile = resolve('build/client/loadable-stats.json');
   const extractor = new ChunkExtractor({ statsFile });
-  console.log('server hit here');
   const staticContext = {};
   const Jsx = (
     <ChunkExtractorManager extractor={extractor}>
@@ -67,7 +65,7 @@ export const render = async (req: any, res: any, clientStats: Stats) => {
     ${head.meta.toString()}
     ${head.link.toString()}
   `.trim();
-  const nonce = '1234';
+  const { nonce } = res.locals;
   cssCache.nonce = nonce;
   const linkTags = `
     ${extractor.getLinkTags({ nonce })}
@@ -93,11 +91,8 @@ export const render = async (req: any, res: any, clientStats: Stats) => {
   return res.send(document);
 };
 
-export default function middlewareRenderer({
-  clientStats,
-  serverStats
-}: any): any {
-  return (req: any, res: any) => render(req, res, clientStats);
+export default function middlewareRenderer(): any {
+  return (req: any, res: any) => render(req, res);
 }
 
 if ((module as any).hot) {

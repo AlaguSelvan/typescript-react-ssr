@@ -3,6 +3,9 @@ const { join, resolve } = require('path');
 const { smart } = require('webpack-merge');
 const externals = require('./node-externals');
 const nodeExternals = require('webpack-node-externals');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+require('dotenv').config();
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -16,7 +19,6 @@ const filename =
 const base = {
   name: 'server',
   target: 'node',
-  mode: process.env.NODE_ENV,
   entry: resolve('server', 'render.tsx'),
   output: {
     filename,
@@ -50,6 +52,7 @@ const base = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     })
