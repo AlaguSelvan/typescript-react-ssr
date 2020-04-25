@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a message 1`] = `[Function]`;
+
+exports[`should match snapshot 1`] = `[Function]`;

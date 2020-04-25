@@ -1,4 +1,4 @@
 import Button from './Button';
-import Toggle from './Toggle';
+import Switch from './Switch';
 
-export { Button, Toggle };
+export { Button, Switch };

@@ -1,8 +1,16 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import Button from './Button';
 
-test('Shows the children when children is passed', () => {
-  const testMessage = 'Test Message';
-  render(<Button>{testMessage}</Button>);
+afterEach(cleanup);
+
+test('should match snapshot', () => {
+  const { asFragment } = render(<Button />);
+  expect(asFragment).toMatchSnapshot();
+});
+
+test('has text when text prop is passed', () => {
+  const value = 'hello';
+  const { getByTestId } = render(<Button value="hello" />);
+  expect(getByTestId('para')).toHaveTextContent(value);
 });
