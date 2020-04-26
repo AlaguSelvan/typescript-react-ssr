@@ -9,6 +9,7 @@ import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
+import nanoid from 'nanoid';
 // import serialize from "serialize-javascript";
 
 import App from '../app/App';
@@ -18,7 +19,7 @@ import routes from '../app/Router';
 
 const cssCache = createCache();
 
-const preloadData = (routes, path, store) => {
+const preloadData = (routes: any, path: any, store: any) => {
   const branch = matchRoutes(routes, path);
   const promises = branch.map(({ route, match }) => {
     if (route.loadData) {
@@ -36,7 +37,7 @@ const preloadData = (routes, path, store) => {
   return Promise.all(promises);
 };
 
-const render = async (req: any, res: any) => {
+export const render = async (req: any, res: any) => {
   const { url } = req;
   const { store } = configureStore({ url });
   await preloadData(routes, req.path, store);
@@ -90,4 +91,12 @@ const render = async (req: any, res: any) => {
   return res.send(document);
 };
 
-export default render;
+export default function middlewareRenderer(): any {
+  return (req: any, res: any) => render(req, res);
+}
+
+if ((module as any).hot) {
+  (module as any).hot.accept('../app', () => {
+    console.log('server side HMR 🔥');
+  });
+}

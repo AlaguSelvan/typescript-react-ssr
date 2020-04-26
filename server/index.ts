@@ -1,26 +1,52 @@
-/* eslint @typescript-eslint/no-var-requires: 0 */
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import path from 'path';
 import express from 'express';
-import dotenv from 'dotenv';
 import compression from 'compression';
 import helmet from 'helmet';
 import webpack from 'webpack';
-import render from './render';
 import expressStaticGzip from 'express-static-gzip';
-import { nanoid } from 'nanoid';
 import openBrowser from 'react-dev-utils/openBrowser';
+import { nanoid } from 'nanoid';
+import { render } from './render';
 
-dotenv.config();
+require('dotenv').config();
 
 const app = express();
+let isBuilt = false;
 
+const { PORT } = process.env;
+const done = () => {
+  !isBuilt &&
+    app.listen(PORT, () => {
+      isBuilt = true;
+      const url = `http://localhost:${process.env.PORT}`;
+      openBrowser(url);
+      console.info(`Client Running on ${url}`);
+    });
+};
 app.use(helmet());
 app.use(compression());
 
-if (process.env.NODE_ENV === 'development') {
-  const webpackClientConfig = require('../tools/webpack/webpack.config');
-  const compiler = webpack(webpackClientConfig);
-  const clientCompiler = compiler;
+if (process.env.NODE_ENV === 'production') {
+  app.use(
+    '/public',
+    expressStaticGzip('build/client', {
+      enableBrotli: true,
+      orderPreference: ['br', 'gz']
+    })
+  );
+  app.get('*', (req, res) => {
+    res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
+    render(req, res);
+  });
+} else {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const webpackClientConfig = require('../tools/webpack/client/webpack.config');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const webpackServerConfig = require('../tools/webpack/server/webpack.config');
+  const compiler = webpack([webpackClientConfig, webpackServerConfig]);
+  const clientCompiler = compiler.compilers[0];
+  compiler.apply(new webpack.ProgressPlugin());
   const devServerProps = {
     headers: { 'Access-Control-Allow-Origin': '*' },
     hot: true,
@@ -28,40 +54,30 @@ if (process.env.NODE_ENV === 'development') {
     noInfo: true,
     writeToDisk: true,
     stats: 'minimal',
-    serverSideRender: true,
-    index: false
+    serverSideRender: true
   };
+  app.use('/public', express.static(path.resolve('build', 'client')));
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const webpackDevMiddleware = require('webpack-dev-middleware')(
-    clientCompiler,
+    compiler,
     devServerProps
   );
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const webpackHotMiddlware = require('webpack-hot-middleware')(
     clientCompiler,
     devServerProps
   );
-  app.use('/public', express.static(path.resolve('build/client')));
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const webpackServerMiddlware = require('webpack-hot-server-middleware')(
+    compiler
+  );
   app.use(webpackDevMiddleware);
   app.use(webpackHotMiddlware);
+  app.use(webpackServerMiddlware);
+  webpackDevMiddleware.waitUntilValid(done);
 }
-app.use(
-  '/public',
-  expressStaticGzip(path.resolve('build/client'), {
-    enableBrotli: true,
-    orderPreference: ['br', 'gz']
-  })
-);
-
-app.get('*', (req, res) => {
-  res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
-  render(req, res);
-});
 
 app.listen(process.env.PORT, () => {
   const url = `http://localhost:${process.env.PORT}`;
   console.info(`Listening at ${url}`);
-  if (process.env.NODE_ENV === 'development') {
-    if (openBrowser(url)) {
-      console.info("==> 🖥️  Opened on your browser's tab!");
-    }
-  }
 });

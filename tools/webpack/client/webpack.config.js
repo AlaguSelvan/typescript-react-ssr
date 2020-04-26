@@ -8,6 +8,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+require('dotenv').config();
 
 const config =
   process.env.NODE_ENV === 'production'
@@ -46,10 +47,6 @@ const base = {
             }
           }
         ]
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
       }
     ]
   },

@@ -20,11 +20,11 @@
     "strict": true,
     "esModuleInterop": true
   },
+  "include": ["app/**/*", "server/**/*"],
   "exclude": [
     "node_modules",
     "app/**/*.test.ts",
     "app/**/*.test.tsx",
     "app/**/*.stories.ts"
-  ],
-  "include": ["app/**/*"]
+  ]
 }

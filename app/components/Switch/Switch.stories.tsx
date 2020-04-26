@@ -1,13 +1,13 @@
 import React from 'react';
-import Toggle from './Toggle';
+import Switch from './Switch';
 
 export default {
-  component: Toggle,
+  component: Switch,
   title: 'Toggle'
 };
 
 export const Base = () => {
-  // const [title, updateTitle] = useState('');
+  const [checked, setChecked] = React.useState(true);
 
   // https://github.com/WordPress/gutenberg/pull/18031
   // useEffect(() => {
@@ -16,7 +16,7 @@ export const Base = () => {
 
   return (
     <>
-      <Toggle />
+      <Switch checked={checked} onChange={() => setChecked(!checked)} />
     </>
   );
 };

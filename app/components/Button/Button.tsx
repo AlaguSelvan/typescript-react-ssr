@@ -1,7 +1,17 @@
 import React, { ReactChild, ReactFragment, ReactPortal } from 'react';
-import { css } from 'emotion';
+import styled from '@emotion/styled'
 
-const color = 'white';
+const ButtonContainer = styled.button`
+  padding: 32px;
+  background-color: hotpink;
+  font-size: 24px;
+  border-radius: 4px;
+  color: black;
+  font-weight: bold;
+  &:hover {
+    color: white;
+  }
+`
 
 interface Props {
   children?:
@@ -12,24 +22,17 @@ interface Props {
     | null
     | undefined;
   value?: string;
-}
+};
+
 const Button: React.FC<Props> = ({ children, value }) => {
   const [count, setCount] = React.useState(0);
   return (
-    <button
-      onClick={() => setCount(count + 2)}
-      className={css`
-        padding: 32px;
-        background-color: red;
-        font-size: 24px;
-        border-radius: 4px;
-        &:hover {
-          color: ${color};
-        }
-      `}
-    >
-      <span>{children || value}</span>
-    </button>
+    <ButtonContainer
+      data-testid="button"
+      onClick={() => setCount(count + 1)}
+>
+      {value || `Clicked ${count} times`}
+    </ButtonContainer>
   );
 };
 

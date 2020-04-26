@@ -1,7 +1,10 @@
 import loadable from '@loadable/component';
+import * as HomeActions from '../redux/home/actions';
 
 export const Home = loadable(() =>
-  import(/* webpackChunkName: "Home" */ '../container/Home')
+  import(
+    /* webpackPrefetch: true, webpackChunkName: "Home" */ '../container/Home'
+  )
 );
 
 export const About = loadable(() =>
@@ -12,9 +15,8 @@ const routes = [
   {
     path: '/',
     exact: true,
-    component: Home
-    // loadData: () => [
-    // ]
+    component: Home,
+    loadData: () => [HomeActions.fetchUserData()]
   },
   {
     path: '/about',
