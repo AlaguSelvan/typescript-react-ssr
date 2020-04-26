@@ -44,7 +44,6 @@ const SliderInput = styled.input`
   }
 `;
 
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
 interface IProps {
   checked: boolean;
   onChange?: () => void;
