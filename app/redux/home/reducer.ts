@@ -1,7 +1,6 @@
 import HomeActionTypes from './types';
 
 export const initialState = {
-  isLoaded: false,
   userData: []
 };
 

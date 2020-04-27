@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
+import * as HomeActions from '../../redux/home/actions';
 
-const Home = () => {
-  const home = useSelector((state: any) => state.HomeReducer.userData);
+const Home = ({ userData, fetchInitialDataIfNeeded }: any) => {
   const [data, setData] = useState([]);
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
 
   const fetchUserData = async () => {
+    setIsFetching(true);
     const { data } = await axios.get(
       'https://jsonplaceholder.typicode.com/users'
     );
-    console.log(data);
     setData(data);
     setIsFetching(false);
   };
 
   useEffect(() => {
-    fetchUserData();
-    // return () => {
-    //   cleanup
-    // }
+    if (userData.length === 0) {
+      fetchInitialDataIfNeeded();
+    }
   }, []);
 
   return (
@@ -30,15 +29,22 @@ const Home = () => {
       <p>Home Page...</p>
       <div style={{ display: 'flex' }}>
         <div>
-          <b>Initial Data from Server</b>
+          <b>Initial Preloaded Data</b>
           <ul>
-            {home.map(({ name }: any, index: number) => (
+            {userData.map(({ name }: any, index: number) => (
               <li key={index}>{name}</li>
             ))}
           </ul>
         </div>
         <div>
-          <b>Data from Client</b>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <b>Data from Client</b>
+            {!isFetching ? (
+              <button onClick={() => fetchUserData()}>Fetch Data</button>
+            ) : (
+              <p>Fetching</p>
+            )}
+          </div>
           {!isFetching ? (
             <ul>
               {data.map(({ name }: any, index: number) => (
@@ -46,7 +52,7 @@ const Home = () => {
               ))}
             </ul>
           ) : (
-            <p>Fetching...</p>
+            <p>No Data</p>
           )}
         </div>
         {/* <Button /> */}
@@ -58,4 +64,12 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = ({ HomeReducer: { userData } }: any) => ({
+  userData
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  fetchInitialDataIfNeeded: () => dispatch(HomeActions.fetchUserData())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

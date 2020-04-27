@@ -9,7 +9,6 @@ const HtmlTemplate = (
   html: string,
   meta: string,
   style: any,
-  criticalCssIds: any,
   linkTags: any,
   initialState = {},
   scripts: any
@@ -22,7 +21,6 @@ const HtmlTemplate = (
   const template = cheerio.load(HTML_TEMPLATE);
   template('head').append(meta);
   template('head').append(linkTags);
-  template('head').append(style);
   template('head').append(style);
   template('#root').html(html);
   template('body').append(scripts);

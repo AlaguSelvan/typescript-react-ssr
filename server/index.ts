@@ -36,7 +36,6 @@ if (process.env.NODE_ENV === 'production') {
     })
   );
   app.get('*', (req, res) => {
-    res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
     render(req, res);
   });
 } else {
