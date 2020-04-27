@@ -1,5 +1,5 @@
 import React, { ReactChild, ReactFragment, ReactPortal } from 'react';
-import styled from '@emotion/styled'
+import styled from 'styled-components';
 
 const ButtonContainer = styled.button`
   padding: 32px;
@@ -11,7 +11,7 @@ const ButtonContainer = styled.button`
   &:hover {
     color: white;
   }
-`
+`;
 
 interface Props {
   children?:
@@ -22,15 +22,12 @@ interface Props {
     | null
     | undefined;
   value?: string;
-};
+}
 
 const Button: React.FC<Props> = ({ children, value }) => {
   const [count, setCount] = React.useState(0);
   return (
-    <ButtonContainer
-      data-testid="button"
-      onClick={() => setCount(count + 1)}
->
+    <ButtonContainer data-testid="button" onClick={() => setCount(count + 1)}>
       {value || `Clicked ${count} times`}
     </ButtonContainer>
   );

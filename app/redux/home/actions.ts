@@ -10,7 +10,3 @@ export const fetchUserData = () => async (dispatch: any) => {
     payload: data
   });
 };
-
-export const fetchUserIfNeeded = () => (dispatch: any) => {
-  return dispatch({ isLoading: false });
-};

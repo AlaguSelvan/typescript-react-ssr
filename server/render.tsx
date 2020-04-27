@@ -9,13 +9,14 @@ import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/core';
 import { extractCritical } from 'emotion-server';
-import nanoid from 'nanoid';
-// import serialize from "serialize-javascript";
+// import nanoid from 'nanoid';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
 import HtmlTemplate from './utils/HtmlTemplate';
 import routes from '../app/Router';
+import { nanoid } from 'nanoid';
 
 const cssCache = createCache();
 
@@ -38,8 +39,10 @@ const preloadData = (routes: any, path: any, store: any) => {
 };
 
 export const render = async (req: any, res: any) => {
+  res.locals.nonce = Buffer.from(nanoid(32)).toString('base64');
   const { url } = req;
   const { store } = configureStore({ url });
+  const sheet = new ServerStyleSheet();
   await preloadData(routes, req.path, store);
   const statsFile = resolve('build/client/loadable-stats.json');
   const extractor = new ChunkExtractor({ statsFile });
@@ -48,16 +51,17 @@ export const render = async (req: any, res: any) => {
     <ChunkExtractorManager extractor={extractor}>
       <Provider store={store}>
         <StaticRouter location={url} context={staticContext}>
-          <CacheProvider value={cssCache}>
+          <StyleSheetManager sheet={sheet.instance}>
             <App />
-          </CacheProvider>
+          </StyleSheetManager>
         </StaticRouter>
       </Provider>
     </ChunkExtractorManager>
   );
+
   const initialState = store.getState();
-  const app = renderToString(Jsx);
-  const { html, css, ids } = extractCritical(app);
+  const html = renderToString(sheet.collectStyles(Jsx));
+  const styleTags = sheet.getStyleTags();
   const head = Helmet.renderStatic();
   const meta = `
     ${head.title.toString()}
@@ -69,21 +73,15 @@ export const render = async (req: any, res: any) => {
   cssCache.nonce = nonce;
   const linkTags = `
     ${extractor.getLinkTags({ nonce })}
-    ${extractor.getStyleTags({ nonce })}
   `;
-  const emotionId = `<script nonce=${nonce}>window.__emotion=${JSON.stringify(
-    ids
-  )}</script>`;
   const scripts = `${extractor.getScriptTags({ nonce })}`;
-  const criticalCssIds = `${emotionId}`;
-  const style = `<style data-emotion-css="${ids.join(
-    ' '
-  )}" nonce=${nonce}>${css}</style>`;
+  // const style = `<style data-emotion-css="${ids.join(
+  //   ' '
+  // )}" nonce=${nonce}>${css}</style>`;
   const document = HtmlTemplate(
     html,
     meta,
-    style,
-    criticalCssIds,
+    styleTags,
     linkTags,
     initialState,
     scripts

@@ -14,12 +14,23 @@ module.exports = {
     '@babel/preset-react'
   ],
   plugins: [
-    'react-hot-loader/babel',
-    'emotion',
     '@babel/plugin-transform-async-to-generator',
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-syntax-dynamic-import',
     '@loadable/babel-plugin',
-    '@babel/plugin-transform-runtime'
-  ]
+    '@babel/plugin-transform-runtime',
+    [
+      'babel-plugin-styled-components',
+      {
+        ssr: true,
+        displayName: true,
+        preprocess: false
+      }
+    ]
+  ],
+  env: {
+    development: {
+      plugins: ['react-hot-loader/babel']
+    }
+  }
 };
