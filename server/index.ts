@@ -6,7 +6,6 @@ import helmet from 'helmet';
 import webpack from 'webpack';
 import expressStaticGzip from 'express-static-gzip';
 import openBrowser from 'react-dev-utils/openBrowser';
-import { nanoid } from 'nanoid';
 import { render } from './render';
 
 require('dotenv').config();

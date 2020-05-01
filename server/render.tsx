@@ -7,15 +7,12 @@ import { Provider } from 'react-redux';
 import Helmet from 'react-helmet';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import createCache from '@emotion/cache';
-import { CacheProvider } from '@emotion/core';
-import { extractCritical } from 'emotion-server';
-// import nanoid from 'nanoid';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
 import HtmlTemplate from './utils/HtmlTemplate';
-import routes from '../app/Router';
+import routes from '../app/router';
 import { nanoid } from 'nanoid';
 
 const cssCache = createCache();
