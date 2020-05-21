@@ -1,4 +1,4 @@
-# TypeScript React SSR Boilerplater
+# TypeScript React SSR Boilerplate
 
 ## Who this BoilerPlate For?
 
