@@ -1,8 +1,8 @@
 # TypeScript React SSR Boilerplate
 
-## Who this BoilerPlate For?
+## Who this BoilerPlate for?
 
-This BoilerPlate is Built for People who have trouble worrying about SEO or configuring SSR from scratch, This BoilerPlate solves all the Issues with that and It is Built to be very much similar to Create-React-App for Picking up and Working very faster.
+This Boilerplate is built for people who have trouble worrying about SEO or configuring SSR from scratch, This Boilerplate solves all the issues with that and It is built to be very much similar to Create-React-App for picking up and working very faster.
 
 ## Requirements
 
@@ -87,4 +87,4 @@ Here is the structure of the app, which serves as generally accepted guidelines 
 
 ### Important Information
 
-This Boilerplate is still in Beta, It Will work fine on Development and Production, But Still some minor updates and fixes are there which will be fixed soon and This Boilerplate will be Ready for everyone.
+This Boilerplate is still in Beta, It will work fine on Development and Production, but still some minor updates and fixes are there which will be fixed soon and This Boilerplate will be ready for everyone.
