@@ -14,24 +14,24 @@ const { store, history } = configureStore({ initialState });
 const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;
 
 const render = () => {
-	renderMethod(
-		<Provider store={store}>
-			<ConnectedRouter history={history}>
-				<App />
-			</ConnectedRouter>
-		</Provider>,
-		document.getElementById('root')
-	);
+  renderMethod(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </Provider>,
+    document.getElementById('root')
+  );
 };
 
 if (process.env.NODE_ENV === 'development') {
-	loadableReady(() => {
-		render();
-	});
-	if ((module as any).hot) {
-		(module as any).hot.accept('./Router');
-		(module as any).hot.accept();
-	}
+  loadableReady(() => {
+    render();
+  });
+  if ((module as any).hot) {
+    (module as any).hot.accept('./Router');
+    (module as any).hot.accept();
+  }
 } else {
-	render();
+  render();
 }
