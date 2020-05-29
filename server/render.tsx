@@ -6,16 +6,13 @@ import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import Helmet from 'react-helmet';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
-import createCache from '@emotion/cache';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 
 import App from '../app/App';
 import configureStore from '../app/redux/configureStore';
 import HtmlTemplate from './utils/HtmlTemplate';
-import routes from '../app/router';
+import routes from '../app/Router';
 import { nanoid } from 'nanoid';
-
-const cssCache = createCache();
 
 const preloadData = (routes: any, path: any, store: any) => {
   const branch = matchRoutes(routes, path);
@@ -67,14 +64,10 @@ export const render = async (req: any, res: any) => {
     ${head.link.toString()}
   `.trim();
   const { nonce } = res.locals;
-  cssCache.nonce = nonce;
   const linkTags = `
     ${extractor.getLinkTags({ nonce })}
   `;
   const scripts = `${extractor.getScriptTags({ nonce })}`;
-  // const style = `<style data-emotion-css="${ids.join(
-  //   ' '
-  // )}" nonce=${nonce}>${css}</style>`;
   const document = HtmlTemplate(
     html,
     meta,
@@ -88,10 +81,4 @@ export const render = async (req: any, res: any) => {
 
 export default function middlewareRenderer(): any {
   return (req: any, res: any) => render(req, res);
-}
-
-if ((module as any).hot) {
-  (module as any).hot.accept('../app', () => {
-    console.log('server side HMR 🔥');
-  });
 }

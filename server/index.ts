@@ -74,8 +74,3 @@ if (process.env.NODE_ENV === 'production') {
   app.use(webpackServerMiddlware);
   webpackDevMiddleware.waitUntilValid(done);
 }
-
-app.listen(process.env.PORT, () => {
-  const url = `http://localhost:${process.env.PORT}`;
-  console.info(`Listening at ${url}`);
-});

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Home /> renders the <UserList /> if loading was successful 1`] = `undefined`;
+
+exports[`<Home /> renders the list if loading was successful 1`] = `undefined`;
+
+exports[`<Home /> renders the loading status if requesting data 1`] = `undefined`;
