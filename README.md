@@ -27,8 +27,8 @@ yarn
 **3. Start to run it:**
 
 ```sh
-yarn start  # Running Client side with Dev or Prod Config.
-yarn build  # Building bundle
+yarn start or npm start # Running Client side with Dev or Prod Config.
+yarn build or npm run build # Building bundle
 ```
 
 The app Will Run at [http://localhost:3000](http://localhost:3000)

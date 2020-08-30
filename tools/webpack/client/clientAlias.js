@@ -7,8 +7,8 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => resolve(appDirectory, relativePath);
 
 const clientAlias = {
-  '@Components': resolve(__dirname, '../../app/components'),
-  '@Container': resolve(__dirname, '../../app/container')
+	'@Components': resolve(__dirname, '../../app/components'),
+	'@Container': resolve(__dirname, '../../app/container')
 };
 
 // const clientAlias = isProd ? prodClientAlias : devClientAlias;
