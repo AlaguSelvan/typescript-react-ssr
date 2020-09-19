@@ -7,8 +7,13 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import App from './App';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
+declare global {
+	interface Window {
+		__INITIAL_STATE__: any;
+		__REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
+	}
+}
+
 const initialState = window.__INITIAL_STATE__;
 const { store, history } = configureStore({ initialState });
 const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate;

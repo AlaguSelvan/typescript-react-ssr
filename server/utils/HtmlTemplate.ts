@@ -7,7 +7,7 @@ import cheerio from 'cheerio';
 interface IProps {
 	html: string;
 	meta: string;
-	style: string;
+	styleTags: string;
 	linkTags: string;
 	initialState: any;
 	scripts: string;
@@ -17,7 +17,7 @@ interface IProps {
 const HtmlTemplate = ({
 	html,
 	meta,
-	style,
+	styleTags,
 	linkTags,
 	initialState = {},
 	scripts,
@@ -31,7 +31,7 @@ const HtmlTemplate = ({
 	const template = cheerio.load(HTML_TEMPLATE);
 	template('head').append(meta);
 	template('head').append(linkTags);
-	template('head').append(style);
+	template('head').append(styleTags);
 	template('head').append(initialStateScript);
 	template('#root').html(html);
 	template('body').append(scripts);

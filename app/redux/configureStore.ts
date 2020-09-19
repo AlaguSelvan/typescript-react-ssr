@@ -27,8 +27,6 @@ const configureStore = ({ initialState, url }: Argv): any => {
 	];
 	// Use Redux DevTools Extension in development
 	const composeEnhancers =
-		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-		// @ts-ignore
 		(isDev && !isServer && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
 		compose;
 	const enhancers = composeEnhancers(

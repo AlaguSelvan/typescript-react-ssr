@@ -69,7 +69,7 @@ export const render = async (req: Request, res: Response): Promise<any> => {
 		${extractor.getLinkTags({ nonce })}
 	`;
 	const scripts = `${extractor.getScriptTags({ nonce })}`;
-	const document = HtmlTemplate(
+	const document = HtmlTemplate({
 		html,
 		meta,
 		styleTags,
@@ -77,7 +77,7 @@ export const render = async (req: Request, res: Response): Promise<any> => {
 		initialState,
 		scripts,
 		nonce
-	);
+	});
 	return res.send(document);
 };
 
