@@ -32,13 +32,13 @@ afterEach(cleanup);
 // 	}
 // ];
 
-interface IProps {
-	userData: IUserData[];
-}
+// interface IProps {
+// 	userData: IUserData[];
+// }
 
-interface IActions {
-	fetchInitialDataIfNeeded: () => null;
-}
+// interface IActions {
+// 	fetchInitialDataIfNeeded: () => null;
+// }
 
 describe('<About />', () => {
 	// const tree = () => {
