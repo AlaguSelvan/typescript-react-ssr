@@ -2,7 +2,7 @@ import { cleanup } from '@testing-library/react';
 // import { MemoryRouter } from 'react-router-dom';
 
 // import About from '../About';
-import IUserData from '../../../types/UserData';
+// import IUserData from '../../../types/UserData';
 
 afterEach(cleanup);
 
