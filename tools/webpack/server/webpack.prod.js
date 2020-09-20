@@ -2,8 +2,7 @@ const { resolve } = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  mode: 'production',
-  output: {
-    filename: 'prod-server-bundle.js'
-  }
+	name: 'server',
+	target: 'node',
+	mode: 'production'
 };
