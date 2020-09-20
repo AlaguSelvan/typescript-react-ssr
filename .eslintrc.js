@@ -12,13 +12,6 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: ['*.js'],
-			extends: ['eslint:recommended', 'plugin:prettier/recommended'],
-			rules: {
-				'no-unused-vars': 0
-			}
-		},
-		{
 			files: ['*.ts', '*.tsx'],
 			extends: [
 				'eslint:recommended',
