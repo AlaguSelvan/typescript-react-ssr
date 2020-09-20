@@ -1,7 +1,6 @@
 const webpack = require('webpack');
-const { join, resolve } = require('path');
+const { resolve } = require('path');
 const { merge } = require('webpack-merge');
-const externals = require('./node-externals');
 const nodeExternals = require('webpack-node-externals');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 

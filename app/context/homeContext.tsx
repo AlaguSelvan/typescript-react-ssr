@@ -10,9 +10,6 @@ interface IProps {
 
 const HomeProvider: React.FC<IProps> = ({ children }) => {
 	const [data, setData] = useState([]);
-	// const [cartItems, setCartItems] = useState([]);
-	// const [cartItemsCount, setCartItemsCount] = useState(0);
-	// const [cartTotal, setCartTotal] = useState(0);
 	const fetchData = async () => {
 		const { data }: any = await fetch(
 			'https://jsonplaceholder.typicode.com/users'
