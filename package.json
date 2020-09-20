@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon ./index.ts",
     "webpack:server": "webpack ./tools/webpack/server/webpack.config.js",
-    "start:prod": "cross-env NODE_ENV=production node ./build/server/index.js",
+    "start:prod": "cross-env NODE_ENV=production npm-run-all build start",
     "build": "npm-run-all clean -p build:*",
     "build:client": "cross-env NODE_ENV=production npm-run-all compile:client && webpack --config ./tools/webpack/client/webpack.config.js",
     "build:server": "cross-env NODE_ENV=production npm-run-all compile:server",

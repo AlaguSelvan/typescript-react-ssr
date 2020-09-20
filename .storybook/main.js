@@ -1,12 +1,6 @@
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = {
-  "stories": [
-    "../app/**/*.stories.mdx",
-    "../app/**/*.stories.@(js|jsx|ts|tsx)"
-  ],
-  "addons": [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials"
-  ]
-}
+	stories: ['../app/**/*.stories.mdx', '../app/**/*.stories.@(js|jsx|ts|tsx)'],
+	addons: ['@storybook/addon-links', '@storybook/addon-essentials']
+};

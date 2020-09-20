@@ -15,7 +15,6 @@ module.exports = {
 			files: ['*.js'],
 			extends: ['eslint:recommended', 'plugin:prettier/recommended'],
 			rules: {
-				// for samples
 				'no-unused-vars': 0
 			}
 		},
