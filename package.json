@@ -39,7 +39,7 @@
     "@loadable/component": "^5.13.2",
     "@loadable/server": "^5.13.2",
     "@testing-library/react": "^11.0.4",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.3",
     "compression": "^1.7.4",
     "connected-react-router": "^6.8.0",
