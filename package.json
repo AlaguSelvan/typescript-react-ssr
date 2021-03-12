@@ -152,7 +152,7 @@
     "jsdom": "^16.4.0",
     "json-loader": "^0.5.7",
     "path": "^0.12.7",
-    "react-dev-utils": "^10.2.1",
+    "react-dev-utils": "^11.0.4",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-hot-loader": "^4.12.21",
     "react-is": "^16.13.1",
