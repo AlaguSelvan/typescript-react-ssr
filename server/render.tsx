@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { resolve } from 'path';
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { pipeToNodeWritable } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { matchRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
@@ -55,30 +57,44 @@ export const render = async (req: Request, res: Response): Promise<any> => {
 	);
 
 	const initialState = store.getState();
-	const html = renderToString(sheet.collectStyles(Jsx));
-	const styleTags = sheet.getStyleTags();
-	const head = Helmet.renderStatic();
-	const meta = `
-		${head.title.toString()}
-		${head.base.toString()}
-		${head.meta.toString()}
-		${head.link.toString()}
-	`.trim();
-	const { nonce } = res.locals;
-	const linkTags = `
-		${extractor.getLinkTags({ nonce })}
-	`;
-	const scripts = `${extractor.getScriptTags({ nonce })}`;
-	const document = HtmlTemplate({
-		html,
-		meta,
-		styleTags,
-		linkTags,
-		initialState,
-		scripts,
-		nonce
+	let didError = false;
+	const { startWriting, abort } = pipeToNodeWritable(Jsx, res, {
+		onReadyToStream() {
+			// If something errored before we started streaming, we set the error code appropriately.
+			res.statusCode = didError ? 500 : 200;
+			res.setHeader('Content-type', 'text/html');
+			res.write('<!DOCTYPE html>');
+			startWriting();
+		},
+		onError(x: Error) {
+			didError = true;
+			console.error(x);
+		}
 	});
-	return res.send(document);
+	// const html = pipeToNodeWritable(sheet.collectStyles(Jsx));
+	// const styleTags = sheet.getStyleTags();
+	// const head = Helmet.renderStatic();
+	// const meta = `
+	// 	${head.title.toString()}
+	// 	${head.base.toString()}
+	// 	${head.meta.toString()}
+	// 	${head.link.toString()}
+	// `.trim();
+	// const { nonce } = res.locals;
+	// const linkTags = `
+	// 	${extractor.getLinkTags({ nonce })}
+	// `;
+	// const scripts = `${extractor.getScriptTags({ nonce })}`;
+	// const document = HtmlTemplate({
+	// 	html,
+	// 	meta,
+	// 	styleTags,
+	// 	linkTags,
+	// 	initialState,
+	// 	scripts,
+	// 	nonce
+	// });
+	// return res.send(document);
 };
 
 export default function middlewareRenderer(): any {

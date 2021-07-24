@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { pipeToNodeWritable } from 'react-dom/unstable-fizz';
 import { loadableReady } from '@loadable/component';
 import { Provider } from 'react-redux';
 import configureStore from './redux/configureStore';

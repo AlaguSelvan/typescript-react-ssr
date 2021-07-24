@@ -10,10 +10,10 @@ insert_final_newline = true
 
 # Indentation override for all JS under lib directory
 [src/**.ts]
-indent_style = tabs
+indent_style = tab
 indent_size = 2
 
 # Indentation override for all JS under lib directory
 [src/**.tsx]
-indent_style = tabs
+indent_style = tab
 indent_size = 2
